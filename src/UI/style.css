@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer base {
+
+    :host {
+        --background-color: initial;
+        --paper-color: initial;
+        --primary-color: initial;
+        --primary-color-light: initial;
+        --primary-color-dark: initial;
+        --primary-color-contrast: initial;
+        --secondary-color: initial;
+        --secondaryy-color-light: initial;
+        --secondary-color-dark: initial;
+        --secondary-color-contrast: initial;
+        --text-color: initial;
+        --text-color-secondary: initial;
+        --text-color-disabled: initial;
+
+        color: var(--text-color);
+        background-color: var(--background-color);
+        font-family: sans-serif;
+    }
+}
+
+@layer components {
+
+    input[type=text], input[type=number], select {
+        display: block;
+        width: 100%;
+        padding: 0 0.25em;
+        border-color: transparent;
+        border-width: 3px 0;
+        background: var(--paper-color);
+
+        height: calc(1.5em + 3px);
+        line-height: 1;
+
+        &:focus, &:focus-visible {
+            border-bottom-color: var(--primary-color);
+            outline: none;
+        }
+    }
+
+    /* Remove the default number input field spinner */
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+}
