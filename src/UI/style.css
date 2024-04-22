@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer base {
 
     :host {
@@ -77,7 +76,6 @@
             }
 
             &.active {
-                background: var(--paper-color);
                 color: var(--primary-color);
             }
         }
