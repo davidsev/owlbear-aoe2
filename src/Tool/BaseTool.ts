@@ -15,6 +15,7 @@ import { BaseShape } from '../Shape/BaseShape';
 import { PathBuilder } from '@owlbear-rodeo/sdk/lib/builders/PathBuilder';
 import { Point } from '@davidsev/owlbear-utils';
 import { TextBuilder } from '@owlbear-rodeo/sdk/lib/builders/TextBuilder';
+import { toolMetadata, ToolMetadata } from '../Metadata/tool';
 
 export abstract class BaseTool implements ToolMode {
 
@@ -27,18 +28,7 @@ export abstract class BaseTool implements ToolMode {
         shape: BaseShape,
     } = undefined;
 
-    private toolMetadata = { // FIXME
-        areaFillColor: '#000000',
-        areaFillOpacity: 0.5,
-        areaStrokeColor: '#000000',
-        areaStrokeOpacity: 0,
-        shapeFillColor: '#000000',
-        shapeFillOpacity: 0,
-        shapeStrokeColor: '#FF0000',
-        shapeStrokeOpacity: 1,
-        shapeDisplayMode: 'always',
-        labelDisplayMode: 'drawing',
-    };
+    public toolMetadata: ToolMetadata = toolMetadata.defaultValues;
 
     /** The icon that will be displayed in the toolbar. */
     get icons (): ToolIcon[] {
@@ -56,6 +46,8 @@ export abstract class BaseTool implements ToolMode {
 
     // When they start drawing, create the shape.
     async onToolDragStart (context: ToolContext, event: ToolEvent) {
+        this.toolMetadata = toolMetadata.clean(context.metadata);
+
         // Make the items.
         const areaItem = this.buildAreaPath().build();
         const outlineItem = this.buildOutlinePath().attachedTo(areaItem.id).build();
