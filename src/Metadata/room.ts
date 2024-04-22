@@ -1,5 +1,5 @@
-import { RoomMetadataMapper } from '@davidsev/owlbear-utils';
 import { getId } from '../Utils/getId';
+import { CachedRoomMetadata } from '../../../owlbear-utils/js/Metadata/Cached/Room';
 
 export enum ConeShape {
     TRIANGLE = 'TRIANGLE',
@@ -26,5 +26,4 @@ export class RoomMetadata {
     coneSizeSnapping: number = 1;
 }
 
-export const roomMetadata = new RoomMetadataMapper(getId(), new RoomMetadata);
-
+export const roomMetadata = new CachedRoomMetadata(getId(), new RoomMetadata);

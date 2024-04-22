@@ -41,13 +41,12 @@ export class SettingsForm extends BaseElement {
         }
 
         // Load the metadata into the form.
-        roomMetadata.get().then((metadata) => {
-            this.inputs.coneShape.value = metadata.coneShape;
-            this.inputs.coneWidth.value = metadata.coneWidth;
-            this.inputs.coneStartPoints.value = metadata.coneStartPoints;
-            this.inputs.coneOverlapThreshold.valueAsNumber = metadata.coneOverlapThreshold * 100;
-            this.inputs.coneSizeSnapping.valueAsNumber = metadata.coneSizeSnapping;
-        });
+        console.log('coneWidth', roomMetadata.data.coneWidth);
+        this.inputs.coneShape.value = roomMetadata.data.coneShape;
+        this.inputs.coneWidth.value = roomMetadata.data.coneWidth;
+        this.inputs.coneStartPoints.value = roomMetadata.data.coneStartPoints;
+        this.inputs.coneOverlapThreshold.valueAsNumber = roomMetadata.data.coneOverlapThreshold * 100;
+        this.inputs.coneSizeSnapping.valueAsNumber = roomMetadata.data.coneSizeSnapping;
     }
 
     private formChanged () {
