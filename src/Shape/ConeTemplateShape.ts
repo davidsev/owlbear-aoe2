@@ -19,11 +19,11 @@ export class ConeTemplateShape extends BaseShape {
     }
 
     private get triangle (): Triangle {
-        const vector = this.roundedEnd.sub(this.roundedStart);
+        const vector = this.roundedEnd.sub(this.roundedStart).scale(Math.tan(this.widthRads / 2));
         return new Triangle(
             this.roundedStart,
-            this.roundedEnd.add(new Point(vector.y / 2, -vector.x / 2)),
-            this.roundedEnd.add(new Point(-vector.y / 2, vector.x / 2)),
+            this.roundedEnd.add(new Point(vector.y, -vector.x)),
+            this.roundedEnd.add(new Point(-vector.y, vector.x)),
         );
     }
 
