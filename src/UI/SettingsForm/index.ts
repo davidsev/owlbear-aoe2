@@ -1,9 +1,10 @@
-import { customElement } from 'lit/decorators.js';
-import { html } from 'lit';
+import { customElement, query } from 'lit/decorators.js';
+import { html, PropertyValueMap } from 'lit';
 import { BaseElement } from '../BaseElement';
 import { SelectEnum } from '../Components/SelectEnum';
 import { ConeStyle, roomMetadata, StartPoint } from '../../Metadata/room';
 import { MultiSelectEnum } from '../Components/MultiSelectEnum';
+import { FormControl } from '../Components/FormControl';
 
 @customElement('settings-form')
 export class SettingsForm extends BaseElement {
@@ -24,6 +25,15 @@ export class SettingsForm extends BaseElement {
         coneOverlapThreshold: document.createElement('input'),
         coneSizeSnapping: document.createElement('input'),
     };
+
+    @query('form-control#coneWidth', true)
+    private accessor coneWidthWrapper!: FormControl;
+    @query('form-control#coneStartPoints', true)
+    private accessor coneStartPointsWrapper!: FormControl;
+    @query('form-control#coneOverlapThreshold', true)
+    private accessor coneOverlapThresholdWrapper!: FormControl;
+    @query('form-control#coneSizeSnapping', true)
+    private accessor coneSizeSnappingWrapper!: FormControl;
 
     constructor () {
         super();
@@ -56,25 +66,42 @@ export class SettingsForm extends BaseElement {
             coneOverlapThreshold: parseInt(this.inputs.coneOverlapThreshold.value) / 100,
             coneSizeSnapping: parseFloat(this.inputs.coneSizeSnapping.value),
         });
+
+        this.showOrHideFields();
+    }
+
+    private showOrHideFields () {
+        // Show or hide fields
+        this.coneWidthWrapper.style.display = roomMetadata.data.coneStyle == ConeStyle.CUSTOM_TEMPLATE ? 'initial' : 'none';
+
+        const isTemplate = roomMetadata.data.coneStyle == ConeStyle.TEMPLATE || roomMetadata.data.coneStyle == ConeStyle.CUSTOM_TEMPLATE;
+        this.coneStartPointsWrapper.style.display = isTemplate ? 'initial' : 'none';
+        this.coneOverlapThresholdWrapper.style.display = isTemplate ? 'initial' : 'none';
+        this.coneSizeSnappingWrapper.style.display = isTemplate ? 'initial' : 'none';
+    }
+
+    firstUpdated (_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
+        super.firstUpdated(_changedProperties);
+        this.showOrHideFields();
     }
 
     // Render the UI as a function of component state
     render () {
         return html`
             <form class="p-2">
-                <form-control label="Cone Style">
+                <form-control id="coneStyle" label="Cone Style">
                     ${this.inputs.coneStyle}
                 </form-control>
-                <form-control label="Cone Width">
+                <form-control id="coneWidth" label="Cone Width">
                     ${this.inputs.coneWidth}
                 </form-control>
-                <form-control label="Cone Start Point(s)">
+                <form-control id="coneStartPoints" label="Cone Start Point(s)">
                     ${this.inputs.coneStartPoints}
                 </form-control>
-                <form-control label="Cone Overlap Threshold">
+                <form-control id="coneOverlapThreshold" label="Cone Overlap Threshold">
                     ${this.inputs.coneOverlapThreshold}
                 </form-control>
-                <form-control label="Cone Size Snapping">
+                <form-control id="coneSizeSnapping" label="Cone Size Snapping">
                     ${this.inputs.coneSizeSnapping}
                 </form-control>
             </form>
