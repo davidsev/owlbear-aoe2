@@ -2,22 +2,20 @@ import { customElement } from 'lit/decorators.js';
 import { html } from 'lit';
 import { BaseElement } from '../BaseElement';
 import { SelectEnum } from '../Components/SelectEnum';
-import { ConeShape, ConeWidth, roomMetadata, StartPoint } from '../../Metadata/room';
+import { ConeStyle, roomMetadata, StartPoint } from '../../Metadata/room';
 import { MultiSelectEnum } from '../Components/MultiSelectEnum';
 
 @customElement('settings-form')
 export class SettingsForm extends BaseElement {
 
     private readonly inputs = {
-        coneShape: new SelectEnum({
-            [ConeShape.TRIANGLE]: 'Triangle (5e)',
-            [ConeShape.SEMICIRCLE]: 'Semicircle (pathfinder)',
+        coneStyle: new SelectEnum({
+            [ConeStyle.TEMPLATE]: 'D&D 5e',
+            [ConeStyle.PATHFINDER]: 'Pathfinder / D&D 3.5',
+            [ConeStyle.CUSTOM_TEMPLATE]: '5e style with custom width',
+            [ConeStyle.TOKEN]: 'D&D 5e (Token)',
         }),
-        coneWidth: new SelectEnum({
-            [ConeWidth.SQUARE]: 'Width = Height (5e)',
-            [ConeWidth.NINETY]: '90° (pathfinder / 3.5)',
-            [ConeWidth.EQUILATERAL]: 'Equilateral',
-        }),
+        coneWidth: document.createElement('input'),
         coneStartPoints: new MultiSelectEnum({
             [StartPoint.CORNER]: 'Corners',
             [StartPoint.CENTER]: 'Center',
@@ -31,6 +29,7 @@ export class SettingsForm extends BaseElement {
         super();
 
         // Set up the inputs.
+        this.inputs.coneWidth.type = 'number';
         this.inputs.coneOverlapThreshold.type = 'number';
         this.inputs.coneSizeSnapping.type = 'number';
         this.inputs.coneSizeSnapping.step = '0.1';
@@ -41,18 +40,18 @@ export class SettingsForm extends BaseElement {
         }
 
         // Load the metadata into the form.
-        console.log('coneWidth', roomMetadata.data.coneWidth);
-        this.inputs.coneShape.value = roomMetadata.data.coneShape;
-        this.inputs.coneWidth.value = roomMetadata.data.coneWidth;
+        this.inputs.coneStyle.value = roomMetadata.data.coneStyle;
+        this.inputs.coneWidth.value = roomMetadata.data.coneWidth.toString();
         this.inputs.coneStartPoints.value = roomMetadata.data.coneStartPoints;
         this.inputs.coneOverlapThreshold.valueAsNumber = roomMetadata.data.coneOverlapThreshold * 100;
         this.inputs.coneSizeSnapping.valueAsNumber = roomMetadata.data.coneSizeSnapping;
     }
 
     private formChanged () {
+        // Save the data
         roomMetadata.set({
-            coneShape: this.inputs.coneShape.value,
-            coneWidth: this.inputs.coneWidth.value,
+            coneStyle: this.inputs.coneStyle.value,
+            coneWidth: this.inputs.coneWidth.valueAsNumber,
             coneStartPoints: this.inputs.coneStartPoints.value,
             coneOverlapThreshold: parseInt(this.inputs.coneOverlapThreshold.value) / 100,
             coneSizeSnapping: parseFloat(this.inputs.coneSizeSnapping.value),
@@ -63,8 +62,8 @@ export class SettingsForm extends BaseElement {
     render () {
         return html`
             <form class="p-2">
-                <form-control label="Cone Shape">
-                    ${this.inputs.coneShape}
+                <form-control label="Cone Style">
+                    ${this.inputs.coneStyle}
                 </form-control>
                 <form-control label="Cone Width">
                     ${this.inputs.coneWidth}
