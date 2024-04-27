@@ -24,6 +24,13 @@ export class ConeTemplateShape extends BaseShape {
         return grid.snapTo(this.start, allowedSnapPoints.reduce((a, b) => a | b));
     }
 
+    public get roundedDistance (): number {
+        const snapTo = roomMetadata.data.coneSizeSnapping * grid.dpi;
+        if (snapTo === 0)
+            return this.distance;
+        return Math.round(this.distance / snapTo) * snapTo;
+    }
+
     private get roundedEnd (): Point {
         const vector = this.end.sub(this.start);
         return this.roundedStart.add(vector.scale(this.roundedDistance / this.distance));
