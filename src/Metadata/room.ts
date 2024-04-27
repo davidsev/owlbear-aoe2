@@ -1,5 +1,5 @@
 import { getId } from '../Utils/getId';
-import { CachedRoomMetadata } from '../../../owlbear-utils/js/Metadata/Cached/Room';
+import { CachedRoomMetadata } from '@davidsev/owlbear-utils/js/Metadata/Cached/Room';
 
 export enum ConeStyle {
     TEMPLATE = 'TEMPLATE',
