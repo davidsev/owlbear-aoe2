@@ -2,6 +2,7 @@ import { BaseShape } from './BaseShape';
 import { Cell, grid, Point, SnapTo } from '@davidsev/owlbear-utils';
 import { Command, PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
 import { Triangle } from '../Utils/Geometry/Triangle';
+import { roomMetadata } from '../Metadata/room';
 
 export class ConeTemplateShape extends BaseShape {
 
@@ -48,7 +49,7 @@ export class ConeTemplateShape extends BaseShape {
 
         const searchArea = grid.iterateCellsBoundingPoints(triangle.points.map(point => grid.getCell(point)));
         for (const cell of searchArea) {
-            if (triangle.intersectsCellPercentage(cell) > 50)
+            if (triangle.intersectsCellPercentage(cell) > roomMetadata.data.coneOverlapThreshold)
                 cells.push(cell);
         }
         return cells;
