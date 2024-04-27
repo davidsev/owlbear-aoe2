@@ -1,5 +1,5 @@
 import { html } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { BaseElement } from '../BaseElement';
 
 @customElement('select-enum')
@@ -12,6 +12,9 @@ export class SelectEnum<T extends Record<string, string>> extends BaseElement {
         // Make sure we have a tabindex so onblur works
         if (this.tabIndex < 0)
             this.tabIndex = 0;
+
+        this.addEventListener('focus', this.show.bind(this));
+        this.addEventListener('blur', this.hide.bind(this));
     }
 
     // Declare reactive properties
@@ -22,19 +25,17 @@ export class SelectEnum<T extends Record<string, string>> extends BaseElement {
     @property()
     accessor active: boolean = false;
 
-    @query('div#input')
-    private accessor input!: HTMLDivElement;
-    @query('div#dropdown')
-    private accessor dropdown!: HTMLDivElement;
-
     // Render the UI as a function of component state
     render () {
         return html`
             <div class="relative">
-                <div id="input" class="input ${this.active ? 'active' : ''}" @click="${this.toggleDropdown}">
+                <div class="${this.active ? 'hidden' : 'input'}" @click="${this.show}">
                     ${this.options[this.value]}
                 </div>
-                <div id="dropdown" class="dropdown ${this.active ? '' : 'hidden'}">
+                <div class="${this.active ? 'input active' : 'hidden'}" @click="${this.hide}">
+                    ${this.options[this.value]}
+                </div>
+                <div id="dropdown" class="mt-1.5 dropdown ${this.active ? '' : 'hidden'}">
                     ${Object.entries(this.options).map(([value, label]) => html`
                         <div @click="${this.selectItem.bind(this, value)}"
                              class="item ${value === this.value ? 'active' : ''}">
@@ -46,13 +47,12 @@ export class SelectEnum<T extends Record<string, string>> extends BaseElement {
         `;
     }
 
-    connectedCallback () {
-        super.connectedCallback();
-        this.addEventListener('blur', () => this.active = false);
+    private show () {
+        this.active = true;
     }
 
-    private toggleDropdown () {
-        this.active = !this.active;
+    private hide () {
+        this.active = false;
     }
 
     private selectItem (item: string) {

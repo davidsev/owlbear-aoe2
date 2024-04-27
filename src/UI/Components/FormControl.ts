@@ -9,7 +9,7 @@ export class FormControl extends BaseElement {
     @property()
     accessor label: string = '';
 
-    @queryAssignedElements({ selector: 'input, select' })
+    @queryAssignedElements()
     accessor inputs!: HTMLElement[];
 
     // Render the UI as a function of component state
@@ -26,7 +26,6 @@ export class FormControl extends BaseElement {
         if (!this.inputs.length)
             return;
 
-        if (this.inputs[0] instanceof HTMLInputElement || this.inputs[0] instanceof HTMLSelectElement)
-            this.inputs[0].focus();
+        this.inputs[0].focus();
     }
 }
