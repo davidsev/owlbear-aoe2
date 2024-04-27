@@ -13,7 +13,7 @@ export class SettingsForm extends BaseElement {
         coneStyle: new SelectEnum({
             [ConeStyle.TEMPLATE]: 'D&D 5e',
             [ConeStyle.PATHFINDER]: 'Pathfinder / D&D 3.5',
-            [ConeStyle.CUSTOM_TEMPLATE]: '5e style with custom width',
+            [ConeStyle.CUSTOM_TEMPLATE]: 'D&D 5e, customized',
             [ConeStyle.TOKEN]: 'D&D 5e (Token)',
         }),
         coneWidth: document.createElement('input'),
@@ -73,11 +73,11 @@ export class SettingsForm extends BaseElement {
     private showOrHideFields () {
         // Show or hide fields
         this.coneWidthWrapper.style.display = roomMetadata.data.coneStyle == ConeStyle.CUSTOM_TEMPLATE ? 'initial' : 'none';
+        this.coneStartPointsWrapper.style.display = roomMetadata.data.coneStyle == ConeStyle.CUSTOM_TEMPLATE ? 'initial' : 'none';
+        this.coneSizeSnappingWrapper.style.display = roomMetadata.data.coneStyle == ConeStyle.CUSTOM_TEMPLATE ? 'initial' : 'none';
 
         const isTemplate = roomMetadata.data.coneStyle == ConeStyle.TEMPLATE || roomMetadata.data.coneStyle == ConeStyle.CUSTOM_TEMPLATE;
-        this.coneStartPointsWrapper.style.display = isTemplate ? 'initial' : 'none';
         this.coneOverlapThresholdWrapper.style.display = isTemplate ? 'initial' : 'none';
-        this.coneSizeSnappingWrapper.style.display = isTemplate ? 'initial' : 'none';
     }
 
     firstUpdated (_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {

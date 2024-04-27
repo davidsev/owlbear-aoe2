@@ -2,30 +2,35 @@ import { BaseShape } from './BaseShape';
 import { Cell, grid, Point, SnapTo } from '@davidsev/owlbear-utils';
 import { Command, PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
 import { Triangle } from '../Utils/Geometry/Triangle';
-import { roomMetadata, StartPoint } from '../Metadata/room';
+import { StartPoint } from '../Metadata/room';
 
 export class ConeTemplateShape extends BaseShape {
 
-    constructor (public readonly widthRads: number) {
+    constructor (
+        public readonly widthRads: number,
+        public readonly startPoints: StartPoint[],
+        public readonly overlapThreshold: number,
+        public readonly sizeSnapping: number,
+    ) {
         super();
     }
 
     private get roundedStart (): Point {
-        if (!roomMetadata.data.coneStartPoints.length)
+        if (!this.startPoints.length)
             return this.start;
 
         const allowedSnapPoints: SnapTo[] = [];
-        if (roomMetadata.data.coneStartPoints.includes(StartPoint.CORNER))
+        if (this.startPoints.includes(StartPoint.CORNER))
             allowedSnapPoints.push(SnapTo.CORNER);
-        if (roomMetadata.data.coneStartPoints.includes(StartPoint.CENTER))
+        if (this.startPoints.includes(StartPoint.CENTER))
             allowedSnapPoints.push(SnapTo.CENTER);
-        if (roomMetadata.data.coneStartPoints.includes(StartPoint.EDGE))
+        if (this.startPoints.includes(StartPoint.EDGE))
             allowedSnapPoints.push(SnapTo.EDGE);
         return grid.snapTo(this.start, allowedSnapPoints.reduce((a, b) => a | b));
     }
 
     public get roundedDistance (): number {
-        const snapTo = roomMetadata.data.coneSizeSnapping * grid.dpi;
+        const snapTo = this.sizeSnapping * grid.dpi;
         if (snapTo === 0)
             return this.distance;
         return Math.round(this.distance / snapTo) * snapTo;
@@ -66,7 +71,7 @@ export class ConeTemplateShape extends BaseShape {
 
         const searchArea = grid.iterateCellsBoundingPoints(triangle.points.map(point => grid.getCell(point)));
         for (const cell of searchArea) {
-            if (triangle.intersectsCellPercentage(cell) > roomMetadata.data.coneOverlapThreshold)
+            if (triangle.intersectsCellPercentage(cell) > this.overlapThreshold)
                 cells.push(cell);
         }
         return cells;
