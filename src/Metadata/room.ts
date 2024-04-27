@@ -16,7 +16,7 @@ export enum StartPoint {
 
 export class RoomMetadata {
     coneStyle: ConeStyle = ConeStyle.TEMPLATE;
-    coneWidth: number = 60;
+    coneWidth: number = 53.1;
     coneStartPoints: StartPoint[] = [StartPoint.CORNER];
     coneOverlapThreshold: number = 0.1;
     coneSizeSnapping: number = 1;
