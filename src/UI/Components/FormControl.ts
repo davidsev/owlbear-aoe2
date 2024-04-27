@@ -1,5 +1,5 @@
 import { html } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
 import { BaseElement } from '../BaseElement';
 
 @customElement('form-control')
@@ -9,15 +9,24 @@ export class FormControl extends BaseElement {
     @property()
     accessor label: string = '';
 
+    @queryAssignedElements({ selector: 'input, select' })
+    accessor inputs!: HTMLElement[];
+
     // Render the UI as a function of component state
     render () {
         return html`
             <div class="mb-3">
-                <label for="input">
-                    <div class="block text-sm text-text-secondary">${this.label}</div>
-                    <slot></slot>
-                </label>
+                <label @click="${this.labelClicked}" class="block text-sm text-text-secondary">${this.label}</label>
+                <slot></slot>
             </div>
         `;
+    }
+
+    private labelClicked () {
+        if (!this.inputs.length)
+            return;
+
+        if (this.inputs[0] instanceof HTMLInputElement || this.inputs[0] instanceof HTMLSelectElement)
+            this.inputs[0].focus();
     }
 }
