@@ -11,7 +11,7 @@ export class ConeTemplateShape extends BaseShape {
     }
 
     private get roundedStart (): Point {
-        if (!roomMetadata.data.coneStartPoints)
+        if (!roomMetadata.data.coneStartPoints.length)
             return this.start;
 
         const allowedSnapPoints: SnapTo[] = [];
