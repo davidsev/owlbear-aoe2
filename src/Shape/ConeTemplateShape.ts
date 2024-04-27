@@ -2,7 +2,7 @@ import { BaseShape } from './BaseShape';
 import { Cell, grid, Point, SnapTo } from '@davidsev/owlbear-utils';
 import { Command, PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
 import { Triangle } from '../Utils/Geometry/Triangle';
-import { roomMetadata } from '../Metadata/room';
+import { roomMetadata, StartPoint } from '../Metadata/room';
 
 export class ConeTemplateShape extends BaseShape {
 
@@ -11,7 +11,17 @@ export class ConeTemplateShape extends BaseShape {
     }
 
     private get roundedStart (): Point {
-        return grid.snapTo(this.start, SnapTo.CORNER);
+        if (!roomMetadata.data.coneStartPoints)
+            return this.start;
+
+        const allowedSnapPoints: SnapTo[] = [];
+        if (roomMetadata.data.coneStartPoints.includes(StartPoint.CORNER))
+            allowedSnapPoints.push(SnapTo.CORNER);
+        if (roomMetadata.data.coneStartPoints.includes(StartPoint.CENTER))
+            allowedSnapPoints.push(SnapTo.CENTER);
+        if (roomMetadata.data.coneStartPoints.includes(StartPoint.EDGE))
+            allowedSnapPoints.push(SnapTo.EDGE);
+        return grid.snapTo(this.start, allowedSnapPoints.reduce((a, b) => a | b));
     }
 
     private get roundedEnd (): Point {
