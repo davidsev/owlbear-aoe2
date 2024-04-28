@@ -10,7 +10,7 @@ export class SquareSettingsForm extends BaseElement {
 
     private readonly inputs = {
         coneStyle: new SelectEnum({
-            [ConeStyle.TEMPLATE]: 'D&D 5e',
+            [ConeStyle.TEMPLATE]: 'D&D 5e (Template Method)',
             [ConeStyle.PATHFINDER]: 'Pathfinder / D&D 3.5',
             [ConeStyle.TOKEN]: 'D&D 5e (Token Method)',
         }),
