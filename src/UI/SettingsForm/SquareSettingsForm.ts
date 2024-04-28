@@ -4,7 +4,6 @@ import { BaseElement } from '../BaseElement';
 import { SelectEnum } from '../Components/SelectEnum';
 import { ConeStyle, roomMetadata, StartPoint } from '../../Metadata/room';
 import { MultiSelectEnum } from '../Components/MultiSelectEnum';
-import { FormControl } from '../Components/FormControl';
 
 @customElement('square-settings-form')
 export class SquareSettingsForm extends BaseElement {
@@ -25,14 +24,8 @@ export class SquareSettingsForm extends BaseElement {
         coneSizeSnapping: document.createElement('input'),
     };
 
-    @query('form-control#coneWidth', true)
-    private accessor coneWidthWrapper!: FormControl;
-    @query('form-control#coneStartPoints', true)
-    private accessor coneStartPointsWrapper!: FormControl;
-    @query('form-control#coneOverlapThreshold', true)
-    private accessor coneOverlapThresholdWrapper!: FormControl;
-    @query('form-control#coneSizeSnapping', true)
-    private accessor coneSizeSnappingWrapper!: FormControl;
+    @query('div#templateConeFields', true)
+    private accessor templateConeFields!: HTMLDivElement;
 
     constructor () {
         super();
@@ -72,10 +65,7 @@ export class SquareSettingsForm extends BaseElement {
 
     private showOrHideFields () {
         // Show or hide fields
-        this.coneWidthWrapper.style.display = roomMetadata.data.squareConeStyle == ConeStyle.TEMPLATE ? 'initial' : 'none';
-        this.coneStartPointsWrapper.style.display = roomMetadata.data.squareConeStyle == ConeStyle.TEMPLATE ? 'initial' : 'none';
-        this.coneOverlapThresholdWrapper.style.display = roomMetadata.data.squareConeStyle == ConeStyle.TEMPLATE ? 'initial' : 'none';
-        this.coneSizeSnappingWrapper.style.display = roomMetadata.data.squareConeStyle == ConeStyle.TEMPLATE ? 'initial' : 'none';
+        this.templateConeFields.style.display = roomMetadata.data.squareConeStyle == ConeStyle.TEMPLATE ? 'initial' : 'none';
     }
 
     protected firstUpdated (_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
@@ -99,20 +89,22 @@ export class SquareSettingsForm extends BaseElement {
                 <form-control id="coneStyle" label="Cone Style">
                     ${this.inputs.coneStyle}
                 </form-control>
-                <form-control id="coneWidth" label="Cone Width">
-                    ${this.inputs.coneWidth}
-                </form-control>
-                <form-control id="coneStartPoints" label="Cone Start Point(s)">
-                    ${this.inputs.coneStartPoints}
-                </form-control>
-                <form-control id="coneOverlapThreshold" label="Cone Overlap Threshold">
-                    ${this.inputs.coneOverlapThreshold}
-                </form-control>
-                <form-control id="coneSizeSnapping" label="Cone Size Snapping">
-                    ${this.inputs.coneSizeSnapping}
-                </form-control>
-                <div class="flex justify-end">
-                    <button type="button" @click=${this.setDefaults}>Reset to default</button>
+                <div id="templateConeFields">
+                    <form-control label="Cone Width">
+                        ${this.inputs.coneWidth}
+                    </form-control>
+                    <form-control label="Cone Start Point(s)">
+                        ${this.inputs.coneStartPoints}
+                    </form-control>
+                    <form-control label="Cone Overlap Threshold">
+                        ${this.inputs.coneOverlapThreshold}
+                    </form-control>
+                    <form-control label="Cone Size Snapping">
+                        ${this.inputs.coneSizeSnapping}
+                    </form-control>
+                    <div class="flex justify-end">
+                        <button type="button" @click=${this.setDefaults}>Reset to default</button>
+                    </div>
                 </div>
             </form>
 
