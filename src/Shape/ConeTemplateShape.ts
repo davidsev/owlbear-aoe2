@@ -71,7 +71,7 @@ export class ConeTemplateShape extends BaseShape {
 
         const searchArea = grid.iterateCellsBoundingPoints(triangle.points.map(point => grid.getCell(point)));
         for (const cell of searchArea) {
-            if (triangle.intersectsCellPercentage(cell) > this.overlapThreshold)
+            if (triangle.intersectsCellPercentage(cell) > this.overlapThreshold * 100)
                 cells.push(cell);
         }
         return cells;
