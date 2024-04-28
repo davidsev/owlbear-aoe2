@@ -3,7 +3,6 @@ import { CachedRoomMetadata } from '@davidsev/owlbear-utils/js/Metadata/Cached/R
 
 export enum ConeStyle {
     TEMPLATE = 'TEMPLATE',
-    CUSTOM_TEMPLATE = 'CUSTOM_TEMPLATE',
     PATHFINDER = 'PATHFINDER',
     TOKEN = 'TOKEN',
 }
@@ -16,7 +15,7 @@ export enum StartPoint {
 
 export class RoomMetadata {
     coneStyle: ConeStyle = ConeStyle.TEMPLATE;
-    coneWidth: number = 53.1;
+    coneWidth: number | null = null;
     coneStartPoints: StartPoint[] = [StartPoint.CORNER];
     coneOverlapThreshold: number = 0.1;
     coneSizeSnapping: number = 1;

@@ -13,8 +13,7 @@ export class SettingsForm extends BaseElement {
         coneStyle: new SelectEnum({
             [ConeStyle.TEMPLATE]: 'D&D 5e',
             [ConeStyle.PATHFINDER]: 'Pathfinder / D&D 3.5',
-            [ConeStyle.CUSTOM_TEMPLATE]: 'D&D 5e, customized',
-            [ConeStyle.TOKEN]: 'D&D 5e (Token)',
+            [ConeStyle.TOKEN]: 'D&D 5e (Token Method)',
         }),
         coneWidth: document.createElement('input'),
         coneStartPoints: new MultiSelectEnum({
@@ -40,6 +39,7 @@ export class SettingsForm extends BaseElement {
 
         // Set up the inputs.
         this.inputs.coneWidth.type = 'number';
+        this.inputs.coneWidth.setAttribute('placeholder', 'Width = Height');
         this.inputs.coneOverlapThreshold.type = 'number';
         this.inputs.coneSizeSnapping.type = 'number';
         this.inputs.coneSizeSnapping.step = '0.1';
@@ -51,7 +51,7 @@ export class SettingsForm extends BaseElement {
 
         // Load the metadata into the form.
         this.inputs.coneStyle.value = roomMetadata.data.coneStyle;
-        this.inputs.coneWidth.value = roomMetadata.data.coneWidth.toString();
+        this.inputs.coneWidth.value = (roomMetadata.data.coneWidth || '').toString();
         this.inputs.coneStartPoints.value = roomMetadata.data.coneStartPoints;
         this.inputs.coneOverlapThreshold.valueAsNumber = roomMetadata.data.coneOverlapThreshold * 100;
         this.inputs.coneSizeSnapping.valueAsNumber = roomMetadata.data.coneSizeSnapping;
@@ -72,12 +72,10 @@ export class SettingsForm extends BaseElement {
 
     private showOrHideFields () {
         // Show or hide fields
-        this.coneWidthWrapper.style.display = roomMetadata.data.coneStyle == ConeStyle.CUSTOM_TEMPLATE ? 'initial' : 'none';
-        this.coneStartPointsWrapper.style.display = roomMetadata.data.coneStyle == ConeStyle.CUSTOM_TEMPLATE ? 'initial' : 'none';
-        this.coneSizeSnappingWrapper.style.display = roomMetadata.data.coneStyle == ConeStyle.CUSTOM_TEMPLATE ? 'initial' : 'none';
-
-        const isTemplate = roomMetadata.data.coneStyle == ConeStyle.TEMPLATE || roomMetadata.data.coneStyle == ConeStyle.CUSTOM_TEMPLATE;
-        this.coneOverlapThresholdWrapper.style.display = isTemplate ? 'initial' : 'none';
+        this.coneWidthWrapper.style.display = roomMetadata.data.coneStyle == ConeStyle.TEMPLATE ? 'initial' : 'none';
+        this.coneStartPointsWrapper.style.display = roomMetadata.data.coneStyle == ConeStyle.TEMPLATE ? 'initial' : 'none';
+        this.coneOverlapThresholdWrapper.style.display = roomMetadata.data.coneStyle == ConeStyle.TEMPLATE ? 'initial' : 'none';
+        this.coneSizeSnappingWrapper.style.display = roomMetadata.data.coneStyle == ConeStyle.TEMPLATE ? 'initial' : 'none';
     }
 
     firstUpdated (_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
