@@ -78,9 +78,18 @@ export class SquareSettingsForm extends BaseElement {
         this.coneSizeSnappingWrapper.style.display = roomMetadata.data.squareConeStyle == ConeStyle.TEMPLATE ? 'initial' : 'none';
     }
 
-    firstUpdated (_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
+    protected firstUpdated (_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
         super.firstUpdated(_changedProperties);
         this.showOrHideFields();
+    }
+
+    private setDefaults () {
+        this.inputs.coneStyle.value = roomMetadata.defaultValues.squareConeStyle;
+        this.inputs.coneWidth.value = (roomMetadata.defaultValues.squareConeWidth || '').toString();
+        this.inputs.coneStartPoints.value = roomMetadata.defaultValues.squareConeStartPoints;
+        this.inputs.coneOverlapThreshold.value = roomMetadata.defaultValues.squareConeOverlapThreshold.toString();
+        this.inputs.coneSizeSnapping.value = roomMetadata.defaultValues.squareConeSizeSnapping.toString();
+        this.formChanged();
     }
 
     // Render the UI as a function of component state
@@ -102,6 +111,9 @@ export class SquareSettingsForm extends BaseElement {
                 <form-control id="coneSizeSnapping" label="Cone Size Snapping">
                     ${this.inputs.coneSizeSnapping}
                 </form-control>
+                <div class="flex justify-end">
+                    <button type="button" @click=${this.setDefaults}>Reset to default</button>
+                </div>
             </form>
 
             <!--

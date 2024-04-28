@@ -27,6 +27,7 @@
 
 @layer components {
 
+    /* Form controls */
     input[type=text], input[type=number], select, div.input {
         display: block;
         width: 100%;
@@ -80,4 +81,25 @@
             }
         }
     }
+
+    /* Buttons */
+    button {
+        padding: 0.6em 1em 0.35em 1em;
+        display: inline-flex;
+        align-items: center;
+        margin: 0;
+        font-weight: 500;
+        font-size: 0.875em;
+        border-radius: 5px;
+        border: 2px solid transparent;
+        cursor: pointer;
+        vertical-align: text-bottom;
+        line-height: 1.25em;
+
+        &:hover {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+    }
+
 }

@@ -1,4 +1,4 @@
-import { SquareSettingsForm } from './Square';
+import { SquareSettingsForm } from './SquareSettingsForm';
 
 export async function initSettingsForm () {
     // Load the page.
