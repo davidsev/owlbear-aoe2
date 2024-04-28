@@ -4,6 +4,7 @@ import { ConeTemplateShape } from '../Shape/ConeTemplateShape';
 import { ConeStyle, roomMetadata } from '../Metadata/room';
 import { ConePathfinderShape } from '../Shape/ConePathfinderShape';
 import { BaseShape } from '../Shape/BaseShape';
+import { ConeTokenShape } from '../Shape/ConeTokenShape';
 
 export class ConeTool extends BaseTool {
 
@@ -14,6 +15,8 @@ export class ConeTool extends BaseTool {
     protected getShape (): BaseShape {
         if (roomMetadata.data.squareConeStyle == ConeStyle.PATHFINDER) {
             return new ConePathfinderShape();
+        } else if (roomMetadata.data.squareConeStyle == ConeStyle.TOKEN) {
+            return new ConeTokenShape();
         } else { // TEMPLATE
             return new ConeTemplateShape(
                 ((roomMetadata.data.squareConeWidth || 53.1) % 180) * Math.PI / 180,

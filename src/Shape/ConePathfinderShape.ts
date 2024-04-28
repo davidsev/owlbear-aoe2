@@ -1,6 +1,7 @@
 import { BaseShape } from './BaseShape';
 import { Cell, grid, Point, SnapTo, Square } from '@davidsev/owlbear-utils';
 import { PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
+import { getDirection8 } from '../Utils/Geometry/getDirection';
 
 const Shapes = {
     15: {
@@ -97,7 +98,7 @@ export class ConePathfinderShape extends BaseShape {
     }
 
     public getLabelPosition (): Point {
-        const direction = this.getDirection();
+        const direction = getDirection8(this.end.sub(this.start));
         if (!direction)
             return this.start;
         return grid.snapTo(this.start, SnapTo.CORNER).add({
@@ -112,7 +113,7 @@ export class ConePathfinderShape extends BaseShape {
 
     public getCells (): Cell[] {
         // Work out if it's diagonal or not, and which direction.
-        const direction = this.getDirection();
+        const direction = getDirection8(this.end.sub(this.start));
         if (!direction)
             return [];
         const isDiagonal = direction.x != 0 && direction.y != 0;
@@ -198,32 +199,5 @@ export class ConePathfinderShape extends BaseShape {
 
     private isValidSize (distance: number): distance is keyof typeof Shapes {
         return distance in Shapes;
-    }
-
-    // Get a normalized direction vector.
-    // In OBR right and down are positive.
-    private getDirection (): Point | null {
-        const rawDirection = this.end.sub(this.start);
-        if (rawDirection.x == 0 && rawDirection.y == 0)
-            return null;
-        const angle = Math.atan2(rawDirection.y, rawDirection.x);
-
-        if (Math.abs(angle) < Math.PI * 0.125)
-            return new Point(1, 0);
-        if (Math.abs(angle) > Math.PI * 0.875)
-            return new Point(-1, 0);
-        if (angle < 0) {
-            if (Math.abs(angle) < Math.PI * 0.375)
-                return new Point(1, -1);
-            if (Math.abs(angle) > Math.PI * 0.625)
-                return new Point(-1, -1);
-            return new Point(0, -1);
-        } else {
-            if (Math.abs(angle) < Math.PI * 0.375)
-                return new Point(1, 1);
-            if (Math.abs(angle) > Math.PI * 0.625)
-                return new Point(-1, 1);
-            return new Point(0, 1);
-        }
     }
 }
