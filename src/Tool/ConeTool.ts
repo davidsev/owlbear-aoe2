@@ -12,14 +12,14 @@ export class ConeTool extends BaseTool {
     readonly id = getId('cone');
 
     protected getShape (): BaseShape {
-        if (roomMetadata.data.coneStyle == ConeStyle.PATHFINDER) {
+        if (roomMetadata.data.squareConeStyle == ConeStyle.PATHFINDER) {
             return new ConePathfinderShape();
         } else { // TEMPLATE
             return new ConeTemplateShape(
-                ((roomMetadata.data.coneWidth || 53.1) % 180) * Math.PI / 180,
-                roomMetadata.data.coneStartPoints,
-                roomMetadata.data.coneOverlapThreshold,
-                roomMetadata.data.coneSizeSnapping,
+                ((roomMetadata.data.squareConeWidth || 53.1) % 180) * Math.PI / 180,
+                roomMetadata.data.squareConeStartPoints,
+                roomMetadata.data.squareConeOverlapThreshold,
+                roomMetadata.data.squareConeSizeSnapping,
             );
         }
     }

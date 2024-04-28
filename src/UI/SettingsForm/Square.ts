@@ -6,8 +6,8 @@ import { ConeStyle, roomMetadata, StartPoint } from '../../Metadata/room';
 import { MultiSelectEnum } from '../Components/MultiSelectEnum';
 import { FormControl } from '../Components/FormControl';
 
-@customElement('settings-form')
-export class SettingsForm extends BaseElement {
+@customElement('square-settings-form')
+export class SquareSettingsForm extends BaseElement {
 
     private readonly inputs = {
         coneStyle: new SelectEnum({
@@ -50,21 +50,21 @@ export class SettingsForm extends BaseElement {
         }
 
         // Load the metadata into the form.
-        this.inputs.coneStyle.value = roomMetadata.data.coneStyle;
-        this.inputs.coneWidth.value = (roomMetadata.data.coneWidth || '').toString();
-        this.inputs.coneStartPoints.value = roomMetadata.data.coneStartPoints;
-        this.inputs.coneOverlapThreshold.valueAsNumber = roomMetadata.data.coneOverlapThreshold * 100;
-        this.inputs.coneSizeSnapping.valueAsNumber = roomMetadata.data.coneSizeSnapping;
+        this.inputs.coneStyle.value = roomMetadata.data.squareConeStyle;
+        this.inputs.coneWidth.value = (roomMetadata.data.squareConeWidth || '').toString();
+        this.inputs.coneStartPoints.value = roomMetadata.data.squareConeStartPoints;
+        this.inputs.coneOverlapThreshold.valueAsNumber = roomMetadata.data.squareConeOverlapThreshold * 100;
+        this.inputs.coneSizeSnapping.valueAsNumber = roomMetadata.data.squareConeSizeSnapping;
     }
 
     private formChanged () {
         // Save the data
         roomMetadata.set({
-            coneStyle: this.inputs.coneStyle.value,
-            coneWidth: this.inputs.coneWidth.valueAsNumber,
-            coneStartPoints: this.inputs.coneStartPoints.value,
-            coneOverlapThreshold: parseInt(this.inputs.coneOverlapThreshold.value) / 100,
-            coneSizeSnapping: parseFloat(this.inputs.coneSizeSnapping.value),
+            squareConeStyle: this.inputs.coneStyle.value,
+            squareConeWidth: this.inputs.coneWidth.valueAsNumber,
+            squareConeStartPoints: this.inputs.coneStartPoints.value,
+            squareConeOverlapThreshold: parseInt(this.inputs.coneOverlapThreshold.value) / 100,
+            squareConeSizeSnapping: parseFloat(this.inputs.coneSizeSnapping.value),
         });
 
         this.showOrHideFields();
@@ -72,10 +72,10 @@ export class SettingsForm extends BaseElement {
 
     private showOrHideFields () {
         // Show or hide fields
-        this.coneWidthWrapper.style.display = roomMetadata.data.coneStyle == ConeStyle.TEMPLATE ? 'initial' : 'none';
-        this.coneStartPointsWrapper.style.display = roomMetadata.data.coneStyle == ConeStyle.TEMPLATE ? 'initial' : 'none';
-        this.coneOverlapThresholdWrapper.style.display = roomMetadata.data.coneStyle == ConeStyle.TEMPLATE ? 'initial' : 'none';
-        this.coneSizeSnappingWrapper.style.display = roomMetadata.data.coneStyle == ConeStyle.TEMPLATE ? 'initial' : 'none';
+        this.coneWidthWrapper.style.display = roomMetadata.data.squareConeStyle == ConeStyle.TEMPLATE ? 'initial' : 'none';
+        this.coneStartPointsWrapper.style.display = roomMetadata.data.squareConeStyle == ConeStyle.TEMPLATE ? 'initial' : 'none';
+        this.coneOverlapThresholdWrapper.style.display = roomMetadata.data.squareConeStyle == ConeStyle.TEMPLATE ? 'initial' : 'none';
+        this.coneSizeSnappingWrapper.style.display = roomMetadata.data.squareConeStyle == ConeStyle.TEMPLATE ? 'initial' : 'none';
     }
 
     firstUpdated (_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {

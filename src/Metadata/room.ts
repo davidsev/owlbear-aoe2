@@ -14,11 +14,11 @@ export enum StartPoint {
 }
 
 export class RoomMetadata {
-    coneStyle: ConeStyle = ConeStyle.TEMPLATE;
-    coneWidth: number | null = null;
-    coneStartPoints: StartPoint[] = [StartPoint.CORNER];
-    coneOverlapThreshold: number = 0.1;
-    coneSizeSnapping: number = 1;
+    squareConeStyle: ConeStyle = ConeStyle.TEMPLATE;
+    squareConeWidth: number | null = null;
+    squareConeStartPoints: StartPoint[] = [StartPoint.CORNER];
+    squareConeOverlapThreshold: number = 0.1;
+    squareConeSizeSnapping: number = 1;
 }
 
 export const roomMetadata = new CachedRoomMetadata(getId(), new RoomMetadata);

@@ -1,7 +1,7 @@
-import { SettingsForm } from './index';
+import { SquareSettingsForm } from './Square';
 
 export async function initSettingsForm () {
-    // Laad the page.
-    document.body.replaceChildren(new SettingsForm());
+    // Load the page.
+    document.body.replaceChildren(new SquareSettingsForm());
 }
 
