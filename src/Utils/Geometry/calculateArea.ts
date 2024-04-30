@@ -10,17 +10,16 @@ export function calculateArea (points: Vector2[], debug: IntersectionDebugger | 
         return 0;
     }
 
-    // Turn it into lines.
-    const lines: LineSegment[] = [];
-    for (let i = 0; i < points.length; i++) {
-        const p1 = points[i];
-        const p2 = points[(i + 1) % points.length];
-        lines.push(new LineSegment(p1, p2));
-    }
-
     // If it's a triangle, use Heron's formula https://www.mathsisfun.com/geometry/herons-formula.html
     // (We can't do b*h/2 because it's not axis aligned)
     if (points.length === 3) {
+
+        const lines = [
+            new LineSegment(points[0], points[1]),
+            new LineSegment(points[1], points[2]),
+            new LineSegment(points[2], points[0]),
+        ];
+
         const a = lines[0].length;
         const b = lines[1].length;
         const c = lines[2].length;
@@ -44,9 +43,11 @@ export function calculateArea (points: Vector2[], debug: IntersectionDebugger | 
 
     // Otherwise it's not a triangle, so we need to split it into triangles and add the areas.
     let polygonArea = 0.0;
-    const center = calculateCenter(points);
-    for (const line of lines) {
-        polygonArea += calculateArea([center, line.p1, line.p2], debug);
+    const p1 = points[0];
+    for (let i = 2; i < points.length; i++) {
+        const p2 = points[i - 1];
+        const p3 = points[i];
+        polygonArea += calculateArea([points[0], p2, p3], debug);
     }
 
     return polygonArea;
