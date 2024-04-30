@@ -77,7 +77,7 @@ export class SquareSettingsForm extends BaseElement {
         this.inputs.coneStyle.value = roomMetadata.defaultValues.squareConeStyle;
         this.inputs.coneWidth.value = (roomMetadata.defaultValues.squareConeWidth || '').toString();
         this.inputs.coneStartPoints.value = roomMetadata.defaultValues.squareConeStartPoints;
-        this.inputs.coneOverlapThreshold.value = roomMetadata.defaultValues.squareConeOverlapThreshold.toString();
+        this.inputs.coneOverlapThreshold.value = (roomMetadata.defaultValues.squareConeOverlapThreshold * 100).toString();
         this.inputs.coneSizeSnapping.value = roomMetadata.defaultValues.squareConeSizeSnapping.toString();
         this.formChanged();
     }
