@@ -46,15 +46,20 @@ export class Triangle implements Iterable<Point> {
         // Work out the polygon that intersects the two.
         const newPolygon: Point[] = [];
 
-        // Find any points of the triangle that are inside the cell.
-        for (const point of this) {
-            if (cell.containsPoint(point))
+        // Find any for points of the cell that are inside the triangle.
+        for (const point of cell.corners) {
+            if (this.containsPoint(point))
                 newPolygon.push(point);
         }
 
-        // Ditto for points of the cell that are inside the triangle.
-        for (const point of cell.corners) {
-            if (this.containsPoint(point))
+        // If all of the cell is inside the triangle, then 100%.
+        if (newPolygon.length == cell.corners.length) {
+            return 100;
+        }
+
+        // Find any points of the triangle that are inside the cell.
+        for (const point of this) {
+            if (cell.containsPoint(point))
                 newPolygon.push(point);
         }
 
