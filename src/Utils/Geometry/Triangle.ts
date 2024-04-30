@@ -3,6 +3,8 @@ import { Cell, LineSegment, Point } from '@davidsev/owlbear-utils';
 import { calculateLineIntersections } from './calculateLineIntersections';
 import { sortPointsClockwise } from './sortPointsClockwise';
 import { calculateArea } from './calculateArea';
+import { roomMetadata } from '../../Metadata/room';
+import { IntersectionDebugger } from '../IntersectionDebugger';
 
 export class Triangle implements Iterable<Point> {
 
@@ -37,6 +39,10 @@ export class Triangle implements Iterable<Point> {
     }
 
     public intersectsCellPercentage (cell: Cell): number {
+        const debugMode = roomMetadata.data.debugIntersection && cell.containsPoint(new Point(0, 0));
+        const debug = debugMode ? IntersectionDebugger.getInstance() : null;
+        debug?.clear();
+
         // Work out the polygon that intersects the two.
         const newPolygon: Point[] = [];
 
@@ -59,6 +65,8 @@ export class Triangle implements Iterable<Point> {
             }
         }
 
+        debug?.cross(...newPolygon);
+
         // Then sort our points to be in order, and remove dupes.
         const sortedPoints = sortPointsClockwise(newPolygon);
         const uniqueSortedPoints = [...new Map(sortedPoints.map(point => [point.toString(), point])).values()];
@@ -69,7 +77,7 @@ export class Triangle implements Iterable<Point> {
         }
 
         // Otherwise we need the area of the polygon.
-        const polygonArea = calculateArea(uniqueSortedPoints);
+        const polygonArea = calculateArea(uniqueSortedPoints, debug);
 
         // Compare to the area of the cell.
         return polygonArea / calculateArea(cell.corners) * 100;

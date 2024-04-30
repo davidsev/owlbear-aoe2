@@ -14,6 +14,7 @@ export enum StartPoint {
 }
 
 export class RoomMetadata {
+    debugIntersection: boolean = false;
     squareConeStyle: ConeStyle = ConeStyle.TEMPLATE;
     squareConeWidth: number | null = null;
     squareConeStartPoints: StartPoint[] = [StartPoint.CORNER];
