@@ -1,5 +1,5 @@
 import { roomMetadata } from './Metadata/room';
-import { awaitReady } from '../../owlbear-utils';
+import { awaitReady } from '@davidsev/owlbear-utils';
 
 let functions: Map<string, Function> = new Map<string, Function>();
 
