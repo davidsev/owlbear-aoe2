@@ -22,6 +22,12 @@ export class SquareSettingsForm extends BaseElement {
         }),
         coneOverlapThreshold: document.createElement('input'),
         coneSizeSnapping: document.createElement('input'),
+        circleStartPoints: new MultiSelectEnum({
+            [StartPoint.CORNER]: 'Corners',
+            [StartPoint.CENTER]: 'Center',
+            [StartPoint.EDGE]: 'Edges',
+        }),
+        circleSizeSnapping: document.createElement('input'),
     };
 
     @query('div#templateConeFields', true)
@@ -43,6 +49,8 @@ export class SquareSettingsForm extends BaseElement {
         this.inputs.coneOverlapThreshold.type = 'number';
         this.inputs.coneSizeSnapping.type = 'number';
         this.inputs.coneSizeSnapping.step = '0.1';
+        this.inputs.circleSizeSnapping.type = 'number';
+        this.inputs.circleSizeSnapping.step = '0.1';
 
         // Update the metadata when the form changes.
         for (const [key, input] of Object.entries(this.inputs)) {
@@ -55,6 +63,8 @@ export class SquareSettingsForm extends BaseElement {
         this.inputs.coneStartPoints.value = roomMetadata.data.squareConeStartPoints;
         this.inputs.coneOverlapThreshold.valueAsNumber = roomMetadata.data.squareConeOverlapThreshold * 100;
         this.inputs.coneSizeSnapping.valueAsNumber = roomMetadata.data.squareConeSizeSnapping;
+        this.inputs.circleStartPoints.value = roomMetadata.data.squareCircleStartPoints;
+        this.inputs.circleSizeSnapping.valueAsNumber = roomMetadata.data.squareCircleSizeSnapping;
     }
 
     private formChanged () {
@@ -65,6 +75,8 @@ export class SquareSettingsForm extends BaseElement {
             squareConeStartPoints: this.inputs.coneStartPoints.value,
             squareConeOverlapThreshold: parseInt(this.inputs.coneOverlapThreshold.value) / 100,
             squareConeSizeSnapping: parseFloat(this.inputs.coneSizeSnapping.value),
+            squareCircleStartPoints: this.inputs.circleStartPoints.value,
+            squareCircleSizeSnapping: parseFloat(this.inputs.circleSizeSnapping.value),
         });
 
         this.showOrHideFields();
@@ -83,12 +95,18 @@ export class SquareSettingsForm extends BaseElement {
         this.requestUpdate();
     }
 
-    private setDefaults () {
+    private setConeDefaults () {
         this.inputs.coneStyle.value = roomMetadata.defaultValues.squareConeStyle;
         this.inputs.coneWidth.value = (roomMetadata.defaultValues.squareConeWidth || '').toString();
         this.inputs.coneStartPoints.value = roomMetadata.defaultValues.squareConeStartPoints;
         this.inputs.coneOverlapThreshold.value = (roomMetadata.defaultValues.squareConeOverlapThreshold * 100).toString();
         this.inputs.coneSizeSnapping.value = roomMetadata.defaultValues.squareConeSizeSnapping.toString();
+        this.formChanged();
+    }
+
+    private setCircleDefaults () {
+        this.inputs.circleStartPoints.value = roomMetadata.defaultValues.squareCircleStartPoints;
+        this.inputs.circleSizeSnapping.value = roomMetadata.defaultValues.squareCircleSizeSnapping.toString();
         this.formChanged();
     }
 
@@ -119,11 +137,21 @@ export class SquareSettingsForm extends BaseElement {
                             ${this.inputs.coneSizeSnapping}
                         </form-control>
                         <div class="flex justify-end">
-                            <button type="button" @click=${this.setDefaults}>Reset to default</button>
+                            <button type="button" @click=${this.setConeDefaults}>Reset to default</button>
                         </div>
                     </div>
                 </div>
-                <div id="circleForm"></div>
+                <div id="circleForm">
+                    <form-control label="Circle Start Point(s)">
+                        ${this.inputs.circleStartPoints}
+                    </form-control>
+                    <form-control label="Circle Size Snapping">
+                        ${this.inputs.circleSizeSnapping}
+                    </form-control>
+                    <div class="flex justify-end">
+                        <button type="button" @click=${this.setCircleDefaults}>Reset to default</button>
+                    </div>
+                </div>
                 <div id="cubeForm"></div>
             </form>
         `;

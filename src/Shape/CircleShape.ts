@@ -1,11 +1,36 @@
 import { BaseShape } from './BaseShape';
 import { Cell, grid, Point, SnapTo } from '@davidsev/owlbear-utils';
 import { Command, PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
+import { StartPoint } from '../Metadata/room';
 
 export class CircleShape extends BaseShape {
 
+    constructor (
+        public readonly startPoints: StartPoint[],
+        public readonly sizeSnapping: number,
+    ) {
+        super();
+    }
+
     private get roundedStart (): Point {
-        return grid.snapTo(this.start, SnapTo.CORNER);
+        if (!this.startPoints.length)
+            return this.start;
+
+        const allowedSnapPoints: SnapTo[] = [];
+        if (this.startPoints.includes(StartPoint.CORNER))
+            allowedSnapPoints.push(SnapTo.CORNER);
+        if (this.startPoints.includes(StartPoint.CENTER))
+            allowedSnapPoints.push(SnapTo.CENTER);
+        if (this.startPoints.includes(StartPoint.EDGE))
+            allowedSnapPoints.push(SnapTo.EDGE);
+        return grid.snapTo(this.start, allowedSnapPoints.reduce((a, b) => a | b));
+    }
+
+    public get roundedDistance (): number {
+        const snapTo = this.sizeSnapping * grid.dpi;
+        if (snapTo === 0)
+            return this.distance;
+        return Math.round(this.distance / snapTo) * snapTo;
     }
 
     private get roundedEnd (): Point {

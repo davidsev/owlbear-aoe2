@@ -20,6 +20,8 @@ export class RoomMetadata {
     squareConeStartPoints: StartPoint[] = [StartPoint.CORNER];
     squareConeOverlapThreshold: number = 0.1;
     squareConeSizeSnapping: number = 1;
+    squareCircleStartPoints: StartPoint[] = [StartPoint.CORNER];
+    squareCircleSizeSnapping: number = 1;
 }
 
 export const roomMetadata = new CachedRoomMetadata(getId(), new RoomMetadata);
