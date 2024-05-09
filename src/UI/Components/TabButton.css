@@ -1,0 +1,17 @@
+
+div {
+    padding: 0.3em 0.75em;
+    border: 0 solid transparent;
+    border-bottom: 1px solid white;
+    border-radius: 0;
+    white-space: nowrap;
+    cursor: pointer;
+
+    &.active {
+        border-bottom: 3px solid var(--primary-color);
+        padding-bottom: calc(0.3em - 2px);
+        outline: none;
+        font-weight: 500;
+        background: rgba(187, 153, 255, 0.16);
+    }
+}

@@ -27,6 +27,13 @@ export class SquareSettingsForm extends BaseElement {
     @query('div#templateConeFields', true)
     private accessor templateConeFields!: HTMLDivElement;
 
+    @query('div#coneForm', true)
+    private accessor coneForm!: HTMLDivElement;
+    @query('div#circleForm', true)
+    private accessor circleForm!: HTMLDivElement;
+    @query('div#cubeForm', true)
+    private accessor cubeForm!: HTMLDivElement;
+
     constructor () {
         super();
 
@@ -71,6 +78,9 @@ export class SquareSettingsForm extends BaseElement {
     protected firstUpdated (_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
         super.firstUpdated(_changedProperties);
         this.showOrHideFields();
+
+        // Trigger a refresh, the first render won't have had the tab targets set.
+        this.requestUpdate();
     }
 
     private setDefaults () {
@@ -86,43 +96,36 @@ export class SquareSettingsForm extends BaseElement {
     render () {
         return html`
             <form class="p-2">
-                <form-control id="coneStyle" label="Cone Style">
-                    ${this.inputs.coneStyle}
-                </form-control>
-                <div id="templateConeFields">
-                    <form-control label="Cone Width">
-                        ${this.inputs.coneWidth}
+                <tab-bar class="mb-2">
+                    <tab-button .target=${this.coneForm}>Cone</tab-button>
+                    <tab-button .target=${this.circleForm}>Circle</tab-button>
+                    <tab-button .target=${this.cubeForm}>Cube</tab-button>
+                </tab-bar>
+                <div id="coneForm">
+                    <form-control id="coneStyle" label="Cone Style">
+                        ${this.inputs.coneStyle}
                     </form-control>
-                    <form-control label="Cone Start Point(s)">
-                        ${this.inputs.coneStartPoints}
-                    </form-control>
-                    <form-control label="Cone Overlap Threshold">
-                        ${this.inputs.coneOverlapThreshold}
-                    </form-control>
-                    <form-control label="Cone Size Snapping">
-                        ${this.inputs.coneSizeSnapping}
-                    </form-control>
-                    <div class="flex justify-end">
-                        <button type="button" @click=${this.setDefaults}>Reset to default</button>
+                    <div id="templateConeFields">
+                        <form-control label="Cone Width">
+                            ${this.inputs.coneWidth}
+                        </form-control>
+                        <form-control label="Cone Start Point(s)">
+                            ${this.inputs.coneStartPoints}
+                        </form-control>
+                        <form-control label="Cone Overlap Threshold">
+                            ${this.inputs.coneOverlapThreshold}
+                        </form-control>
+                        <form-control label="Cone Size Snapping">
+                            ${this.inputs.coneSizeSnapping}
+                        </form-control>
+                        <div class="flex justify-end">
+                            <button type="button" @click=${this.setDefaults}>Reset to default</button>
+                        </div>
                     </div>
                 </div>
+                <div id="circleForm"></div>
+                <div id="cubeForm"></div>
             </form>
-
-            <!--
-            <div class="block w-full bg-background">background</div>
-            <div class="block w-full bg-paper">paper</div>
-            <div class="block w-full bg-primary">primary</div>
-            <div class="block w-full bg-primary-light">primary light</div>
-            <div class="block w-full bg-primary-dark">primary dark</div>
-            <div class="block w-full bg-primary-contrast">primary contrast</div>
-            <div class="block w-full bg-secondary">secondary</div>
-            <div class="block w-full bg-secondary-light">secondary light</div>
-            <div class="block w-full bg-secondary-dark">secondary dark</div>
-            <div class="block w-full bg-secondary-contrast">secondary contrast</div>
-            <div class="block w-full bg-text">text</div>
-            <div class="block w-full bg-text-secondary">text secondary</div>
-            <div class="block w-full bg-text-disabled">text disabled</div>
-            -->
         `;
     }
 }
