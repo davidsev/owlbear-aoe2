@@ -44,3 +44,12 @@ export function getDirection4 (vector: Vector2): Point | null {
         return new Point(0, -1);
     return new Point(0, 1);
 }
+
+/** Get a normalized direction vector, in one of the 4 diagonal directions.
+ *  In OBR right and down are positive.
+ */
+export function getDiagonalDirection4 (vector: Vector2): Point | null {
+    if (vector.x == 0 && vector.y == 0)
+        return null;
+    return new Point(Math.sign(vector.x), Math.sign(vector.y));
+}

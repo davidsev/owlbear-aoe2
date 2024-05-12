@@ -2,8 +2,8 @@ import { BaseTool } from './BaseTool';
 import { getId } from '../Utils/getId';
 import { CubeTemplateShape } from '../Shape/CubeTemplateShape';
 import { CubeStyle, roomMetadata } from '../Metadata/room';
-import { ConePathfinderShape } from '../Shape/ConePathfinderShape';
 import { BaseShape } from '../Shape/BaseShape';
+import { CubeSimpleShape } from '../Shape/CubeSimpleShape';
 
 export class CubeTool extends BaseTool {
 
@@ -13,7 +13,7 @@ export class CubeTool extends BaseTool {
 
     protected getShape (): BaseShape {
         if (roomMetadata.data.squareCubeStyle == CubeStyle.SQUARE) {
-            return new ConePathfinderShape();
+            return new CubeSimpleShape();
         } else { // TEMPLATE
             return new CubeTemplateShape(
                 roomMetadata.data.squareCubeStartPoints,
