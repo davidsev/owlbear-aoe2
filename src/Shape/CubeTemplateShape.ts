@@ -29,10 +29,24 @@ export class CubeTemplateShape extends BaseShape {
     }
 
     public get roundedDistance (): number {
+        // Calculate the distance between the start and end points.
+        // If the vector is axis aligned, then use the length.
+        // If it's diagonal, then we need to calculate what size triangle gets us that hypotenuse.
+        const vector = this.end.sub(this.start);
+        const aaDist = Math.max(Math.abs(vector.x), Math.abs(vector.y));
+        const diagonalDist = Math.max(Math.abs(vector.x), Math.abs(vector.y)) / 1.414;
+
+        // Decide which of the two distances to use based on the angle of the vector.
+        const bigComponent = Math.max(Math.abs(vector.x), Math.abs(vector.y));
+        const smallComponent = Math.min(Math.abs(vector.x), Math.abs(vector.y));
+        const diagonality = Math.atan2(smallComponent, bigComponent) / (1.57 / 2);
+        const dist = diagonalDist * (1 - diagonality) + aaDist * diagonality;
+
         const snapTo = this.sizeSnapping * grid.dpi;
         if (snapTo === 0)
-            return this.distance;
-        return Math.round(this.distance / snapTo) * snapTo;
+            return dist;
+
+        return Math.round(dist / snapTo) * snapTo;
     }
 
     private get roundedEnd (): Point {
