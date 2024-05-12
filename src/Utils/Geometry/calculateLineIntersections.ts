@@ -1,5 +1,5 @@
 import { LineSegment, Point } from '@davidsev/owlbear-utils';
-import { Vector2 } from '@owlbear-rodeo/sdk';
+import { cross, dot } from './vectorFunctions';
 
 // algorithm from https://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect/565282#565282
 export function calculateLineIntersections (line1: LineSegment, line2: LineSegment): Point[] {
@@ -66,10 +66,3 @@ function isZeroIsh (x: number) {
     return Math.abs(x) < 1 / 1000000;
 }
 
-function dot (lhs: Vector2, rhs: Vector2): number {
-    return lhs.x * rhs.x + lhs.y * rhs.y;
-}
-
-function cross (lhs: Vector2, rhs: Vector2): number {
-    return lhs.x * rhs.y - lhs.y * rhs.x;
-}

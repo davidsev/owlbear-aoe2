@@ -7,6 +7,11 @@ export enum ConeStyle {
     TOKEN = 'TOKEN',
 }
 
+export enum CubeStyle {
+    TEMPLATE = 'TEMPLATE',
+    SQUARE = 'SQUARE',
+}
+
 export enum StartPoint {
     CORNER = 'CORNER',
     CENTER = 'CENTER',
@@ -22,6 +27,10 @@ export class RoomMetadata {
     squareConeSizeSnapping: number = 1;
     squareCircleStartPoints: StartPoint[] = [StartPoint.CORNER];
     squareCircleSizeSnapping: number = 1;
+    squareCubeStyle: CubeStyle = CubeStyle.SQUARE;
+    squareCubeStartPoints: StartPoint[] = [StartPoint.CORNER];
+    squareCubeSizeSnapping: number = 1;
+    squareCubeOverlapThreshold: number = 0.1;
 }
 
 export const roomMetadata = new CachedRoomMetadata(getId(), new RoomMetadata);

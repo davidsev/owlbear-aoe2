@@ -1,6 +1,9 @@
 import { BaseTool } from './BaseTool';
 import { getId } from '../Utils/getId';
-import { CubeShape } from '../Shape/CubeShape';
+import { CubeTemplateShape } from '../Shape/CubeTemplateShape';
+import { CubeStyle, roomMetadata } from '../Metadata/room';
+import { ConePathfinderShape } from '../Shape/ConePathfinderShape';
+import { BaseShape } from '../Shape/BaseShape';
 
 export class CubeTool extends BaseTool {
 
@@ -8,7 +11,15 @@ export class CubeTool extends BaseTool {
     readonly icon = '/icons/cube.svg';
     readonly id = getId('cube');
 
-    protected getShape (): CubeShape {
-        return new CubeShape(); // Width = height, so this is the angle where you cast.
+    protected getShape (): BaseShape {
+        if (roomMetadata.data.squareCubeStyle == CubeStyle.SQUARE) {
+            return new ConePathfinderShape();
+        } else { // TEMPLATE
+            return new CubeTemplateShape(
+                roomMetadata.data.squareCubeStartPoints,
+                roomMetadata.data.squareCubeOverlapThreshold,
+                roomMetadata.data.squareCubeSizeSnapping,
+            );
+        }
     }
 }
