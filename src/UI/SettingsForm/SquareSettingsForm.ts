@@ -2,7 +2,7 @@ import { customElement, query } from 'lit/decorators.js';
 import { html, PropertyValueMap } from 'lit';
 import { BaseElement } from '../BaseElement';
 import { SelectEnum } from '../Components/SelectEnum';
-import { ConeStyle, CubeStyle, roomMetadata, StartPoint } from '../../Metadata/room';
+import { ConeStyle, CubeStyle, roomMetadata, SquareDirection, StartPoint } from '../../Metadata/room';
 import { MultiSelectEnum } from '../Components/MultiSelectEnum';
 
 @customElement('square-settings-form')
@@ -22,6 +22,11 @@ export class SquareSettingsForm extends BaseElement {
         }),
         coneOverlapThreshold: document.createElement('input'),
         coneSizeSnapping: document.createElement('input'),
+        coneDirection: new SelectEnum({
+            [SquareDirection.ALL]: 'Unrestricted',
+            [SquareDirection.FOUR]: '4 Compass Points',
+            [SquareDirection.EIGHT]: '8 Compass Points',
+        }),
         circleStartPoints: new MultiSelectEnum({
             [StartPoint.CORNER]: 'Corners',
             [StartPoint.CENTER]: 'Center',
@@ -39,6 +44,11 @@ export class SquareSettingsForm extends BaseElement {
         }),
         cubeSizeSnapping: document.createElement('input'),
         cubeOverlapThreshold: document.createElement('input'),
+        cubeDirection: new SelectEnum({
+            [SquareDirection.ALL]: 'Unrestricted',
+            [SquareDirection.FOUR]: '4 Compass Points',
+            [SquareDirection.EIGHT]: '8 Compass Points',
+        }),
     };
 
     @query('div#templateConeFields', true)
@@ -79,12 +89,14 @@ export class SquareSettingsForm extends BaseElement {
         this.inputs.coneStartPoints.value = roomMetadata.data.squareConeStartPoints;
         this.inputs.coneOverlapThreshold.valueAsNumber = roomMetadata.data.squareConeOverlapThreshold * 100;
         this.inputs.coneSizeSnapping.valueAsNumber = roomMetadata.data.squareConeSizeSnapping;
+        this.inputs.coneDirection.value = roomMetadata.data.squareConeDirection;
         this.inputs.circleStartPoints.value = roomMetadata.data.squareCircleStartPoints;
         this.inputs.circleSizeSnapping.valueAsNumber = roomMetadata.data.squareCircleSizeSnapping;
         this.inputs.cubeStyle.value = roomMetadata.data.squareCubeStyle;
         this.inputs.cubeStartPoints.value = roomMetadata.data.squareCubeStartPoints;
         this.inputs.cubeOverlapThreshold.valueAsNumber = roomMetadata.data.squareCubeOverlapThreshold * 100;
         this.inputs.cubeSizeSnapping.valueAsNumber = roomMetadata.data.squareCubeSizeSnapping;
+        this.inputs.cubeDirection.value = roomMetadata.data.squareCubeDirection;
     }
 
     private formChanged () {
@@ -95,12 +107,14 @@ export class SquareSettingsForm extends BaseElement {
             squareConeStartPoints: this.inputs.coneStartPoints.value,
             squareConeOverlapThreshold: parseInt(this.inputs.coneOverlapThreshold.value) / 100,
             squareConeSizeSnapping: parseFloat(this.inputs.coneSizeSnapping.value),
+            squareConeDirection: this.inputs.coneDirection.value,
             squareCircleStartPoints: this.inputs.circleStartPoints.value,
             squareCircleSizeSnapping: parseFloat(this.inputs.circleSizeSnapping.value),
             squareCubeStyle: this.inputs.cubeStyle.value,
             squareCubeStartPoints: this.inputs.cubeStartPoints.value,
             squareCubeOverlapThreshold: parseInt(this.inputs.cubeOverlapThreshold.value) / 100,
             squareCubeSizeSnapping: parseFloat(this.inputs.cubeSizeSnapping.value),
+            squareCubeDirection: this.inputs.cubeDirection.value,
         });
 
         this.showOrHideFields();
@@ -125,6 +139,7 @@ export class SquareSettingsForm extends BaseElement {
         this.inputs.coneStartPoints.value = roomMetadata.defaultValues.squareConeStartPoints;
         this.inputs.coneOverlapThreshold.value = (roomMetadata.defaultValues.squareConeOverlapThreshold * 100).toString();
         this.inputs.coneSizeSnapping.value = roomMetadata.defaultValues.squareConeSizeSnapping.toString();
+        this.inputs.coneDirection.value = roomMetadata.defaultValues.squareConeDirection;
         this.formChanged();
     }
 
@@ -139,6 +154,7 @@ export class SquareSettingsForm extends BaseElement {
         this.inputs.cubeStartPoints.value = roomMetadata.defaultValues.squareCubeStartPoints;
         this.inputs.cubeOverlapThreshold.value = (roomMetadata.defaultValues.squareCubeOverlapThreshold * 100).toString();
         this.inputs.cubeSizeSnapping.value = roomMetadata.defaultValues.squareCubeSizeSnapping.toString();
+        this.inputs.cubeDirection.value = roomMetadata.defaultValues.squareCubeDirection;
         this.formChanged();
     }
 
@@ -167,6 +183,9 @@ export class SquareSettingsForm extends BaseElement {
                         </form-control>
                         <form-control label="Cone Size Snapping">
                             ${this.inputs.coneSizeSnapping}
+                        </form-control>
+                        <form-control label="Cone Direction">
+                            ${this.inputs.coneDirection}
                         </form-control>
                         <div class="flex justify-end">
                             <button type="button" @click=${this.setConeDefaults}>Reset to default</button>
@@ -197,6 +216,9 @@ export class SquareSettingsForm extends BaseElement {
                         </form-control>
                         <form-control label="Cube Size Snapping">
                             ${this.inputs.cubeSizeSnapping}
+                        </form-control>
+                        <form-control label="Cube Direction">
+                            ${this.inputs.cubeDirection}
                         </form-control>
                     </div>
                     <div class="flex justify-end">

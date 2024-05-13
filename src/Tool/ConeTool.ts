@@ -23,6 +23,7 @@ export class ConeTool extends BaseTool {
                 roomMetadata.data.squareConeStartPoints,
                 roomMetadata.data.squareConeOverlapThreshold,
                 roomMetadata.data.squareConeSizeSnapping,
+                roomMetadata.data.squareConeDirection,
             );
         }
     }

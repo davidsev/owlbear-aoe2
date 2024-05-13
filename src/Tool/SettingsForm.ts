@@ -17,7 +17,7 @@ export class SettingsForm implements ToolAction {
     onClick (context: ToolContext, elementId: string): void {
         OBR.popover.open({
             id: getId('settings-form'),
-            height: 500,
+            height: 600,
             width: 350,
             url: '/frame.html#settings-form',
             anchorElementId: elementId,

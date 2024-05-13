@@ -19,6 +19,7 @@ export class CubeTool extends BaseTool {
                 roomMetadata.data.squareCubeStartPoints,
                 roomMetadata.data.squareCubeOverlapThreshold,
                 roomMetadata.data.squareCubeSizeSnapping,
+                roomMetadata.data.squareCubeDirection,
             );
         }
     }

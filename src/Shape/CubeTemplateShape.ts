@@ -1,8 +1,9 @@
 import { BaseShape } from './BaseShape';
 import { Cell, grid, Point, SnapTo } from '@davidsev/owlbear-utils';
 import { Command, PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
-import { StartPoint } from '../Metadata/room';
+import { SquareDirection, StartPoint } from '../Metadata/room';
 import { Square } from '../Utils/Geometry/Shape/Square';
+import { getDirection4, getDirection8 } from '../Utils/Geometry/getDirection';
 
 export class CubeTemplateShape extends BaseShape {
 
@@ -10,6 +11,7 @@ export class CubeTemplateShape extends BaseShape {
         public readonly startPoints: StartPoint[],
         public readonly overlapThreshold: number,
         public readonly sizeSnapping: number,
+        public readonly directionSnapping: SquareDirection,
     ) {
         super();
     }
@@ -51,7 +53,23 @@ export class CubeTemplateShape extends BaseShape {
 
     private get roundedEnd (): Point {
         const vector = this.end.sub(this.start);
-        return this.roundedStart.add(vector.scale((this.roundedDistance * 1.414) / this.distance));
+
+        // If the direction isn't locked, then just fix the length and we're done.
+        if (this.directionSnapping === SquareDirection.ALL)
+            return this.roundedStart.add(vector.scale(this.roundedDistance * 1.414 / this.distance));
+
+        // Otherwise we need to snap to the nearest valid direction.
+        const direction = this.directionSnapping === SquareDirection.FOUR ? getDirection4(vector) : getDirection8(vector);
+        if (!direction)
+            return this.roundedStart;
+
+        // Work out how far to move in the direction.  If it's diagonal, then we need to not move the full distance.
+        let move = new Point(this.roundedDistance * direction.x, this.roundedDistance * direction.y);
+        if (direction.x !== 0 && direction.y !== 0)
+            move = move.scale(1.414 / 2);
+
+        return this.roundedStart.add(move.scale(1.414));
+
     }
 
     private get square (): Square {
