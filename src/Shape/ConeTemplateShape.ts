@@ -1,7 +1,7 @@
 import { BaseShape } from './BaseShape';
 import { Cell, grid, Point, SnapTo } from '@davidsev/owlbear-utils';
 import { Command, PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
-import { Triangle } from '../Utils/Geometry/Triangle';
+import { Triangle } from '../Utils/Geometry/Shape/Triangle';
 import { StartPoint } from '../Metadata/room';
 
 export class ConeTemplateShape extends BaseShape {

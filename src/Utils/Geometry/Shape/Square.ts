@@ -1,13 +1,14 @@
 import { Vector2 } from '@owlbear-rodeo/sdk';
-import { Cell, LineSegment, Point } from '@davidsev/owlbear-utils';
-import { calculateLineIntersections } from './calculateLineIntersections';
-import { sortPointsClockwise } from './sortPointsClockwise';
-import { calculateArea } from './calculateArea';
-import { roomMetadata } from '../../Metadata/room';
-import { IntersectionDebugger } from '../IntersectionDebugger';
-import { dot } from './vectorFunctions';
+import { Cell, Point } from '@davidsev/owlbear-utils';
+import { calculateLineIntersections } from '../calculateLineIntersections';
+import { sortPointsClockwise } from '../sortPointsClockwise';
+import { calculateArea } from '../calculateArea';
+import { roomMetadata } from '../../../Metadata/room';
+import { IntersectionDebugger } from '../../IntersectionDebugger';
+import { dot } from '../vectorFunctions';
+import { Polygon } from './Polygon';
 
-export class Square implements Iterable<Point> {
+export class Square extends Polygon {
 
     public readonly p1: Point;
     public readonly p2: Point;
@@ -16,35 +17,23 @@ export class Square implements Iterable<Point> {
     public readonly isAABB: boolean;
 
     public constructor (corner: Vector2, oppositeCorner: Vector2) {
-        this.p1 = new Point(corner);
-        this.p3 = new Point(oppositeCorner);
 
-        const diagonal = this.center.sub(this.p1); // p1 -> center, rotate 90deg to get p2 and p4.
-        this.p2 = this.center.add({ x: diagonal.y, y: -diagonal.x });
-        this.p4 = this.center.add({ x: -diagonal.y, y: diagonal.x });
+        const p1 = new Point(corner);
+        const p3 = new Point(oppositeCorner);
 
+        // Calculate the other two points.
+        const center = p1.add(p3).scale(0.5);
+        const diagonal = center.sub(p1); // p1 -> center, rotate 90deg to get p2 and p4.
+        const p2 = center.add({ x: diagonal.y, y: -diagonal.x });
+        const p4 = center.add({ x: -diagonal.y, y: diagonal.x });
+
+        super([p1, p2, p3, p4]);
+
+        this.p1 = p1;
+        this.p2 = p2;
+        this.p3 = p3;
+        this.p4 = p4;
         this.isAABB = Math.abs(diagonal.x) == Math.abs(diagonal.y);
-    }
-
-    public [Symbol.iterator] (): Iterator<Point> {
-        return this.points[Symbol.iterator]();
-    }
-
-    public get points (): Point[] {
-        return [this.p1, this.p2, this.p3, this.p4];
-    }
-
-    public get center (): Point {
-        return this.p1.add(this.p3).scale(0.5);
-    }
-
-    public get lines (): LineSegment[] {
-        return [
-            new LineSegment(this.p1, this.p2),
-            new LineSegment(this.p2, this.p3),
-            new LineSegment(this.p3, this.p4),
-            new LineSegment(this.p4, this.p1),
-        ];
     }
 
     public intersectsCellPercentage (cell: Cell): number {

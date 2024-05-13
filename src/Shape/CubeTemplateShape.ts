@@ -2,7 +2,7 @@ import { BaseShape } from './BaseShape';
 import { Cell, grid, Point, SnapTo } from '@davidsev/owlbear-utils';
 import { Command, PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
 import { StartPoint } from '../Metadata/room';
-import { Square } from '../Utils/Geometry/Square';
+import { Square } from '../Utils/Geometry/Shape/Square';
 
 export class CubeTemplateShape extends BaseShape {
 
