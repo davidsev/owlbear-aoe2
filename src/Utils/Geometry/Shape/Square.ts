@@ -1,10 +1,5 @@
 import { Vector2 } from '@owlbear-rodeo/sdk';
-import { Cell, Point } from '@davidsev/owlbear-utils';
-import { calculateLineIntersections } from '../calculateLineIntersections';
-import { sortPointsClockwise } from '../sortPointsClockwise';
-import { calculateArea } from '../calculateArea';
-import { roomMetadata } from '../../../Metadata/room';
-import { IntersectionDebugger } from '../../IntersectionDebugger';
+import { Point } from '@davidsev/owlbear-utils';
 import { dot } from '../vectorFunctions';
 import { Polygon } from './Polygon';
 
@@ -34,56 +29,6 @@ export class Square extends Polygon {
         this.p3 = p3;
         this.p4 = p4;
         this.isAABB = Math.abs(diagonal.x) == Math.abs(diagonal.y);
-    }
-
-    public intersectsCellPercentage (cell: Cell): number {
-        const debugMode = roomMetadata.data.debugIntersection && cell.containsPoint(new Point(0, 0));
-        const debug = debugMode ? IntersectionDebugger.getInstance() : null;
-        debug?.clear();
-
-        // Work out the polygon that intersects the two.
-        const newPolygon: Point[] = [];
-
-        // Find any points of the cell that are inside the square.
-        for (const point of cell.corners) {
-            if (this.containsPoint(point))
-                newPolygon.push(point);
-        }
-
-        // If all of the cell is inside the triangle, then 100%.
-        if (newPolygon.length == cell.corners.length) {
-            return 100;
-        }
-
-        // Find any points of the square that are inside the cell.
-        for (const point of this) {
-            if (cell.containsPoint(point))
-                newPolygon.push(point);
-        }
-
-        // And find any points where the lines intersect.
-        for (const squareLine of this.lines) {
-            for (const cellLine of cell.edges) {
-                newPolygon.push(...calculateLineIntersections(squareLine, cellLine));
-            }
-        }
-
-        debug?.cross(...newPolygon);
-
-        // Then sort our points to be in order, and remove dupes.
-        const sortedPoints = sortPointsClockwise(newPolygon);
-        const uniqueSortedPoints = [...new Map(sortedPoints.map(point => [point.toString(), point])).values()];
-
-        // If there's not enough / any overlap, then no intersection.
-        if (uniqueSortedPoints.length < 3) {
-            return 0;
-        }
-
-        // Otherwise we need the area of the polygon.
-        const polygonArea = calculateArea(uniqueSortedPoints, debug);
-
-        // Compare to the area of the cell.
-        return polygonArea / calculateArea(cell.corners) * 100;
     }
 
     // Formula from https://math.stackexchange.com/questions/190111/how-to-check-if-a-point-is-inside-a-rectangle
