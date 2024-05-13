@@ -24,16 +24,19 @@ export function calculateLineIntersections (line1: LineSegment, line2: LineSegme
 
         // Overlap:  t0 and t1 are the points on line1 where the intersections happen, return them both.
         if (t0 >= 0 && t0 <= 1 || t1 >= 0 && t1 <= 1) {
-            return [
-                new Point({
+            const points: Point[] = [];
+            if (t0 >= 0 && t0 <= 1)
+                points.push(new Point({
                     x: line1.p1.x + (line1.p2.x - line1.p1.x) * t0,
                     y: line1.p1.y + (line1.p2.y - line1.p1.y) * t0,
-                }),
-                new Point({
-                    x: line1.p1.x + (line1.p2.x - line1.p1.x) * t1,
-                    y: line1.p1.y + (line1.p2.y - line1.p1.y) * t1,
-                }),
-            ];
+                }));
+            if (t1 >= 0 && t1 <= 1)
+                points.push(
+                    new Point({
+                        x: line1.p1.x + (line1.p2.x - line1.p1.x) * t1,
+                        y: line1.p1.y + (line1.p2.y - line1.p1.y) * t1,
+                    }));
+            return points;
         }
 
         // Same line but non-overlapping segments, so no intersection
