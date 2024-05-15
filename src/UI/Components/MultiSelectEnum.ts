@@ -26,7 +26,7 @@ export class MultiSelectEnum<T extends Record<string, string>> extends BaseEleme
                 ${Object.entries(this.options).map(([value, label]) => html`
                     <div>
                         <input id="${value}" type="checkbox" value="${value}" @change="${this.changeHandler}"
-                               ?checked="${this.value.includes(value)}">
+                               .checked=${this.value.includes(value)}>
                         <label for="${value}">${label}</label>
                     </div>
                 `)}
