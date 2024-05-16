@@ -187,9 +187,9 @@ export class SquareSettingsForm extends BaseElement {
                         <form-control label="Cone Direction">
                             ${this.inputs.coneDirection}
                         </form-control>
-                        <div class="flex justify-end">
-                            <button type="button" @click=${this.setConeDefaults}>Reset to default</button>
-                        </div>
+                    </div>
+                    <div class="flex justify-end">
+                        <button type="button" @click=${this.setConeDefaults}>Reset to default</button>
                     </div>
                 </div>
                 <div id="circleForm">
