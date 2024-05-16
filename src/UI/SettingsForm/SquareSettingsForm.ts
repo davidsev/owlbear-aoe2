@@ -2,7 +2,7 @@ import { customElement, query } from 'lit/decorators.js';
 import { html, PropertyValueMap } from 'lit';
 import { BaseElement } from '../BaseElement';
 import { SelectEnum } from '../Components/SelectEnum';
-import { ConeStyle, CubeStyle, roomMetadata, SquareDirection, StartPoint } from '../../Metadata/room';
+import { roomMetadata, SquareConeStyle, SquareCubeStyle, SquareDirection, StartPoint } from '../../Metadata/room';
 import { MultiSelectEnum } from '../Components/MultiSelectEnum';
 
 @customElement('square-settings-form')
@@ -10,9 +10,9 @@ export class SquareSettingsForm extends BaseElement {
 
     private readonly inputs = {
         coneStyle: new SelectEnum({
-            [ConeStyle.TEMPLATE]: 'D&D 5e (Template Method)',
-            [ConeStyle.PATHFINDER]: 'Pathfinder / D&D 3.5',
-            [ConeStyle.TOKEN]: 'D&D 5e (Token Method)',
+            [SquareConeStyle.TEMPLATE]: 'D&D 5e (Template Method)',
+            [SquareConeStyle.PATHFINDER]: 'Pathfinder / D&D 3.5',
+            [SquareConeStyle.TOKEN]: 'D&D 5e (Token Method)',
         }),
         coneWidth: document.createElement('input'),
         coneStartPoints: new MultiSelectEnum({
@@ -34,8 +34,8 @@ export class SquareSettingsForm extends BaseElement {
         }),
         circleSizeSnapping: document.createElement('input'),
         cubeStyle: new SelectEnum({
-            [CubeStyle.SQUARE]: 'Default',
-            [CubeStyle.TEMPLATE]: 'Template',
+            [SquareCubeStyle.SQUARE]: 'Default',
+            [SquareCubeStyle.TEMPLATE]: 'Template',
         }),
         cubeStartPoints: new MultiSelectEnum({
             [StartPoint.CORNER]: 'Corners',
@@ -121,8 +121,8 @@ export class SquareSettingsForm extends BaseElement {
     }
 
     private showOrHideFields () {
-        this.templateConeFields.style.display = roomMetadata.data.squareConeStyle == ConeStyle.TEMPLATE ? 'initial' : 'none';
-        this.templateCubeFields.style.display = roomMetadata.data.squareCubeStyle == CubeStyle.TEMPLATE ? 'initial' : 'none';
+        this.templateConeFields.style.display = roomMetadata.data.squareConeStyle == SquareConeStyle.TEMPLATE ? 'initial' : 'none';
+        this.templateCubeFields.style.display = roomMetadata.data.squareCubeStyle == SquareCubeStyle.TEMPLATE ? 'initial' : 'none';
     }
 
     protected firstUpdated (_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {

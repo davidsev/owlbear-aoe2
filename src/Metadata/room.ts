@@ -1,13 +1,13 @@
 import { getId } from '../Utils/getId';
 import { CachedRoomMetadata } from '@davidsev/owlbear-utils/js/Metadata/Cached/Room';
 
-export enum ConeStyle {
+export enum SquareConeStyle {
     TEMPLATE = 'TEMPLATE',
     PATHFINDER = 'PATHFINDER',
     TOKEN = 'TOKEN',
 }
 
-export enum CubeStyle {
+export enum SquareCubeStyle {
     TEMPLATE = 'TEMPLATE',
     SQUARE = 'SQUARE',
 }
@@ -26,7 +26,7 @@ export enum SquareDirection {
 
 export class RoomMetadata {
     debugIntersection: boolean = false;
-    squareConeStyle: ConeStyle = ConeStyle.TEMPLATE;
+    squareConeStyle: SquareConeStyle = SquareConeStyle.TEMPLATE;
     squareConeWidth: number | null = null;
     squareConeStartPoints: StartPoint[] = [StartPoint.CORNER];
     squareConeOverlapThreshold: number = 0.1;
@@ -34,7 +34,7 @@ export class RoomMetadata {
     squareConeDirection: SquareDirection = SquareDirection.ALL;
     squareCircleStartPoints: StartPoint[] = [StartPoint.CORNER];
     squareCircleSizeSnapping: number = 1;
-    squareCubeStyle: CubeStyle = CubeStyle.SQUARE;
+    squareCubeStyle: SquareCubeStyle = SquareCubeStyle.SQUARE;
     squareCubeStartPoints: StartPoint[] = [StartPoint.CORNER];
     squareCubeSizeSnapping: number = 1;
     squareCubeOverlapThreshold: number = 0.1;
