@@ -29,11 +29,6 @@ export enum HexConeStyle {
     EQUILATERAL = 'EQUILATERAL',
 }
 
-export enum HexDirection {
-    ALL = 'ALL',
-    SIX = 'SIX',
-}
-
 export class RoomMetadata {
     debugIntersection: boolean = false;
     squareConeStyle: SquareConeStyle = SquareConeStyle.TEMPLATE;
@@ -54,15 +49,12 @@ export class RoomMetadata {
     hexConeStartPoints: StartPoint[] = [StartPoint.CORNER];
     hexConeOverlapThreshold: number = 0.1;
     hexConeSizeSnapping: number = 1;
-    hexConeDirection: HexDirection = HexDirection.ALL;
     hexCircleStartPoints: StartPoint[] = [StartPoint.CORNER];
     hexCircleSizeSnapping: number = 1;
     hexCubeWidth: number = 60;
     hexCubeStartPoints: StartPoint[] = [StartPoint.CORNER];
     hexCubeOverlapThreshold: number = 0.1;
     hexCubeSizeSnapping: number = 1;
-    hexCubeDirection: HexDirection = HexDirection.ALL;
-
 }
 
 export const roomMetadata = new CachedRoomMetadata(getId(), new RoomMetadata);

@@ -2,7 +2,7 @@ import { customElement, query } from 'lit/decorators.js';
 import { html, PropertyValueMap } from 'lit';
 import { BaseElement } from '../BaseElement';
 import { SelectEnum } from '../Components/SelectEnum';
-import { HexConeStyle, HexDirection, roomMetadata, StartPoint } from '../../Metadata/room';
+import { HexConeStyle, roomMetadata, StartPoint } from '../../Metadata/room';
 import { MultiSelectEnum } from '../Components/MultiSelectEnum';
 
 @customElement('hex-settings-form')
@@ -21,10 +21,6 @@ export class HexSettingsForm extends BaseElement {
         }),
         coneOverlapThreshold: document.createElement('input'),
         coneSizeSnapping: document.createElement('input'),
-        coneDirection: new SelectEnum({
-            [HexDirection.ALL]: 'Unrestricted',
-            [HexDirection.SIX]: 'Grid Aligned',
-        }),
         circleStartPoints: new MultiSelectEnum({
             [StartPoint.CORNER]: 'Corners',
             [StartPoint.CENTER]: 'Center',
@@ -38,10 +34,6 @@ export class HexSettingsForm extends BaseElement {
         }),
         cubeSizeSnapping: document.createElement('input'),
         cubeOverlapThreshold: document.createElement('input'),
-        cubeDirection: new SelectEnum({
-            [HexDirection.ALL]: 'Unrestricted',
-            [HexDirection.SIX]: 'Grid Aligned',
-        }),
     };
 
     @query('div#templateConeFields', true)
@@ -79,13 +71,11 @@ export class HexSettingsForm extends BaseElement {
         this.inputs.coneStartPoints.value = roomMetadata.data.hexConeStartPoints;
         this.inputs.coneOverlapThreshold.valueAsNumber = roomMetadata.data.hexConeOverlapThreshold * 100;
         this.inputs.coneSizeSnapping.valueAsNumber = roomMetadata.data.hexConeSizeSnapping;
-        this.inputs.coneDirection.value = roomMetadata.data.hexConeDirection;
         this.inputs.circleStartPoints.value = roomMetadata.data.hexCircleStartPoints;
         this.inputs.circleSizeSnapping.valueAsNumber = roomMetadata.data.hexCircleSizeSnapping;
         this.inputs.cubeStartPoints.value = roomMetadata.data.hexCubeStartPoints;
         this.inputs.cubeOverlapThreshold.valueAsNumber = roomMetadata.data.hexCubeOverlapThreshold * 100;
         this.inputs.cubeSizeSnapping.valueAsNumber = roomMetadata.data.hexCubeSizeSnapping;
-        this.inputs.cubeDirection.value = roomMetadata.data.hexCubeDirection;
     }
 
     private formChanged () {
@@ -96,13 +86,11 @@ export class HexSettingsForm extends BaseElement {
             hexConeStartPoints: this.inputs.coneStartPoints.value,
             hexConeOverlapThreshold: parseInt(this.inputs.coneOverlapThreshold.value) / 100,
             hexConeSizeSnapping: parseFloat(this.inputs.coneSizeSnapping.value),
-            hexConeDirection: this.inputs.coneDirection.value,
             hexCircleStartPoints: this.inputs.circleStartPoints.value,
             hexCircleSizeSnapping: parseFloat(this.inputs.circleSizeSnapping.value),
             hexCubeStartPoints: this.inputs.cubeStartPoints.value,
             hexCubeOverlapThreshold: parseInt(this.inputs.cubeOverlapThreshold.value) / 100,
             hexCubeSizeSnapping: parseFloat(this.inputs.cubeSizeSnapping.value),
-            hexCubeDirection: this.inputs.cubeDirection.value,
         });
 
         this.showOrHideFields();
@@ -126,7 +114,6 @@ export class HexSettingsForm extends BaseElement {
         this.inputs.coneStartPoints.value = roomMetadata.defaultValues.hexConeStartPoints;
         this.inputs.coneOverlapThreshold.value = (roomMetadata.defaultValues.hexConeOverlapThreshold * 100).toString();
         this.inputs.coneSizeSnapping.value = roomMetadata.defaultValues.hexConeSizeSnapping.toString();
-        this.inputs.coneDirection.value = roomMetadata.defaultValues.hexConeDirection;
         this.formChanged();
     }
 
@@ -140,7 +127,6 @@ export class HexSettingsForm extends BaseElement {
         this.inputs.cubeStartPoints.value = roomMetadata.defaultValues.hexCubeStartPoints;
         this.inputs.cubeOverlapThreshold.value = (roomMetadata.defaultValues.hexCubeOverlapThreshold * 100).toString();
         this.inputs.cubeSizeSnapping.value = roomMetadata.defaultValues.hexCubeSizeSnapping.toString();
-        this.inputs.cubeDirection.value = roomMetadata.defaultValues.hexCubeDirection;
         this.formChanged();
     }
 
@@ -170,9 +156,6 @@ export class HexSettingsForm extends BaseElement {
                         <form-control label="Cone Size Snapping">
                             ${this.inputs.coneSizeSnapping}
                         </form-control>
-                        <form-control label="Cone Direction">
-                            ${this.inputs.coneDirection}
-                        </form-control>
                     </div>
                     <div class="flex justify-end">
                         <button type="button" @click=${this.setConeDefaults}>Reset to default</button>
@@ -198,9 +181,6 @@ export class HexSettingsForm extends BaseElement {
                     </form-control>
                     <form-control label="Cube Size Snapping">
                         ${this.inputs.cubeSizeSnapping}
-                    </form-control>
-                    <form-control label="Cube Direction">
-                        ${this.inputs.cubeDirection}
                     </form-control>
                     <div class="flex justify-end">
                         <button type="button" @click=${this.setCubeDefaults}>Reset to default</button>
