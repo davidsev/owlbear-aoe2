@@ -93,13 +93,9 @@ export abstract class BaseTool implements ToolMode {
         // And the text
         if (label) {
             label.text.plainText = this.currentArea.shape.getLabelText();
-            // label.position = this.currentArea.shape.getLabelPosition();
             const pos = this.currentArea.shape.getLabelPosition();
             label.position = { x: pos.x - 100, y: pos.y - 50 };
             label.visible = true;
-            //const size = await measureText(label.text);
-            //const center = this.currentArea.shape.getLabelPosition();
-            //label.position = { x: center.x - size.x / 2, y: center.y - size.y / 2 };
         }
     }
 
