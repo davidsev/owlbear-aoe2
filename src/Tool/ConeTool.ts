@@ -1,11 +1,12 @@
 import { BaseTool } from './BaseTool';
 import { getId } from '../Utils/getId';
 import { ConeTemplateShape } from '../Shape/ConeTemplateShape';
-import { roomMetadata, SquareConeStyle, SquareDirection } from '../Metadata/room';
+import { HexConeStyle, roomMetadata, SquareConeStyle, SquareDirection } from '../Metadata/room';
 import { ConePathfinderShape } from '../Shape/ConePathfinderShape';
 import { BaseShape } from '../Shape/BaseShape';
 import { ConeTokenShape } from '../Shape/ConeTokenShape';
 import { grid } from '@davidsev/owlbear-utils';
+import { ConeHexShape } from '../Shape/ConeHexShape';
 
 export class ConeTool extends BaseTool {
 
@@ -15,13 +16,17 @@ export class ConeTool extends BaseTool {
 
     protected getShape (): BaseShape {
         if (grid.type == 'HEX_HORIZONTAL' || grid.type == 'HEX_VERTICAL') {
-            return new ConeTemplateShape(
-                (roomMetadata.data.hexConeWidth % 180) * Math.PI / 180,
-                roomMetadata.data.hexConeStartPoints,
-                roomMetadata.data.hexConeOverlapThreshold,
-                roomMetadata.data.hexConeSizeSnapping,
-                SquareDirection.ALL,
-            );
+            if (roomMetadata.data.hexConeStyle == HexConeStyle.EQUILATERAL) {
+                return new ConeHexShape();
+            } else {
+                return new ConeTemplateShape(
+                    (roomMetadata.data.hexConeWidth % 180) * Math.PI / 180,
+                    roomMetadata.data.hexConeStartPoints,
+                    roomMetadata.data.hexConeOverlapThreshold,
+                    roomMetadata.data.hexConeSizeSnapping,
+                    SquareDirection.ALL,
+                );
+            }
         } else {
             if (roomMetadata.data.squareConeStyle == SquareConeStyle.PATHFINDER) {
                 return new ConePathfinderShape();
