@@ -1,4 +1,4 @@
-import { BaseShape } from './BaseShape';
+import { BaseShape, cached } from './BaseShape';
 import { Cell, grid, Point, SnapTo } from '@davidsev/owlbear-utils';
 import { Command, PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
 import { Triangle } from '../Utils/Geometry/Shape/Triangle';
@@ -17,6 +17,7 @@ export class ConeTemplateShape extends BaseShape {
         super();
     }
 
+    @cached()
     private get roundedStart (): Point {
         if (!this.startPoints.length)
             return this.start;
@@ -31,6 +32,7 @@ export class ConeTemplateShape extends BaseShape {
         return grid.snapTo(this.start, allowedSnapPoints.reduce((a, b) => a | b));
     }
 
+    @cached()
     public get roundedDistance (): number {
         const snapTo = this.sizeSnapping * grid.dpi;
         if (snapTo === 0)
@@ -38,6 +40,7 @@ export class ConeTemplateShape extends BaseShape {
         return Math.round(this.distance / snapTo) * snapTo;
     }
 
+    @cached()
     private get roundedEnd (): Point {
         const vector = this.end.sub(this.start);
 
@@ -58,6 +61,7 @@ export class ConeTemplateShape extends BaseShape {
         return this.roundedStart.add(move);
     }
 
+    @cached()
     private get triangle (): Triangle {
         const vector = this.roundedEnd.sub(this.roundedStart).scale(Math.tan(this.widthRads / 2));
         return new Triangle(
@@ -67,12 +71,14 @@ export class ConeTemplateShape extends BaseShape {
         );
     }
 
-    public getLabelPosition (): Point {
+    @cached()
+    public get labelPosition (): Point {
         const triangle = this.triangle;
         return triangle.center;
     }
 
-    public getOutline (): PathCommand[] {
+    @cached()
+    public get outline (): PathCommand[] {
         const triangle = this.triangle;
         return [
             [Command.MOVE, triangle.p1.x, triangle.p1.y],
@@ -82,7 +88,8 @@ export class ConeTemplateShape extends BaseShape {
         ];
     }
 
-    public getCells (): Cell[] {
+    @cached()
+    public get cells (): Cell[] {
         const cells: Cell[] = [];
         const triangle = this.triangle;
 

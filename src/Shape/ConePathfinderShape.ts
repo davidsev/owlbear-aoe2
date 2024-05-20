@@ -1,4 +1,4 @@
-import { BaseShape } from './BaseShape';
+import { BaseShape, cached } from './BaseShape';
 import { Cell, grid, Point, SnapTo, Square } from '@davidsev/owlbear-utils';
 import { PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
 import { getDirection8 } from '../Utils/Geometry/getDirection';
@@ -77,6 +77,7 @@ export class ConePathfinderShape extends BaseShape {
         super();
     }
 
+    @cached()
     public get roundedDistance (): number {
         const distance = this.distance;
 
@@ -97,7 +98,8 @@ export class ConePathfinderShape extends BaseShape {
         return currentDistance * grid.dpi / ASSUMED_SQUARE_FEET;
     }
 
-    public getLabelPosition (): Point {
+    @cached()
+    public get labelPosition (): Point {
         const direction = getDirection8(this.end.sub(this.start));
         if (!direction)
             return this.start;
@@ -107,11 +109,12 @@ export class ConePathfinderShape extends BaseShape {
         });
     }
 
-    public getOutline (): PathCommand[] {
+    public get outline (): PathCommand[] {
         return [];
     }
 
-    public getCells (): Cell[] {
+    @cached()
+    public get cells (): Cell[] {
         // Work out if it's diagonal or not, and which direction.
         const direction = getDirection8(this.end.sub(this.start));
         if (!direction)

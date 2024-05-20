@@ -1,4 +1,4 @@
-import { BaseShape } from './BaseShape';
+import { BaseShape, cached } from './BaseShape';
 import { Cell, grid, HHex, Point, SnapTo, VHex } from '@davidsev/owlbear-utils';
 import { PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
 import { calculateCenter } from '../Utils/Geometry/calculateCenter';
@@ -7,6 +7,7 @@ import { xy_to_axial_h, xy_to_axial_v } from '@davidsev/owlbear-utils/js/Grid/He
 
 export class ConeHexShape extends BaseShape {
 
+    @cached()
     public get roundedDistance (): number {
         const start = grid.snapTo(this.start, SnapTo.CENTER);
         const end = grid.snapTo(this.end, SnapTo.CENTER);
@@ -14,14 +15,17 @@ export class ConeHexShape extends BaseShape {
         return (Math.round(distance / grid.dpi) + 1) * grid.dpi;
     }
 
-    public getLabelPosition (): Point {
-        return calculateCenter(this.getCells().map(cell => cell.center));
+    @cached()
+    public get labelPosition (): Point {
+        return calculateCenter(this.cells.map(cell => cell.center));
     }
 
-    public getOutline (): PathCommand[] {
+    @cached()
+    public get outline (): PathCommand[] {
         return [];
     }
 
+    @cached()
     private get direction (): '-q' | '+q' | '-r' | '+r' | '-s' | '+s' {
         const direction = this.end.sub(this.start);
         const [q, r] = grid.type == 'HEX_VERTICAL'
@@ -40,7 +44,8 @@ export class ConeHexShape extends BaseShape {
         return s > 0 ? '+s' : '-s';
     }
 
-    public getCells (): Cell[] {
+    @cached()
+    public get cells (): Cell[] {
         const startCell = this.startCell;
         if (!(startCell instanceof BaseHex))
             return [];

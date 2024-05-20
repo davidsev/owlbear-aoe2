@@ -5,9 +5,8 @@ import { CellOutliner } from '../Utils/CellOutliner';
 export abstract class BaseShape {
 
     private _start: Point;
-    private _startCell?: Cell;
     private _end: Point;
-    private _endCell?: Cell;
+    public readonly _cache: Map<string | symbol, any> = new Map();
 
     constructor () {
         this._start = new Point(0, 0);
@@ -20,14 +19,12 @@ export abstract class BaseShape {
 
     public set start (value: Point) {
         this._start = value;
-        this._startCell = undefined;
+        this._cache.clear();
     }
 
+    @cached()
     public get startCell (): Cell {
-        if (!this._startCell) {
-            this._startCell = grid.getCell(this._start);
-        }
-        return this._startCell;
+        return grid.getCell(this._start);
     }
 
     public get end (): Point {
@@ -36,40 +33,59 @@ export abstract class BaseShape {
 
     public set end (value: Point) {
         this._end = value;
-        this._endCell = undefined;
+        this._cache.clear();
     }
 
+    @cached()
     public get endCell (): Cell {
-        if (!this._endCell) {
-            this._endCell = grid.getCell(this._end);
-        }
-        return this._endCell;
+        return grid.getCell(this._end);
     }
 
+    @cached()
     public get distance (): number {
         return this.start.distanceTo(this.end);
     }
 
+    @cached()
     public get roundedDistance (): number {
         return Math.round(this.distance / grid.dpi) * grid.dpi;
     }
 
-    public isValid (): boolean {
+    @cached()
+    public get isValid (): boolean {
         return this.roundedDistance > 0;
     }
 
-    public abstract getCells (): Cell[];
+    public abstract get cells (): Cell[];
 
-    public abstract getLabelPosition (): Point;
+    public abstract get labelPosition (): Point;
 
-    public getLabelText (): string {
+    @cached()
+    public get labelText (): string {
         return `${this.roundedDistance / grid.dpi * (grid.gridScale.parsed.multiplier || 0)}${grid.gridScale.parsed.unit || ''}`;
     }
 
-    public abstract getOutline (): PathCommand[];
+    public abstract get outline (): PathCommand[];
 
-    public getAreaPath (): PathCommand[] {
-        const outliner = new CellOutliner(this.getCells());
+    @cached()
+    public get areaPath (): PathCommand[] {
+        const outliner = new CellOutliner(this.cells);
         return outliner.getOutlinePath();
     }
+}
+
+export function cached () {
+    return function (func: Function, context: ClassGetterDecoratorContext) {
+        console.log(func, context);
+        return function (this: any) {
+            if (this._cache.has(func.name)) {
+                console.log('Cache hit', func.name, this._cache.get(func.name));
+                return this._cache.get(func.name);
+            }
+            const result = func.apply(this);
+            console.log('Cache miss', func.name, result);
+            this._cache.set(func.name, result);
+            return result;
+        };
+    };
 }

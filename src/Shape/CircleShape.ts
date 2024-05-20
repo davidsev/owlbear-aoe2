@@ -1,4 +1,4 @@
-import { BaseShape } from './BaseShape';
+import { BaseShape, cached } from './BaseShape';
 import { Cell, grid, Point, SnapTo } from '@davidsev/owlbear-utils';
 import { Command, PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
 import { StartPoint } from '../Metadata/room';
@@ -12,6 +12,7 @@ export class CircleShape extends BaseShape {
         super();
     }
 
+    @cached()
     private get roundedStart (): Point {
         if (!this.startPoints.length)
             return this.start;
@@ -26,6 +27,7 @@ export class CircleShape extends BaseShape {
         return grid.snapTo(this.start, allowedSnapPoints.reduce((a, b) => a | b));
     }
 
+    @cached()
     public get roundedDistance (): number {
         const snapTo = this.sizeSnapping * grid.dpi;
         if (snapTo === 0)
@@ -33,16 +35,19 @@ export class CircleShape extends BaseShape {
         return Math.round(this.distance / snapTo) * snapTo;
     }
 
+    @cached()
     private get roundedEnd (): Point {
         const vector = this.end.sub(this.start);
         return this.roundedStart.add(vector.scale(this.roundedDistance / this.distance));
     }
 
-    public getLabelPosition (): Point {
+    @cached()
+    public get labelPosition (): Point {
         return this.roundedStart;
     }
 
-    public getOutline (): PathCommand[] {
+    @cached()
+    public get outline (): PathCommand[] {
         return [
             [Command.MOVE, this.roundedStart.x, this.roundedStart.y + this.roundedDistance],
             [Command.CONIC, this.roundedStart.x + this.roundedDistance, this.roundedStart.y + this.roundedDistance, this.roundedStart.x + this.roundedDistance, this.roundedStart.y, Math.PI / 4],
@@ -52,7 +57,8 @@ export class CircleShape extends BaseShape {
         ];
     }
 
-    public getCells (): Cell[] {
+    @cached()
+    public get cells (): Cell[] {
         // Work out the bounding area of the circle.
         const boundingSquare = [
             grid.getCell(this.roundedStart.add({ x: -this.roundedDistance, y: -this.roundedDistance })),

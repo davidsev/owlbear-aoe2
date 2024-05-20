@@ -1,4 +1,4 @@
-import { BaseShape } from './BaseShape';
+import { BaseShape, cached } from './BaseShape';
 import { Cell, grid, LineSegment, Point, SnapTo, Square } from '@davidsev/owlbear-utils';
 import { PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
 import { getDirection4 } from '../Utils/Geometry/getDirection';
@@ -7,32 +7,37 @@ type axis = '+x' | '-x' | '+y' | '-y';
 
 export class ConeTokenShape extends BaseShape {
 
+    @cached()
     private get roundedStart (): Point {
         return grid.snapTo(this.start, SnapTo.CORNER);
     }
 
+    @cached()
     public get roundedDistance (): number {
         return Math.round(this.distance / grid.dpi) * grid.dpi;
     }
 
+    @cached()
     private get roundedEnd (): Point {
         const vector = this.end.sub(this.start);
         return this.roundedStart.add(vector.scale(this.roundedDistance / this.distance));
     }
 
-    public getLabelPosition (): Point {
+    @cached()
+    public get labelPosition (): Point {
         return new Point(
             (this.roundedStart.x + this.roundedEnd.x) / 2,
             (this.roundedStart.y + this.roundedEnd.y) / 2,
         );
     }
 
-    public getOutline (): PathCommand[] {
+    public get outline (): PathCommand[] {
         return [];
     }
 
-    public getCells (): Cell[] {
-        const axis = this.getDirectionToDraw();
+    @cached()
+    public get cells (): Cell[] {
+        const axis = this.directionToDraw;
         if (!axis)
             return [];
 
@@ -64,7 +69,8 @@ export class ConeTokenShape extends BaseShape {
     // Work out which axis to be centered on.
     // If it's diagonal, we want to be centered on the nearest axis, and will reduce the number of tokens as we move away.
     // If it's not diagonal, we want to be centered on the furthest axis, and will increase the number of tokens as we move away.
-    private getDirectionToDraw (): axis | null {
+    @cached()
+    private get directionToDraw (): axis | null {
         const direction = getDirection4(this.end.sub(this.start));
 
         if (!direction)

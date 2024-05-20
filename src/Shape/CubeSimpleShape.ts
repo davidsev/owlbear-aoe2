@@ -1,20 +1,23 @@
 import { Cell, grid, Point, SnapTo } from '@davidsev/owlbear-utils';
 import { PathCommand } from '@owlbear-rodeo/sdk';
-import { BaseShape } from './BaseShape';
+import { BaseShape, cached } from './BaseShape';
 import { getDiagonalDirection4 } from '../Utils/Geometry/getDirection';
 
 export class CubeSimpleShape extends BaseShape {
 
+    @cached()
     private get roundedStart (): Point {
         return grid.snapTo(this.start, SnapTo.CORNER);
     }
 
+    @cached()
     public get roundedDistance (): number {
         const vector = this.end.sub(this.start);
         const dist = Math.max(Math.abs(vector.x), Math.abs(vector.y));
         return Math.round(dist / grid.dpi) * grid.dpi;
     }
 
+    @cached()
     private get roundedEnd (): Point {
         const vector = this.end.sub(this.start);
         const direction = getDiagonalDirection4(vector);
@@ -24,18 +27,20 @@ export class CubeSimpleShape extends BaseShape {
         return this.roundedStart.add(move);
     }
 
-    public getLabelPosition (): Point {
+    @cached()
+    public get labelPosition (): Point {
         return new Point(
             (this.roundedStart.x + this.roundedEnd.x) / 2,
             (this.roundedStart.y + this.roundedEnd.y) / 2,
         );
     }
 
-    public getOutline (): PathCommand[] {
+    public get outline (): PathCommand[] {
         return [];
     }
 
-    public getCells (): Cell[] {
+    @cached()
+    public get cells (): Cell[] {
         const direction = getDiagonalDirection4(this.end.sub(this.start));
         if (!direction)
             return [];

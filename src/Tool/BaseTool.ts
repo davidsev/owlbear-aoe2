@@ -74,7 +74,7 @@ export abstract class BaseTool implements ToolMode {
             return;
 
         // Check if the line is long enough etc
-        if (!this.currentArea.shape.isValid()) {
+        if (!this.currentArea.shape.isValid) {
             if (outline)
                 outline.commands = [];
             area.commands = [];
@@ -85,15 +85,15 @@ export abstract class BaseTool implements ToolMode {
 
         // Update the outline
         if (outline)
-            outline.commands = this.currentArea.shape.getOutline();
+            outline.commands = this.currentArea.shape.outline;
 
         // Update the area
-        area.commands = this.currentArea.shape.getAreaPath();
+        area.commands = this.currentArea.shape.areaPath;
 
         // And the text
         if (label) {
-            label.text.plainText = this.currentArea.shape.getLabelText();
-            const pos = this.currentArea.shape.getLabelPosition();
+            label.text.plainText = this.currentArea.shape.labelText;
+            const pos = this.currentArea.shape.labelPosition;
             label.position = { x: pos.x - 100, y: pos.y - 50 };
             label.visible = true;
         }
@@ -125,7 +125,7 @@ export abstract class BaseTool implements ToolMode {
             });
 
             // Save the items we want to keep.
-            if (this.currentArea.shape.isValid()) {
+            if (this.currentArea.shape.isValid) {
                 const [area, outline, label] = this.getItems(Array.from(items));
                 const itemsToKeep: Item[] = [area];
                 if (/*this.toolMetadata.shapeDisplayMode == 'always' && */ outline)

@@ -1,4 +1,4 @@
-import { BaseShape } from './BaseShape';
+import { BaseShape, cached } from './BaseShape';
 import { Cell, grid, Point, SnapTo } from '@davidsev/owlbear-utils';
 import { Command, PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
 import { SquareDirection, StartPoint } from '../Metadata/room';
@@ -16,6 +16,7 @@ export class CubeTemplateShape extends BaseShape {
         super();
     }
 
+    @cached()
     private get roundedStart (): Point {
         if (!this.startPoints.length)
             return this.start;
@@ -30,6 +31,7 @@ export class CubeTemplateShape extends BaseShape {
         return grid.snapTo(this.start, allowedSnapPoints.reduce((a, b) => a | b));
     }
 
+    @cached()
     public get roundedDistance (): number {
         // Calculate the distance between the start and end points.
         // If the vector is axis aligned, then use the length.
@@ -51,6 +53,7 @@ export class CubeTemplateShape extends BaseShape {
         return Math.round(dist / snapTo) * snapTo;
     }
 
+    @cached()
     private get roundedEnd (): Point {
         const vector = this.end.sub(this.start);
 
@@ -72,15 +75,18 @@ export class CubeTemplateShape extends BaseShape {
 
     }
 
+    @cached()
     private get square (): Square {
         return new Square(this.roundedStart, this.roundedEnd);
     }
 
-    public getLabelPosition (): Point {
+    @cached()
+    public get labelPosition (): Point {
         return this.square.center;
     }
 
-    public getOutline (): PathCommand[] {
+    @cached()
+    public get outline (): PathCommand[] {
         const triangle = this.square;
         return [
             [Command.MOVE, triangle.p1.x, triangle.p1.y],
@@ -91,7 +97,8 @@ export class CubeTemplateShape extends BaseShape {
         ];
     }
 
-    public getCells (): Cell[] {
+    @cached()
+    public get cells (): Cell[] {
         const cells: Cell[] = [];
         const square = this.square;
 
