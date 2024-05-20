@@ -2,8 +2,8 @@ import { BaseShape } from './BaseShape';
 import { Cell, grid, HHex, Point, SnapTo, VHex } from '@davidsev/owlbear-utils';
 import { PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
 import { calculateCenter } from '../Utils/Geometry/calculateCenter';
-import { xy_to_axial_h, xy_to_axial_v } from '../../../owlbear-utils/js/Grid/HexFunctions';
-import { BaseHex } from '../../../owlbear-utils/js/Grid/Cell/BaseHex';
+import { BaseHex } from '@davidsev/owlbear-utils/js/Grid/Cell/BaseHex';
+import { xy_to_axial_h, xy_to_axial_v } from '@davidsev/owlbear-utils/js/Grid/HexFunctions';
 
 export class ConeHexShape extends BaseShape {
 
@@ -41,7 +41,7 @@ export class ConeHexShape extends BaseShape {
     }
 
     public getCells (): Cell[] {
-        const startCell = grid.getCell(this.start);
+        const startCell = this.startCell;
         if (!(startCell instanceof BaseHex))
             return [];
 
