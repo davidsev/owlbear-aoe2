@@ -1,12 +1,18 @@
 import { customElement, query } from 'lit/decorators.js';
-import { html, PropertyValueMap } from 'lit';
+import { html, PropertyValueMap, unsafeCSS } from 'lit';
 import { BaseElement } from '../BaseElement';
 import { SelectEnum } from '../Components/SelectEnum';
 import { roomMetadata, SquareConeStyle, SquareCubeStyle, SquareDirection, StartPoint } from '../../Metadata/room';
 import { MultiSelectEnum } from '../Components/MultiSelectEnum';
+import style from './SettingsForm.css';
 
 @customElement('square-settings-form')
 export class SquareSettingsForm extends BaseElement {
+
+    static styles = [
+        ...BaseElement.styles,
+        unsafeCSS(style),
+    ];
 
     private readonly inputs = {
         coneStyle: new SelectEnum({
@@ -161,12 +167,12 @@ export class SquareSettingsForm extends BaseElement {
     // Render the UI as a function of component state
     render () {
         return html`
-            <form class="p-2">
-                <tab-bar class="mb-2">
-                    <tab-button .target=${this.coneForm}>Cone</tab-button>
-                    <tab-button .target=${this.circleForm}>Circle</tab-button>
-                    <tab-button .target=${this.cubeForm}>Cube</tab-button>
-                </tab-bar>
+            <tab-bar>
+                <tab-button .target=${this.coneForm}>Cone</tab-button>
+                <tab-button .target=${this.circleForm}>Circle</tab-button>
+                <tab-button .target=${this.cubeForm}>Cube</tab-button>
+            </tab-bar>
+            <form>
                 <div id="coneForm">
                     <form-control id="coneStyle" label="Cone Style">
                         ${this.inputs.coneStyle}
@@ -188,7 +194,7 @@ export class SquareSettingsForm extends BaseElement {
                             ${this.inputs.coneDirection}
                         </form-control>
                     </div>
-                    <div class="flex justify-end">
+                    <div class="resetButton">
                         <button type="button" @click=${this.setConeDefaults}>Reset to default</button>
                     </div>
                 </div>
@@ -199,7 +205,7 @@ export class SquareSettingsForm extends BaseElement {
                     <form-control label="Circle Size Snapping">
                         ${this.inputs.circleSizeSnapping}
                     </form-control>
-                    <div class="flex justify-end">
+                    <div class="resetButton">
                         <button type="button" @click=${this.setCircleDefaults}>Reset to default</button>
                     </div>
                 </div>
@@ -221,7 +227,7 @@ export class SquareSettingsForm extends BaseElement {
                             ${this.inputs.cubeDirection}
                         </form-control>
                     </div>
-                    <div class="flex justify-end">
+                    <div class="resetButton">
                         <button type="button" @click=${this.setCubeDefaults}>Reset to default</button>
                     </div>
                 </div>

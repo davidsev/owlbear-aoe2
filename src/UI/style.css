@@ -1,103 +1,83 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'modern-normalize/modern-normalize.css';
 
-@layer base {
+/*
+ *  text is the color for text
+ *  theme is purple for highlights etc
+ *  background is the main background color
+ *  panel is the background color for panels and controls etc
+ */
+:host([data-theme=light]) {
+    --text-rgb: 0, 0, 0;
+    --theme-rgb: 187, 153, 255;
+    --background-rgb: 229, 231, 235;
+    --panel-rgb: 242, 243, 249;
+}
 
-    :host {
-        --background-color: initial;
-        --paper-color: initial;
-        --primary-color: initial;
-        --primary-color-light: initial;
-        --primary-color-dark: initial;
-        --primary-color-contrast: initial;
-        --secondary-color: initial;
-        --secondaryy-color-light: initial;
-        --secondary-color-dark: initial;
-        --secondary-color-contrast: initial;
-        --text-color: initial;
-        --text-color-secondary: initial;
-        --text-color-disabled: initial;
+:host([data-theme=dark]) {
+    --text-rgb: 255, 255, 255;
+    --theme-rgb: 187, 153, 255;
+    --background-rgb: 46, 49, 66;
+    --panel-rgb: 34, 39, 56;
+}
 
-        color: var(--text-color);
-        font-family: sans-serif;
+:host {
+    --text-color: rgb(var(--text-rgb));
+    --text-secondary-color: rgba(var(--text-rgb), 0.7);
+    --theme-color: rgb(var(--theme-rgb));
+    --background-color: rgb(var(--background-rgb));
+    --panel-color: rgb(var(--panel-rgb));
+
+    color: var(--text-color);
+    font-family: sans-serif;
+    line-height: 1.5;
+}
+
+/* Form controls */
+input[type=text], input[type=number], select, div.input {
+    display: block;
+    width: 100%;
+    padding: 0.5em 0.5em 0.2em 0.5em;
+    border: 0 solid transparent;
+    border-bottom: 1px solid var(--text-color);
+    background: var(--background-color);
+    color: var(--text-color);
+    outline: none;
+    line-height: 1;
+
+    &:focus, &:focus-visible, &.active {
+        border-bottom: 3px solid var(--theme-color);
+        padding-bottom: calc(0.2em - 2px);
+        outline: none;
     }
 }
 
-@layer components {
+/* Remove the default number input field spinner */
+input[type=number] {
+    -moz-appearance: textfield;
+}
 
-    /* Form controls */
-    input[type=text], input[type=number], select, div.input {
-        display: block;
-        width: 100%;
-        padding: 3px 0.25em 2px 0.25em;
-        border: 0 solid transparent;
-        border-bottom: 1px solid white;
-        background: var(--background-color);
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 
-        height: 1.75em;
-        line-height: 1;
-        align-content: center;
+/* Buttons */
+button {
+    margin: 0.6em 1em 0.35em 1em;
+    display: inline-flex;
+    align-items: center;
+    font-weight: 500;
+    font-size: 0.875em;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    line-height: 1.25em;
+    background-color: transparent;
+    color: var(--text-color);
 
-        &:focus, &:focus-visible, &.active {
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 1px;
-            outline: none;
-        }
-    }
-
-    /* Remove the default number input field spinner */
-    input[type=number] {
-        -moz-appearance: textfield;
-    }
-
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-
-    /* Dropdown */
-    div.dropdown {
-        position: absolute;
-        width: 100%;
-        padding: 0;
-        background: var(--paper-color);
-        z-index: 100;
-
-        div.item {
-            padding: 0 0.5em;
-            height: 1.75em;
-            line-height: 1;
-            align-content: center;
-
-            &:hover {
-                background: color-mix(in srgb, var(--primary-color) 30%, var(--paper-color));
-            }
-
-            &.active {
-                color: var(--primary-color);
-            }
-        }
-    }
-
-    /* Buttons */
-    button {
-        padding: 0.6em 1em 0.35em 1em;
-        display: inline-flex;
-        align-items: center;
-        margin: 0;
-        font-weight: 500;
-        font-size: 0.875em;
-        border-radius: 5px;
-        border: 2px solid transparent;
-        cursor: pointer;
-        vertical-align: text-bottom;
-        line-height: 1.25em;
-
-        &:hover {
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
-        }
+    &:hover {
+        border-bottom: 2px solid var(--theme-color);
+        color: var(--theme-color);
     }
 }

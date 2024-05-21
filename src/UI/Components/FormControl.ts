@@ -1,9 +1,15 @@
-import { html } from 'lit';
+import { html, unsafeCSS } from 'lit';
 import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
 import { BaseElement } from '../BaseElement';
+import style from './FormControl.css';
 
 @customElement('form-control')
 export class FormControl extends BaseElement {
+
+    static styles = [
+        ...BaseElement.styles,
+        unsafeCSS(style),
+    ];
 
     // Declare reactive properties
     @property()
@@ -15,10 +21,10 @@ export class FormControl extends BaseElement {
     // Render the UI as a function of component state
     render () {
         return html`
-            <div class="mb-3">
-                <label @click="${this.labelClicked}" class="block text-sm text-text-secondary">${this.label}</label>
+            <main>
+                <label @click="${this.labelClicked}">${this.label}</label>
                 <slot></slot>
-            </div>
+            </main>
         `;
     }
 

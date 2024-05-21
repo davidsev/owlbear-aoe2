@@ -1,0 +1,11 @@
+
+main {
+    margin-bottom: 0.75rem;
+}
+
+label {
+    display: block;
+    font-size: 0.875rem;
+    line-height: 1rem;
+    color: var(--text-secondary-color);
+}

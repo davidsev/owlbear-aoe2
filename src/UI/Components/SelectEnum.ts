@@ -1,9 +1,15 @@
-import { html } from 'lit';
+import { html, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { BaseElement } from '../BaseElement';
+import style from './SelectEnum.css';
 
 @customElement('select-enum')
 export class SelectEnum<T extends Record<string, string>> extends BaseElement {
+
+    static styles = [
+        ...BaseElement.styles,
+        unsafeCSS(style),
+    ];
 
     constructor (options: T) {
         super();
@@ -28,14 +34,14 @@ export class SelectEnum<T extends Record<string, string>> extends BaseElement {
     // Render the UI as a function of component state
     render () {
         return html`
-            <div class="relative">
+            <main>
                 <div class="${this.active ? 'hidden' : 'input'}" @click="${this.show}">
                     ${this.options[this.value]}
                 </div>
                 <div class="${this.active ? 'input active' : 'hidden'}" @click="${this.hide}">
                     ${this.options[this.value]}
                 </div>
-                <div id="dropdown" class="mt-1.5 dropdown ${this.active ? '' : 'hidden'}">
+                <div id="dropdown" class="${this.active ? '' : 'hidden'}">
                     ${Object.entries(this.options).map(([value, label]) => html`
                         <div @click="${this.selectItem.bind(this, value)}"
                              class="item ${value === this.value ? 'active' : ''}">
@@ -43,7 +49,7 @@ export class SelectEnum<T extends Record<string, string>> extends BaseElement {
                         </div>
                     `)}
                 </div>
-            </div>
+            </main>
         `;
     }
 
