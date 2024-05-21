@@ -76,14 +76,11 @@ export abstract class BaseShape {
 
 export function cached () {
     return function (func: Function, context: ClassGetterDecoratorContext) {
-        console.log(func, context);
         return function (this: any) {
             if (this._cache.has(func.name)) {
-                console.log('Cache hit', func.name, this._cache.get(func.name));
                 return this._cache.get(func.name);
             }
             const result = func.apply(this);
-            console.log('Cache miss', func.name, result);
             this._cache.set(func.name, result);
             return result;
         };
