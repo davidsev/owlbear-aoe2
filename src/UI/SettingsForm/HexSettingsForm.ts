@@ -82,7 +82,12 @@ export class HexSettingsForm extends BaseElement {
         this.inputs.cubeSizeSnapping.valueAsNumber = roomMetadata.data.hexCubeSizeSnapping;
     }
 
-    private formChanged () {
+    private formChanged (e?: Event) {
+        // Only run if the form is valid.
+        if (e && !(e.target instanceof HTMLInputElement && e.target.form?.checkValidity())) {
+            return;
+        }
+        
         // Save the data
         roomMetadata.set({
             hexConeStyle: this.inputs.coneStyle.value,

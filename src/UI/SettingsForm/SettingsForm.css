@@ -1,13 +1,39 @@
 
 tab-bar {
-    margin-top: 0.5rem;
+    margin-top: 0.5em;
 }
 
 form {
-    padding: 0.75rem 0.75rem;
+    padding: 0.75em 0.75em;
 }
 
 div.resetButton {
     display: flex;
     justify-content: end;
+}
+
+help-tooltip {
+    margin: 0.2em 0.1em 0 0.5em;
+}
+
+.flex {
+    display: flex;
+    justify-content: space-between;
+
+    input, select-enum {
+        flex-grow: 1;
+    }
+}
+
+dl {
+    margin: 0;
+
+    dt:not(:first-child) {
+        margin-top: 1em;
+    }
+
+    dd {
+        margin: 0;
+        color: var(--text-secondary-color);
+    }
 }

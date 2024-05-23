@@ -103,7 +103,12 @@ export class SquareSettingsForm extends BaseElement {
         this.inputs.cubeDirection.value = roomMetadata.data.squareCubeDirection;
     }
 
-    private formChanged () {
+    private formChanged (e?: Event) {
+        // Only run if the form is valid.
+        if (e && e.target instanceof HTMLInputElement && !e.target.form?.checkValidity()) {
+            return;
+        }
+
         // Save the data
         roomMetadata.set({
             squareConeStyle: this.inputs.coneStyle.value,
@@ -173,23 +178,72 @@ export class SquareSettingsForm extends BaseElement {
             <form>
                 <div id="coneForm">
                     <form-control id="coneStyle" label="Cone Style">
-                        ${this.inputs.coneStyle}
+                        <div class="flex">
+                            ${this.inputs.coneStyle}
+                            <help-tooltip>
+                                <dl>
+                                    <dt>D&D 5e (Template Method):</dt>
+                                    <dd>The official rules for D&D 5e.&emsp;Draw a triangle, place it on the map
+                                        somewhere, and see which squares it overlaps.
+                                    </dd>
+                                    <dt>Pathfinder / D&D 3.5:</dt>
+                                    <dd>Uses the official shapes from the PHB.</dd>
+                                    <dt>D&D 5e (Token Method)</dt>
+                                    <dd>Variant method from XGtE, which guarantees a consistent number of squares hit at
+                                        the cost of wonky shapes.
+                                    </dd>
+                                </dl>
+                            </help-tooltip>
+                        </div>
                     </form-control>
                     <div id="templateConeFields">
                         <form-control label="Cone Width">
-                            ${this.inputs.coneWidth}
+                            <div class="flex">
+                                ${this.inputs.coneWidth}
+                                <help-tooltip>
+                                    The width of the cone, in degrees.<br>
+                                    Leave it blank to use the D&D 5e "Width = Height" method.
+                                </help-tooltip>
+                            </div>
                         </form-control>
                         <form-control label="Cone Start Point(s)">
-                            ${this.inputs.coneStartPoints}
+                            <div class="flex">
+                                ${this.inputs.coneStartPoints}
+                                <help-tooltip>
+                                    Select where on the map you can start drawing a cone from.<br/>
+                                    For D&D 5e RAW this should be only corners.<br/>
+                                    Leave it blank to allow a cone to start anywhere.
+                                </help-tooltip>
+                            </div>
                         </form-control>
                         <form-control label="Cone Overlap Threshold">
-                            ${this.inputs.coneOverlapThreshold}
+                            <div class="flex">
+                                ${this.inputs.coneOverlapThreshold}
+                                <help-tooltip>
+                                    How much of a square needs to be covered for it to be considered "hit" by the
+                                    cone.<br/>
+                                    By D&D 5e RAW this should be 0%, although I recommend using 1 instead.
+                                </help-tooltip>
+                            </div>
                         </form-control>
                         <form-control label="Cone Size Snapping">
-                            ${this.inputs.coneSizeSnapping}
+                            <div class="flex">
+                                ${this.inputs.coneSizeSnapping}
+                                <help-tooltip>
+                                    Set what sizes of cone you want to snap to.<br/>
+                                    If set to 0 then any size is allowed.<br/>
+                                    If set to 1 then the cone must be a whole number of squares.<br/>
+                                    0.5 will allow half-squares, etc.
+                                </help-tooltip>
+                            </div>
                         </form-control>
                         <form-control label="Cone Direction">
-                            ${this.inputs.coneDirection}
+                            <div class="flex">
+                                ${this.inputs.coneDirection}
+                                <help-tooltip>
+                                    Choose which directions the cone can face.
+                                </help-tooltip>
+                            </div>
                         </form-control>
                     </div>
                     <div class="resetButton">
@@ -198,10 +252,25 @@ export class SquareSettingsForm extends BaseElement {
                 </div>
                 <div id="circleForm">
                     <form-control label="Circle Start Point(s)">
-                        ${this.inputs.circleStartPoints}
+                        <div class="flex">
+                            ${this.inputs.circleStartPoints}
+                            <help-tooltip>
+                                Select where on the map you can start drawing a circle from.<br/>
+                                For D&D 5e RAW this should be only corners.<br/>
+                                Leave it blank to allow a circle to start anywhere.
+                            </help-tooltip>
+                        </div>
                     </form-control>
                     <form-control label="Circle Size Snapping">
-                        ${this.inputs.circleSizeSnapping}
+                        <div class="flex">
+                            ${this.inputs.circleSizeSnapping}
+                            <help-tooltip>
+                                Set what sizes of circle you want to snap to.<br/>
+                                If set to 0 then any size is allowed.<br/>
+                                If set to 1 then the circle must be a whole number of squares.<br/>
+                                0.5 will allow half-squares, etc.
+                            </help-tooltip>
+                        </div>
                     </form-control>
                     <div class="resetButton">
                         <button class="btn" type="button" @click=${this.setCircleDefaults}>Reset to default</button>
@@ -209,20 +278,59 @@ export class SquareSettingsForm extends BaseElement {
                 </div>
                 <div id="cubeForm">
                     <form-control id="cubeStyle" label="Cube Style">
-                        ${this.inputs.cubeStyle}
+                        <div class="flex">
+                            ${this.inputs.cubeStyle}
+                            <help-tooltip>
+                                <dl>
+                                    <dt>Default:</dt>
+                                    <dd>The official rules for D&D & Pathfinder.&emsp;A simple axis-aligned square.
+                                    </dd>
+                                    <dt>Template Method</dt>
+                                    <dd>Draw a square on the map and see which squares it hits.
+                                    </dd>
+                                </dl>
+                            </help-tooltip>
+                        </div>
                     </form-control>
                     <div id="templateCubeFields">
                         <form-control label="Cube Start Point(s)">
-                            ${this.inputs.cubeStartPoints}
+                            <div class="flex">
+                                ${this.inputs.cubeStartPoints}
+                                <help-tooltip>
+                                    Select where on the map you can start drawing a cube from.<br/>
+                                    Leave it blank to allow a cube to start anywhere.
+                                </help-tooltip>
+                            </div>
                         </form-control>
                         <form-control label="Cube Overlap Threshold">
-                            ${this.inputs.cubeOverlapThreshold}
+                            <div class="flex">
+                                ${this.inputs.cubeOverlapThreshold}
+                                <help-tooltip>
+                                    How much of a square needs to be covered for it to be considered "hit" by the
+                                    cube.<br/>
+                                </help-tooltip>
+                            </div>
                         </form-control>
                         <form-control label="Cube Size Snapping">
-                            ${this.inputs.cubeSizeSnapping}
+                            <div class="flex">
+                                ${this.inputs.cubeSizeSnapping}
+                                <help-tooltip>
+                                    Set what sizes of cube you want to snap to.<br/>
+                                    If set to 0 then any size is allowed.<br/>
+                                    If set to 1 then the cube must be a whole number of squares.<br/>
+                                    0.5 will allow half-squares, etc.
+                                </help-tooltip>
+                            </div>
                         </form-control>
                         <form-control label="Cube Direction">
-                            ${this.inputs.cubeDirection}
+                            <div class="flex">
+                                ${this.inputs.cubeDirection}
+                                <help-tooltip>
+                                    Choose which directions the cube can face.<br/>
+                                    Note this is the direction to the oppisite corner of the cube, so selecting 4
+                                    compass points results in cubes 45° from the axis.
+                                </help-tooltip>
+                            </div>
                         </form-control>
                     </div>
                     <div class="resetButton">
