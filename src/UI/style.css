@@ -63,7 +63,7 @@ input::-webkit-inner-spin-button {
 }
 
 /* Buttons */
-button {
+button.btn {
     margin: 0.6em 1em 0.35em 1em;
     display: inline-flex;
     align-items: center;

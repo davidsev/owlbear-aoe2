@@ -195,7 +195,7 @@ export class SquareSettingsForm extends BaseElement {
                         </form-control>
                     </div>
                     <div class="resetButton">
-                        <button type="button" @click=${this.setConeDefaults}>Reset to default</button>
+                        <button class="btn" type="button" @click=${this.setConeDefaults}>Reset to default</button>
                     </div>
                 </div>
                 <div id="circleForm">
@@ -206,7 +206,7 @@ export class SquareSettingsForm extends BaseElement {
                         ${this.inputs.circleSizeSnapping}
                     </form-control>
                     <div class="resetButton">
-                        <button type="button" @click=${this.setCircleDefaults}>Reset to default</button>
+                        <button class="btn" type="button" @click=${this.setCircleDefaults}>Reset to default</button>
                     </div>
                 </div>
                 <div id="cubeForm">
@@ -228,7 +228,7 @@ export class SquareSettingsForm extends BaseElement {
                         </form-control>
                     </div>
                     <div class="resetButton">
-                        <button type="button" @click=${this.setCubeDefaults}>Reset to default</button>
+                        <button class="btn" type="button" @click=${this.setCubeDefaults}>Reset to default</button>
                     </div>
                 </div>
             </form>
