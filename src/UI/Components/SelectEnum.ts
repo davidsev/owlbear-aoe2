@@ -1,15 +1,13 @@
-import { html, unsafeCSS } from 'lit';
+import { html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { BaseElement } from '../BaseElement';
 import style from './SelectEnum.css';
+import { baseCSS } from '../baseCSS';
 
 @customElement('select-enum')
 export class SelectEnum<T extends Record<string, string>> extends BaseElement {
 
-    static styles = [
-        ...BaseElement.styles,
-        unsafeCSS(style),
-    ];
+    static styles = baseCSS(style);
 
     constructor (options: T) {
         super();

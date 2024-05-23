@@ -1,16 +1,14 @@
-import { html, PropertyValueMap, unsafeCSS } from 'lit';
+import { html, PropertyValueMap } from 'lit';
 import { customElement, queryAssignedElements } from 'lit/decorators.js';
 import { BaseElement } from '../BaseElement';
 import style from './TabBar.css';
 import { TabButton } from './TabButton';
+import { baseCSS } from '../baseCSS';
 
 @customElement('tab-bar')
 export class TabBar extends BaseElement {
 
-    static styles = [
-        ...BaseElement.styles,
-        unsafeCSS(style),
-    ];
+    static styles = baseCSS(style);
 
     @queryAssignedElements({ selector: 'tab-button' })
     accessor buttons!: Array<TabButton>;

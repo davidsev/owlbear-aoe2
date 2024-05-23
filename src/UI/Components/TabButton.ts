@@ -1,15 +1,13 @@
-import { html, PropertyValues, unsafeCSS } from 'lit';
+import { html, PropertyValues } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { BaseElement } from '../BaseElement';
 import style from './TabButton.css';
+import { baseCSS } from '../baseCSS';
 
 @customElement('tab-button')
 export class TabButton extends BaseElement {
 
-    static styles = [
-        ...BaseElement.styles,
-        unsafeCSS(style),
-    ];
+    static styles = baseCSS(style);
 
     // Declare reactive properties
     @property({ type: Boolean, reflect: true })

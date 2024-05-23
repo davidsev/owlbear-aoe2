@@ -1,7 +1,7 @@
 import { SquareSettingsForm } from './SquareSettingsForm';
 import { grid } from '@davidsev/owlbear-utils';
 import { HexSettingsForm } from './HexSettingsForm';
-import styles from '../style.css';
+import styles from '../baseCSS.css';
 
 export async function initSettingsForm () {
     // Load the page based on grid type

@@ -1,18 +1,16 @@
 import { customElement, query } from 'lit/decorators.js';
-import { html, PropertyValueMap, unsafeCSS } from 'lit';
+import { html, PropertyValueMap } from 'lit';
 import { BaseElement } from '../BaseElement';
 import { SelectEnum } from '../Components/SelectEnum';
 import { HexConeStyle, roomMetadata, StartPoint } from '../../Metadata/room';
 import { MultiSelectEnum } from '../Components/MultiSelectEnum';
 import style from './SettingsForm.css';
+import { baseCSS } from '../baseCSS';
 
 @customElement('hex-settings-form')
 export class HexSettingsForm extends BaseElement {
 
-    static styles = [
-        ...BaseElement.styles,
-        unsafeCSS(style),
-    ];
+    static styles = baseCSS(style);
 
     private readonly inputs = {
         coneStyle: new SelectEnum({
