@@ -34,7 +34,11 @@ export class Square extends Polygon {
     // Formula from https://math.stackexchange.com/questions/190111/how-to-check-if-a-point-is-inside-a-rectangle
     public containsPoint (point: Vector2): boolean {
         if (this.isAABB) {
-            return point.x >= this.p1.x && point.x <= this.p3.x && point.y >= this.p1.y && point.y <= this.p3.y;
+            const minX = Math.min(this.p1.x, this.p3.x);
+            const maxX = Math.max(this.p1.x, this.p3.x);
+            const minY = Math.min(this.p1.y, this.p3.y);
+            const maxY = Math.max(this.p1.y, this.p3.y);
+            return point.x >= minX && point.x <= maxX && point.y >= minY && point.y <= maxY;
         } else {
             const M = new Point(point);
             const AB = this.p2.sub(this.p1);
