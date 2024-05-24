@@ -87,7 +87,7 @@ export class HexSettingsForm extends BaseElement {
         if (e && !(e.target instanceof HTMLInputElement && e.target.form?.checkValidity())) {
             return;
         }
-        
+
         // Save the data
         roomMetadata.set({
             hexConeStyle: this.inputs.coneStyle.value,
@@ -150,20 +150,57 @@ export class HexSettingsForm extends BaseElement {
             <form>
                 <div id="coneForm">
                     <form-control id="coneStyle" label="Cone Style">
-                        ${this.inputs.coneStyle}
+                        <div class="flex">
+                            ${this.inputs.coneStyle}
+                            <help-tooltip>
+                                <dl>
+                                    <dt>D&D 5e (Template Method):</dt>
+                                    <dd>The official rules for D&D 5e.&emsp;Draw a triangle, place it on the map
+                                        somewhere, and see which hex's it overlaps.
+                                    </dd>
+                                    <dt>Equilateral:</dt>
+                                    <dd>An equilateral triangle aligned to the grid.</dd>
+                                </dl>
+                            </help-tooltip>
+                        </div>
                     </form-control>
                     <div id="templateConeFields">
                         <form-control label="Cone Width">
-                            ${this.inputs.coneWidth}
+                            <div class="flex">
+                                ${this.inputs.coneWidth}
+                                <help-tooltip>The width of the cone, in degrees.</help-tooltip>
+                            </div>
                         </form-control>
                         <form-control label="Cone Start Point(s)">
-                            ${this.inputs.coneStartPoints}
+                            <div class="flex">
+                                ${this.inputs.coneStartPoints}
+                                <help-tooltip>
+                                    Select where on the map you can start drawing a cone from.<br/>
+                                    For D&D 5e RAW this should be only corners.<br/>
+                                    Leave it blank to allow a cone to start anywhere.
+                                </help-tooltip>
+                            </div>
                         </form-control>
                         <form-control label="Cone Overlap Threshold">
-                            ${this.inputs.coneOverlapThreshold}
+                            <div class="flex">
+                                ${this.inputs.coneOverlapThreshold}
+                                <help-tooltip>
+                                    How much of a hex needs to be covered for it to be considered "hit" by the
+                                    cone.<br/>
+                                    By D&D 5e RAW this should be 0%, although I recommend using a minimum of 1.
+                                </help-tooltip>
+                            </div>
                         </form-control>
                         <form-control label="Cone Size Snapping">
-                            ${this.inputs.coneSizeSnapping}
+                            <div class="flex">
+                                ${this.inputs.coneSizeSnapping}
+                                <help-tooltip>
+                                    Set what sizes of cone you want to snap to.<br/>
+                                    If set to 0 then any size is allowed.<br/>
+                                    If set to 1 then the cone must be a whole number of hexes.<br/>
+                                    0.5 will allow half-hexes, etc.
+                                </help-tooltip>
+                            </div>
                         </form-control>
                     </div>
                     <div class="resetButton">
@@ -172,10 +209,25 @@ export class HexSettingsForm extends BaseElement {
                 </div>
                 <div id="circleForm">
                     <form-control label="Circle Start Point(s)">
-                        ${this.inputs.circleStartPoints}
+                        <div class="flex">
+                            ${this.inputs.circleStartPoints}
+                            <help-tooltip>
+                                Select where on the map you can start drawing a circle from.<br/>
+                                For D&D 5e RAW this should be only center.<br/>
+                                Leave it blank to allow a circle to start anywhere.
+                            </help-tooltip>
+                        </div>
                     </form-control>
                     <form-control label="Circle Size Snapping">
-                        ${this.inputs.circleSizeSnapping}
+                        <div class="flex">
+                            ${this.inputs.circleSizeSnapping}
+                            <help-tooltip>
+                                Set what sizes of circle you want to snap to.<br/>
+                                If set to 0 then any size is allowed.<br/>
+                                If set to 1 then the circle must be a whole number of hexes.<br/>
+                                0.5 will allow half-hexes, etc.
+                            </help-tooltip>
+                        </div>
                     </form-control>
                     <div class="resetButton">
                         <button class="btn" type="button" @click=${this.setCircleDefaults}>Reset to default</button>
@@ -183,13 +235,33 @@ export class HexSettingsForm extends BaseElement {
                 </div>
                 <div id="cubeForm">
                     <form-control label="Cube Start Point(s)">
-                        ${this.inputs.cubeStartPoints}
+                        <div class="flex">
+                            ${this.inputs.cubeStartPoints}
+                            <help-tooltip>
+                                Select where on the map you can start drawing a cube from.<br/>
+                                Leave it blank to allow a cube to start anywhere.
+                            </help-tooltip>
+                        </div>
                     </form-control>
                     <form-control label="Cube Overlap Threshold">
-                        ${this.inputs.cubeOverlapThreshold}
+                        <div class="flex">
+                            ${this.inputs.cubeOverlapThreshold}
+                            <help-tooltip>
+                                How much of a hex needs to be covered for it to be considered "hit" by the
+                                cube.<br/>
+                            </help-tooltip>
+                        </div>
                     </form-control>
                     <form-control label="Cube Size Snapping">
-                        ${this.inputs.cubeSizeSnapping}
+                        <div class="flex">
+                            ${this.inputs.cubeSizeSnapping}
+                            <help-tooltip>
+                                Set what sizes of cube you want to snap to.<br/>
+                                If set to 0 then any size is allowed.<br/>
+                                If set to 1 then the cube must be a whole number of hexes.<br/>
+                                0.5 will allow half-hexes, etc.
+                            </help-tooltip>
+                        </div>
                     </form-control>
                     <div class="resetButton">
                         <button class="btn" type="button" @click=${this.setCubeDefaults}>Reset to default</button>
