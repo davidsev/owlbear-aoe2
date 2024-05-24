@@ -222,7 +222,7 @@ export class SquareSettingsForm extends BaseElement {
                                 <help-tooltip>
                                     How much of a square needs to be covered for it to be considered "hit" by the
                                     cone.<br/>
-                                    By D&D 5e RAW this should be 0%, although I recommend using 1 instead.
+                                    By D&D 5e RAW this should be 0%, although I recommend using a minimum of 1.
                                 </help-tooltip>
                             </div>
                         </form-control>
