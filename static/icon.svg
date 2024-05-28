@@ -3,4 +3,8 @@
      xmlns="http://www.w3.org/2000/svg">
     <path d="M80,80H180V180H280V280H380V380H80V80" stroke-width="20"/>
     <path d="M80,180H180M80,280H280M180,180V380M280,280V380" stroke-width="12"/>
+    <path d="M80,340H380" stroke-width="140" stroke="red" stroke-opacity="75%"/>
+    <text x="50%" y="375" fill="black" text-anchor="middle" font-size="100px"
+          font-family="sans-serif">BETA
+    </text>
 </svg>

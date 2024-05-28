@@ -11,7 +11,7 @@ export function initBackground () {
             id: getId('tool'),
             shortcut: 'A',
             icons: [{
-                icon: '/icons/cone.svg',
+                icon: '/icons/cone-beta.svg',
                 label: 'AoE',
             }],
             defaultMode: getId('cone'),
