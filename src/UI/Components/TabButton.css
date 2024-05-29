@@ -1,4 +1,8 @@
 
+:host {
+    display: block;
+}
+
 div {
     padding: 0.3em 0.75em;
     border: 0 solid transparent;

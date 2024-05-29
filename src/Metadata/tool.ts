@@ -26,8 +26,8 @@ export class ToolMetadata {
     shapeFillOpacity: number = 0;
     shapeStrokeColor: string = '#FF0000';
     shapeStrokeOpacity: number = 1;
-    shapeDisplayMode: LabelDisplayMode = LabelDisplayMode.ALWAYS;
-    labelDisplayMode: ShapeDisplayMode = ShapeDisplayMode.DRAWING;
+    shapeDisplayMode: ShapeDisplayMode = ShapeDisplayMode.ALWAYS;
+    labelDisplayMode: LabelDisplayMode = LabelDisplayMode.DRAWING;
 }
 
 export const toolMetadata = new ToolMetadataMapper(getId('tool'), new ToolMetadata);

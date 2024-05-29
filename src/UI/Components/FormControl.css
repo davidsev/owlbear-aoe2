@@ -1,7 +1,8 @@
 
-main {
-    margin-bottom: 0.75rem;
+:host {
+    display: block;
 }
+
 
 label {
     display: block;

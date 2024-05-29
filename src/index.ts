@@ -1,9 +1,10 @@
 import { init, registerInitFunction } from './init';
 import { initBackground } from './background';
 import './UI';
-import { initSettingsForm } from './UI/SettingsForm/init';
+import { initSettingsForm, initStyleForm } from './UI/Forms/init';
 
 window.init = init;
 
 registerInitFunction('background', initBackground);
 registerInitFunction('settings-form', initSettingsForm);
+registerInitFunction('style-form', initStyleForm);

@@ -4,28 +4,23 @@
 }
 
 button {
-    border-radius: 50%;
-    width: 1.5em;
-    height: 1.5em;
-    line-height: 1em;
+    width: 4em;
+    height: 2em;
+    border-radius: 1em;
+    border: 2px solid white;
     padding: 0.25em;
     margin: 0;
     vertical-align: center;
     text-align: center;
 
-    border: 2px solid rgba(var(--theme-rgb), 1);
-    background-color: rgba(var(--theme-rgb), 0.2);
-    color: var(--text-color);
-
-    &:hover {
-        background-color: rgba(var(--theme-rgb), 1);
+    div {
+        filter: invert() grayscale(1) contrast(100);
     }
 }
 
 dialog {
     position: absolute;
     inset: auto 5%;
-    width: 90%;
     height: fit-content;
     margin: 0;
     padding: 0;
@@ -36,6 +31,12 @@ dialog {
 
     div {
         padding: 1rem;
+        overflow: hidden;
+    }
+
+    hex-alpha-color-picker {
+        width: calc(90vi - 2rem - 2px);
+        height: calc(90vi - 2rem - 2px);
     }
 
     &::backdrop {

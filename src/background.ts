@@ -1,9 +1,11 @@
-import OBR from '@owlbear-rodeo/sdk';
+import OBR, { Metadata } from '@owlbear-rodeo/sdk';
 import { getId } from './Utils/getId';
 import { ConeTool } from './Tool/ConeTool';
 import { CircleTool } from './Tool/CircleTool';
 import { CubeTool } from './Tool/CubeTool';
 import { SettingsForm } from './Tool/SettingsForm';
+import { toolMetadata } from './Metadata/tool';
+import { StyleForm } from './Tool/StyleForm';
 
 export function initBackground () {
     OBR.onReady(async () => {
@@ -15,7 +17,7 @@ export function initBackground () {
                 label: 'AoE',
             }],
             defaultMode: getId('cone'),
-            //    defaultMetadata: toolMetadata.defaultValues,
+            defaultMetadata: toolMetadata.defaultValues as unknown as Metadata,
         });
 
         OBR.tool.createMode(new ConeTool());
@@ -23,5 +25,6 @@ export function initBackground () {
         OBR.tool.createMode(new CubeTool());
 
         OBR.tool.createAction(new SettingsForm());
+        OBR.tool.createAction(new StyleForm());
     });
 }
