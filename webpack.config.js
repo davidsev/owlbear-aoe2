@@ -1,5 +1,6 @@
 const path = require('path');
 const copyPlugin = require('copy-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     entry: './src/index.ts',
@@ -27,11 +28,15 @@ module.exports = {
         fallback: { 'buffer': false }
     },
     plugins: [
+        new HtmlWebpackPlugin({
+            title: 'AoE',
+            filename: 'frame.html',
+        }),
         new copyPlugin({
             patterns: [
                 { from: 'static' }
             ]
-        })
+        }),
     ],
     devServer: {
         headers: {
