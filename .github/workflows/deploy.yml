@@ -25,7 +25,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: "18"
       - name: Install dependencies
         run: npm install
       - name: Build
@@ -39,11 +39,8 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE }}
           aws-region: eu-west-2
           role-session-name: Github
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
       ######
       # Push to s3
       ######
       - name: Deploy to S3
-        run: aws s3 sync ./dist "s3://${{ S3_BUCKET }}/${{ github.ref_name }}" --delete
+        run: aws s3 sync ./dist "s3://${{ secrets.S3_BUCKET }}/${{ github.ref_name }}" --delete
