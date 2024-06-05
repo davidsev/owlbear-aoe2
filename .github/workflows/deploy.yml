@@ -1,0 +1,49 @@
+name: Deploy to AWS
+
+on:
+  push:
+    tags: 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write # This is required for requesting the JWT token used to authenticate to AWS
+
+concurrency:
+  group: "deploy"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      ######
+      # Build
+      ######
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        run: npm run prod
+      ######
+      # Login to AWS
+      ######
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE }}
+          aws-region: eu-west-2
+          role-session-name: Github
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+      ######
+      # Push to s3
+      ######
+      - name: Deploy to S3
+        run: aws s3 sync ./dist "s3://${{ S3_BUCKET }}/${{ github.ref_name }}" --delete
