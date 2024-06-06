@@ -43,4 +43,6 @@ jobs:
       # Push to s3
       ######
       - name: Deploy to S3
-        run: aws s3 sync ./dist "s3://${{ secrets.S3_BUCKET }}/${{ github.ref_name }}" --delete
+        run: |
+          aws s3 sync --metadata-directive REPLACE --cache-control 'max-age=300' ./dist "s3://${{ secrets.S3_BUCKET }}/${{ github.ref_name }}" --delete
+          aws s3 cp --metadata-directive REPLACE --cache-control 'max-age=300' ./dist/manifest.json "s3://${{ secrets.S3_BUCKET }}/" --delete

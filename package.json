@@ -3,7 +3,7 @@
   "scripts": {
     "dev": "webpack --node-env=development",
     "watch": "webpack --node-env=development --watch",
-    "serve": "webpack-dev-server  --node-env=development --port 8090 --hot",
+    "serve": "URL_PREFIX=http://127.0.0.1:8090 webpack-dev-server --node-env=development --port 8090 --hot",
     "prod": "webpack --node-env=production"
   },
   "keywords": [],

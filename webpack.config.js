@@ -34,7 +34,20 @@ module.exports = {
         }),
         new copyPlugin({
             patterns: [
-                { from: 'static' }
+                {
+                    from: 'static',
+                },
+                {
+                    from: 'static/manifest.json',
+                    transform: (content, path) => {
+                        let manifest = JSON.parse(content.toString());
+                        manifest.version = process.env.npm_package_version;
+                        const url_prefix = process.env.URL_PREFIX || '';
+                        manifest.background_url = url_prefix + manifest.background_url;
+                        manifest.icon = url_prefix + manifest.icon;
+                        return JSON.stringify(manifest, null, 4);
+                    },
+                },
             ]
         }),
     ],
