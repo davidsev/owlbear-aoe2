@@ -4,7 +4,7 @@ import { CubeTemplateShape } from '../Shape/CubeTemplateShape';
 import { roomMetadata, SquareCubeStyle, SquareDirection } from '../Metadata/room';
 import { BaseShape } from '../Shape/BaseShape';
 import { CubeSimpleShape } from '../Shape/CubeSimpleShape';
-import { grid } from '../../../owlbear-utils/src';
+import { grid } from '@davidsev/owlbear-utils';
 
 export class CubeTool extends BaseTool {
 
