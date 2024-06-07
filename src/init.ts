@@ -7,7 +7,7 @@ export function registerInitFunction (name: string, callback: Function) {
     functions.set(name, callback);
 }
 
-export async function init () {
+async function init () {
     await grid.awaitReady();
     await roomMetadata.awaitReady();
 
@@ -15,3 +15,5 @@ export async function init () {
     const callback = functions.get(id);
     if (callback) callback();
 }
+
+init();
