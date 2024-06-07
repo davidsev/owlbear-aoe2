@@ -20,8 +20,6 @@ export function initBackground () {
             defaultMetadata: toolMetadata.defaultValues as unknown as Metadata,
         });
 
-        console.log(URL_PREFIX, URL_PREFIX + 'x');
-
         OBR.tool.createMode(new ConeTool());
         OBR.tool.createMode(new CircleTool());
         OBR.tool.createMode(new CubeTool());
