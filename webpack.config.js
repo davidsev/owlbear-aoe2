@@ -2,6 +2,7 @@ const path = require('path');
 const copyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const DefinePlugin = require('webpack').DefinePlugin;
+const version = require('./package.json').version;
 
 module.exports = {
     entry: './src/index.ts',
@@ -35,6 +36,7 @@ module.exports = {
         }),
         new DefinePlugin({
             URL_PREFIX: JSON.stringify(process.env.URL_PREFIX || ''),
+            VERSION: JSON.stringify(version) || 'ERROR',
         }),
         new copyPlugin({
             patterns: [
