@@ -6,7 +6,7 @@ export class SettingsForm implements ToolAction {
     readonly id = getId('setting');
 
     readonly icons: ToolIcon[] = [{
-        icon: '/icons/settings.svg',
+        icon: URL_PREFIX + '/icons/settings.svg',
         label: 'Settings',
         filter: {
             activeTools: [getId('tool')],
@@ -19,7 +19,7 @@ export class SettingsForm implements ToolAction {
             id: getId('settings-form'),
             height: 600,
             width: 350,
-            url: '/frame.html#settings-form',
+            url: URL_PREFIX + '/frame.html#settings-form',
             anchorElementId: elementId,
             anchorOrigin: {
                 horizontal: 'CENTER',

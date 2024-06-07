@@ -1,6 +1,7 @@
 const path = require('path');
 const copyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const DefinePlugin = require('webpack').DefinePlugin;
 
 module.exports = {
     entry: './src/index.ts',
@@ -31,6 +32,9 @@ module.exports = {
         new HtmlWebpackPlugin({
             title: 'AoE',
             filename: 'frame.html',
+        }),
+        new DefinePlugin({
+            URL_PREFIX: JSON.stringify(process.env.URL_PREFIX || ''),
         }),
         new copyPlugin({
             patterns: [

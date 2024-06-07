@@ -6,7 +6,7 @@ export class StyleForm implements ToolAction {
     readonly id = getId('style');
 
     readonly icons: ToolIcon[] = [{
-        icon: '/icons/style.svg',
+        icon: URL_PREFIX + '/icons/style.svg',
         label: 'Style',
         filter: {
             activeTools: [getId('tool')],
@@ -18,7 +18,7 @@ export class StyleForm implements ToolAction {
             id: getId('style-form'),
             height: 600,
             width: 350,
-            url: '/frame.html#style-form',
+            url: URL_PREFIX + '/frame.html#style-form',
             anchorElementId: elementId,
             anchorOrigin: {
                 horizontal: 'CENTER',

@@ -33,7 +33,7 @@ export abstract class BaseTool implements ToolMode {
     /** The icon that will be displayed in the toolbar. */
     get icons (): ToolIcon[] {
         return [{
-            icon: this.icon,
+            icon: URL_PREFIX + this.icon,
             label: this.label,
             filter: {
                 activeTools: [getId('tool')],

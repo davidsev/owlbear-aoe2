@@ -13,12 +13,14 @@ export function initBackground () {
             id: getId('tool'),
             shortcut: 'A',
             icons: [{
-                icon: '/icons/cone-beta.svg',
+                icon: URL_PREFIX + '/icons/cone-beta.svg',
                 label: 'AoE',
             }],
             defaultMode: getId('cone'),
             defaultMetadata: toolMetadata.defaultValues as unknown as Metadata,
         });
+
+        console.log(URL_PREFIX, URL_PREFIX + 'x');
 
         OBR.tool.createMode(new ConeTool());
         OBR.tool.createMode(new CircleTool());
