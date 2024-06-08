@@ -26,6 +26,11 @@ export class HelpTooltip extends BaseElement {
 
     private showDialog () {
         this.dialog.showModal();
+
+        // If the bottom of the dialog is off the screen, move it up.
+        const rect = this.dialog.getBoundingClientRect();
+        if (rect.bottom > window.innerHeight)
+            this.dialog.style.bottom = '1em';
     }
 
     private hideDialog (e: PointerEvent) {
