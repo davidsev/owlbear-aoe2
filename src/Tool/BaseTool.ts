@@ -15,7 +15,7 @@ import { BaseShape } from '../Shape/BaseShape';
 import { PathBuilder } from '@owlbear-rodeo/sdk/lib/builders/PathBuilder';
 import { Point } from '@davidsev/owlbear-utils';
 import { TextBuilder } from '@owlbear-rodeo/sdk/lib/builders/TextBuilder';
-import { toolMetadata, ToolMetadata } from '../Metadata/tool';
+import { LabelDisplayMode, ShapeDisplayMode, toolMetadata, ToolMetadata } from '../Metadata/tool';
 
 export abstract class BaseTool implements ToolMode {
 
@@ -50,16 +50,20 @@ export abstract class BaseTool implements ToolMode {
 
         // Make the items.
         const areaItem = this.buildAreaPath().build();
-        const outlineItem = this.buildOutlinePath().attachedTo(areaItem.id).build();
-        const labelItem = this.buildLabel().attachedTo(areaItem.id).build();
-        const items: Item[] = [areaItem, outlineItem, labelItem];
+        let outlineItem: Path | null = null;
+        if (this.toolMetadata.shapeDisplayMode != ShapeDisplayMode.NEVER)
+            outlineItem = this.buildOutlinePath().attachedTo(areaItem.id).build();
+        let labelItem: Text | null = null;
+        if (this.toolMetadata.labelDisplayMode != LabelDisplayMode.NEVER)
+            labelItem = this.buildLabel().attachedTo(areaItem.id).build();
+        const items: (Item | null)[] = [areaItem, outlineItem, labelItem];
 
         // Start drawing.
         const shape = this.getShape();
         shape.start = new Point(event.pointerPosition);
         this.currentArea = {
             shape: shape,
-            interaction: await OBR.interaction.startItemInteraction(items),
+            interaction: await OBR.interaction.startItemInteraction(items.filter(i => i !== null) as Item[]),
         };
     }
 
@@ -128,9 +132,9 @@ export abstract class BaseTool implements ToolMode {
             if (this.currentArea.shape.isValid) {
                 const [area, outline, label] = this.getItems(Array.from(items));
                 const itemsToKeep: Item[] = [area];
-                if (/*this.toolMetadata.shapeDisplayMode == 'always' && */ outline)
+                if (this.toolMetadata.shapeDisplayMode == ShapeDisplayMode.ALWAYS && outline)
                     itemsToKeep.push(outline);
-                if (/*this.toolMetadata.labelDisplayMode == 'always' && */ label)
+                if (this.toolMetadata.labelDisplayMode == LabelDisplayMode.ALWAYS && label)
                     itemsToKeep.push(label);
                 await OBR.scene.items.addItems(itemsToKeep);
 
