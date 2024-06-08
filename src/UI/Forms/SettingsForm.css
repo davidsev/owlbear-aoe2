@@ -4,7 +4,7 @@ tab-bar {
 }
 
 form {
-    padding: 0.75em 0.75em;
+    padding: 0 0.75em;
 }
 
 div.resetButton {
@@ -14,6 +14,10 @@ div.resetButton {
 
 help-tooltip {
     margin: 0.2em 0.1em 0 0.5em;
+}
+
+form-control {
+    margin: 0.75em 0;
 }
 
 .flex {
