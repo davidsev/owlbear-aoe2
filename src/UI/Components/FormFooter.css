@@ -1,0 +1,22 @@
+
+:host {
+    display: block;
+}
+
+main {
+    position: absolute;
+    inset: auto 0 0.125rem 0;
+    color: rgba(var(--text-rgb), 0.3);
+    font-size: 10px;
+    text-align: center;
+
+    a {
+        color: rgba(var(--text-rgb), 0.3);
+        text-decoration: none;
+        transition: color 0.2s;
+
+        &:hover {
+            color: rgba(var(--theme-rgb), 1);
+        }
+    }
+}

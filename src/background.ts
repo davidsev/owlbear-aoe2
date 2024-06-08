@@ -26,7 +26,5 @@ export function initBackground () {
 
         OBR.tool.createAction(new SettingsForm());
         OBR.tool.createAction(new StyleForm());
-
-        console.log(`AoE v${VERSION} loaded`);
     });
 }

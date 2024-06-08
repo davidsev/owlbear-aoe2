@@ -3,6 +3,7 @@ import { grid } from '@davidsev/owlbear-utils';
 import { HexSettingsForm } from './HexSettingsForm';
 import styles from '../baseCSS.css';
 import { StyleSettingsForm } from './StyleSettingsForm';
+import { FormFooter } from '../Components/FormFooter';
 
 export async function initSettingsForm () {
     // Load the page based on grid type
@@ -14,6 +15,8 @@ export async function initSettingsForm () {
     const styleSheet = document.createElement('style');
     styleSheet.innerText = styles;
     document.head.appendChild(styleSheet);
+
+    document.body.appendChild(new FormFooter());
 }
 
 export async function initStyleForm () {
@@ -22,5 +25,6 @@ export async function initStyleForm () {
     const styleSheet = document.createElement('style');
     styleSheet.innerText = styles;
     document.head.appendChild(styleSheet);
-}
 
+    document.body.appendChild(new FormFooter());
+}
