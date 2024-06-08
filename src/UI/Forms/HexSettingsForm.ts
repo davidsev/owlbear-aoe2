@@ -149,7 +149,7 @@ export class HexSettingsForm extends BaseElement {
             </tab-bar>
             <form>
                 <div id="coneForm">
-                    <form-control id="coneStyle" label="Cone Style">
+                    <form-control id="coneStyle" label="Cone Type">
                         <div class="flex">
                             ${this.inputs.coneStyle}
                             <help-tooltip>
@@ -165,13 +165,13 @@ export class HexSettingsForm extends BaseElement {
                         </div>
                     </form-control>
                     <div id="templateConeFields">
-                        <form-control label="Cone Width">
+                        <form-control label="Width">
                             <div class="flex">
                                 ${this.inputs.coneWidth}
                                 <help-tooltip>The width of the cone, in degrees.</help-tooltip>
                             </div>
                         </form-control>
-                        <form-control label="Cone Start Point(s)">
+                        <form-control label="Restrict Starting Point">
                             <div class="flex">
                                 ${this.inputs.coneStartPoints}
                                 <help-tooltip>
@@ -181,7 +181,7 @@ export class HexSettingsForm extends BaseElement {
                                 </help-tooltip>
                             </div>
                         </form-control>
-                        <form-control label="Cone Overlap Threshold">
+                        <form-control label="Hex Overlap Threshold">
                             <div class="flex">
                                 ${this.inputs.coneOverlapThreshold}
                                 <help-tooltip>
@@ -191,7 +191,7 @@ export class HexSettingsForm extends BaseElement {
                                 </help-tooltip>
                             </div>
                         </form-control>
-                        <form-control label="Cone Size Snapping">
+                        <form-control label="Size Snapping">
                             <div class="flex">
                                 ${this.inputs.coneSizeSnapping}
                                 <help-tooltip>
@@ -208,7 +208,7 @@ export class HexSettingsForm extends BaseElement {
                     </div>
                 </div>
                 <div id="circleForm">
-                    <form-control label="Circle Start Point(s)">
+                    <form-control label="Restrict Starting Point">
                         <div class="flex">
                             ${this.inputs.circleStartPoints}
                             <help-tooltip>
@@ -218,7 +218,7 @@ export class HexSettingsForm extends BaseElement {
                             </help-tooltip>
                         </div>
                     </form-control>
-                    <form-control label="Circle Size Snapping">
+                    <form-control label="Size Snapping">
                         <div class="flex">
                             ${this.inputs.circleSizeSnapping}
                             <help-tooltip>
@@ -234,7 +234,7 @@ export class HexSettingsForm extends BaseElement {
                     </div>
                 </div>
                 <div id="cubeForm">
-                    <form-control label="Cube Start Point(s)">
+                    <form-control label="Restrict Starting Point">
                         <div class="flex">
                             ${this.inputs.cubeStartPoints}
                             <help-tooltip>
@@ -243,7 +243,7 @@ export class HexSettingsForm extends BaseElement {
                             </help-tooltip>
                         </div>
                     </form-control>
-                    <form-control label="Cube Overlap Threshold">
+                    <form-control label="Hex Overlap Threshold">
                         <div class="flex">
                             ${this.inputs.cubeOverlapThreshold}
                             <help-tooltip>
@@ -252,7 +252,7 @@ export class HexSettingsForm extends BaseElement {
                             </help-tooltip>
                         </div>
                     </form-control>
-                    <form-control label="Cube Size Snapping">
+                    <form-control label="Size Snapping">
                         <div class="flex">
                             ${this.inputs.cubeSizeSnapping}
                             <help-tooltip>
