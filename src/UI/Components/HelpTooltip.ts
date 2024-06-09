@@ -25,12 +25,17 @@ export class HelpTooltip extends BaseElement {
     }
 
     private showDialog () {
+        const ourRect = this.getBoundingClientRect();
         this.dialog.showModal();
+        this.dialog.style.top = ourRect.bottom + 'px';
 
         // If the bottom of the dialog is off the screen, move it up.
-        const rect = this.dialog.getBoundingClientRect();
-        if (rect.bottom > window.innerHeight)
+        const dialogRect = this.dialog.getBoundingClientRect();
+        console.log(dialogRect.bottom, window.innerHeight);
+        if (dialogRect.bottom + 25 > window.innerHeight) {
+            this.dialog.style.top = 'auto';
             this.dialog.style.bottom = '1em';
+        }
     }
 
     private hideDialog (e: PointerEvent) {
