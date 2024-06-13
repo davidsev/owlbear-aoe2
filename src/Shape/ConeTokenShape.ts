@@ -1,7 +1,8 @@
 import { BaseShape, cached } from './BaseShape';
-import { Cell, grid, LineSegment, Point, SnapTo, Square } from '@davidsev/owlbear-utils';
+import { Cell, grid, Point, SnapTo, Square } from '@davidsev/owlbear-utils';
 import { Command, PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
-import { getDirection4 } from '../Utils/Geometry/getDirection';
+import { getDirection4, getDirection8 } from '../Utils/Geometry/getDirection';
+import { Triangle } from '../Utils/Geometry/Shape/Triangle';
 
 type axis = '+x' | '-x' | '+y' | '-y';
 
@@ -24,22 +25,28 @@ export class ConeTokenShape extends BaseShape {
     }
 
     @cached()
-    public get labelPosition (): Point {
-        return new Point(
-            (this.roundedStart.x + this.roundedEnd.x) / 2,
-            (this.roundedStart.y + this.roundedEnd.y) / 2,
+    private get triangle (): Triangle {
+        const vector = this.roundedEnd.sub(this.roundedStart).scale(Math.tan(Math.tan(53.1 * Math.PI / 360)));
+        return new Triangle(
+            this.roundedStart,
+            this.roundedEnd.add(new Point(vector.y, -vector.x)),
+            this.roundedEnd.add(new Point(-vector.y, vector.x)),
         );
     }
 
+    @cached()
+    public get labelPosition (): Point {
+        const triangle = this.triangle;
+        return triangle.center;
+    }
+
+    @cached()
     public get outline (): PathCommand[] {
-        const vector = this.roundedEnd.sub(this.roundedStart).scale(Math.tan(53.1 * Math.PI / 360));
-        const p1 = this.roundedStart;
-        const p2 = this.roundedEnd.add(new Point(vector.y, -vector.x));
-        const p3 = this.roundedEnd.add(new Point(-vector.y, vector.x));
+        const triangle = this.triangle;
         return [
-            [Command.MOVE, p1.x, p1.y],
-            [Command.LINE, p2.x, p2.y],
-            [Command.LINE, p3.x, p3.y],
+            [Command.MOVE, triangle.p1.x, triangle.p1.y],
+            [Command.LINE, triangle.p2.x, triangle.p2.y],
+            [Command.LINE, triangle.p3.x, triangle.p3.y],
             [Command.CLOSE],
         ];
     }
@@ -51,24 +58,18 @@ export class ConeTokenShape extends BaseShape {
             return [];
 
         let cellsToCheck = this.getGridSquares(axis);
+        const triangle = this.triangle;
 
-        // Function to measure how close a cell is to the center-line.
-        // We need an extended version of the line as the calculation only works if the line is longer than the cone.
-        const line = this.extendedCenterline;
-        const distanceFunction = (square: Cell) => {
-            const x0 = square.center.x;
-            const y0 = square.center.y;
-            const x1 = line.p1.x;
-            const y1 = line.p1.y;
-            const x2 = line.p2.x;
-            const y2 = line.p2.y;
-            return Math.abs((y2 - y1) * x0 - (x2 - x1) * y0 + x2 * y1 - y2 * x1) / Math.sqrt((y2 - y1) ** 2 + (x2 - x1) ** 2);
+        // Function to measure how close "good" a square is.
+        // We primarily use how much of the cell is within the triangle, with a secondary check on how close the center is.
+        const scoreCell = (cell: Cell) => {
+            return (100 - triangle.intersectsCellPercentage(cell)) * 1000 + triangle.center.distanceTo(cell.center);
         };
 
         // For each row, find the cells closest to the line.
         const cells: Cell[] = [];
         for (const [rowIndex, row] of cellsToCheck.entries()) {
-            const bestSquares = this.maxNofArray(row, distanceFunction, rowIndex + 1);
+            const bestSquares = this.maxNofArray(row, scoreCell, rowIndex + 1);
             cells.push(...bestSquares);
         }
 
@@ -80,21 +81,32 @@ export class ConeTokenShape extends BaseShape {
     // If it's not diagonal, we want to be centered on the furthest axis, and will increase the number of tokens as we move away.
     @cached()
     private get directionToDraw (): axis | null {
-        const direction = getDirection4(this.end.sub(this.start));
+        const direction4 = getDirection4(this.end.sub(this.start));
+        const direction8 = getDirection8(this.end.sub(this.start));
 
-        if (!direction)
+        if (!direction4 || !direction8)
             return null;
 
-        if (direction.x == 0) {
-            if (direction.y == -1) return '-y';
-            if (direction.y == +1) return '+y';
+        // Check the 4 directions.
+        if (direction8.x == 0) {
+            if (direction8.y == -1) return '-y';
+            if (direction8.y == +1) return '+y';
         }
-        if (direction.y == 0) {
-            if (direction.x == -1) return '-x';
-            if (direction.x == +1) return '+x';
+        if (direction8.y == 0) {
+            if (direction8.x == -1) return '-x';
+            if (direction8.x == +1) return '+x';
         }
+        // Diagonal directions.
+        if (direction8.equals({ x: +1, y: -1 }) && direction4.y == -1) return '+x';
+        if (direction8.equals({ x: +1, y: -1 }) && direction4.x == +1) return '-y';
+        if (direction8.equals({ x: -1, y: -1 }) && direction4.y == -1) return '-x';
+        if (direction8.equals({ x: -1, y: -1 }) && direction4.x == -1) return '-y';
+        if (direction8.equals({ x: +1, y: +1 }) && direction4.y == +1) return '+x';
+        if (direction8.equals({ x: +1, y: +1 }) && direction4.x == +1) return '+y';
+        if (direction8.equals({ x: -1, y: +1 }) && direction4.y == +1) return '-x';
+        if (direction8.equals({ x: -1, y: +1 }) && direction4.x == -1) return '+y';
 
-        throw new Error(`Axis is null: direction: ${direction}, line: ${this.end.sub(this.start)}`);
+        throw new Error(`Axis is null: direction: ${direction4}, line: ${this.end.sub(this.start)}`);
     }
 
     // Build a grid of squares to check, in rows.  The first row is nearest the axis.
@@ -130,6 +142,12 @@ export class ConeTokenShape extends BaseShape {
             }
         }
 
+        // We currently have the line nearest the axis in row one, which will get one token.
+        // If it's diagonal we want it the other way around.
+        const direction8 = getDirection8(this.end.sub(this.start));
+        if (direction8?.x !== 0 && direction8?.y !== 0)
+            cells = cells.reverse();
+
         return cells;
     }
 
@@ -146,10 +164,5 @@ export class ConeTokenShape extends BaseShape {
 
         // Return the top n items.
         return sortedValues.slice(0, count).map(x => x[0]);
-    }
-
-    get extendedCenterline (): LineSegment {
-        const vector = this.roundedEnd.sub(this.roundedStart);
-        return new LineSegment(this.roundedStart.sub(vector), this.roundedEnd.add(vector));
     }
 }
