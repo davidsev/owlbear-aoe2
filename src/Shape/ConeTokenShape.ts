@@ -1,6 +1,6 @@
 import { BaseShape, cached } from './BaseShape';
 import { Cell, grid, LineSegment, Point, SnapTo, Square } from '@davidsev/owlbear-utils';
-import { PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
+import { Command, PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
 import { getDirection4 } from '../Utils/Geometry/getDirection';
 
 type axis = '+x' | '-x' | '+y' | '-y';
@@ -32,7 +32,16 @@ export class ConeTokenShape extends BaseShape {
     }
 
     public get outline (): PathCommand[] {
-        return [];
+        const vector = this.roundedEnd.sub(this.roundedStart).scale(Math.tan(53.1 * Math.PI / 360));
+        const p1 = this.roundedStart;
+        const p2 = this.roundedEnd.add(new Point(vector.y, -vector.x));
+        const p3 = this.roundedEnd.add(new Point(-vector.y, vector.x));
+        return [
+            [Command.MOVE, p1.x, p1.y],
+            [Command.LINE, p2.x, p2.y],
+            [Command.LINE, p3.x, p3.y],
+            [Command.CLOSE],
+        ];
     }
 
     @cached()
