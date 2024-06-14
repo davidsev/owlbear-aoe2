@@ -20,7 +20,7 @@ button {
 
 dialog {
     position: absolute;
-    inset: auto 5%;
+    inset: 5% 5% auto 5%;
     height: fit-content;
     margin: 0;
     padding: 0;

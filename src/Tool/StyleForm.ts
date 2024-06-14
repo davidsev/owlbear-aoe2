@@ -16,7 +16,7 @@ export class StyleForm implements ToolAction {
     onClick (context: ToolContext, elementId: string): void {
         OBR.popover.open({
             id: getId('style-form'),
-            height: 350,
+            height: 355,
             width: 350,
             url: URL_PREFIX + '/frame.html#style-form',
             anchorElementId: elementId,
