@@ -48,4 +48,4 @@ jobs:
         run: |
           aws s3 sync --metadata-directive REPLACE --cache-control "public, max-age=604800, immutable" ./dist "s3://${{ secrets.S3_BUCKET }}/${{ github.ref_name }}" --delete
           aws s3 cp --metadata-directive REPLACE --cache-control 'public, max-age=300' ./dist/manifest.json "s3://${{ secrets.S3_BUCKET }}/"
-          aws s3 cp --metadata-directive REPLACE --cache-control 'public, max-age=300' --recursive ./static_root/ "s3://${{ secrets.S3_BUCKET }}/"
+          aws s3 cp --metadata-directive REPLACE --cache-control 'public, max-age=3600' --recursive ./static_root/ "s3://${{ secrets.S3_BUCKET }}/"
