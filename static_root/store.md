@@ -31,9 +31,11 @@ If you want to rotate or scale a shape, you'll need to delete it and draw a new 
 ### Settings
 
 The cog button opens the settings, which are set by the GM for the whole room. \
-The settings are seperate for square and hex grids.
+The settings are separate for square and hex grids.
 
 The pencil button opens the style options, which are per-player.
+
+All the settings are documented in the settings dialog.
 
 ### Other
 
