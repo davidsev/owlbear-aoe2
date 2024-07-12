@@ -16,12 +16,15 @@ import { PathBuilder } from '@owlbear-rodeo/sdk/lib/builders/PathBuilder';
 import { Point } from '@davidsev/owlbear-utils';
 import { TextBuilder } from '@owlbear-rodeo/sdk/lib/builders/TextBuilder';
 import { LabelDisplayMode, ShapeDisplayMode, toolMetadata, ToolMetadata } from '../Metadata/tool';
+import { EventRateLimiter } from '../Utils/EventRateLimiter';
 
 export abstract class BaseTool implements ToolMode {
 
     abstract readonly label: string;
     abstract readonly icon: string;
     abstract readonly id: string;
+
+    private readonly moveRateLimiter = new EventRateLimiter(this.onToolDragMoveReal.bind(this));
 
     private currentArea?: {
         interaction: InteractionManager<Item[]>,
@@ -104,6 +107,10 @@ export abstract class BaseTool implements ToolMode {
     }
 
     async onToolDragMove (context: ToolContext, event: ToolEvent) {
+        this.moveRateLimiter.call(context, event);
+    }
+
+    async onToolDragMoveReal (context: ToolContext, event: ToolEvent) {
 
         if (this.currentArea) {
             const [update] = this.currentArea.interaction;
