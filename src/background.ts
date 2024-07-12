@@ -13,7 +13,7 @@ export function initBackground () {
             id: getId('tool'),
             shortcut: 'A',
             icons: [{
-                icon: URL_PREFIX + '/icons/cone-beta.svg',
+                icon: URL_PREFIX + '/icons/cone.svg',
                 label: 'AoE',
             }],
             defaultMode: getId('cone'),
