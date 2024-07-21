@@ -24,7 +24,7 @@ export class CellOutliner {
         // Count how many times each line shows up, any line that shows up more than once is internal and can be removed.
         const lineCounts = new Map<string, [LineSegment, number]>();
         for (const line of lines) {
-            const key = line.toString();
+            const key = line.p1.toString() + line.p2.toString();
             const [_, count] = lineCounts.get(key) ?? [line, 0];
             lineCounts.set(key, [line, count + 1]);
         }
