@@ -77,8 +77,6 @@ export abstract class BaseTool implements ToolMode {
         if (!this.currentArea)
             return;
 
-        console.time('updateItems');
-
         // Check if the line is long enough etc
         if (!this.currentArea.shape.isValid) {
             if (outline)
@@ -103,8 +101,6 @@ export abstract class BaseTool implements ToolMode {
             label.position = { x: pos.x - 100, y: pos.y - 50 };
             label.visible = true;
         }
-
-        console.timeEnd('updateItems');
     }
 
     async onToolDragMove (context: ToolContext, event: ToolEvent) {
