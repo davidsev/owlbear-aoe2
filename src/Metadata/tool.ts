@@ -20,13 +20,13 @@ export enum ShapeDisplayMode {
 export class ToolMetadata {
     areaFillColor: string = '#000000';
     areaFillOpacity: number = 0.5;
-    areaStrokeColor: string = '#000000';
-    areaStrokeOpacity: number = 0;
+    areaStrokeColor: string = '#FFFFFF';
+    areaStrokeOpacity: number = 1;
     shapeFillColor: string = '#000000';
     shapeFillOpacity: number = 0;
     shapeStrokeColor: string = '#FF0000';
     shapeStrokeOpacity: number = 1;
-    shapeDisplayMode: ShapeDisplayMode = ShapeDisplayMode.ALWAYS;
+    shapeDisplayMode: ShapeDisplayMode = ShapeDisplayMode.DRAWING;
     labelDisplayMode: LabelDisplayMode = LabelDisplayMode.DRAWING;
 }
 
