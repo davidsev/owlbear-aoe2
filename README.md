@@ -10,5 +10,5 @@ An [Owlbear Rodeo](https://www.owlbear.rodeo/) extension to work out which squar
 
 ## Usage
 
-See [store.md](static/store.md) for usage instructions.
+See [store.md](static_root/store.md) for usage instructions.
 
