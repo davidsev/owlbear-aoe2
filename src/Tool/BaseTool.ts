@@ -176,7 +176,7 @@ export abstract class BaseTool implements ToolMode {
             .strokeColor(this.toolMetadata.areaStrokeColor)
             .name('AoE Area')
             .strokeOpacity(this.toolMetadata.areaStrokeOpacity)
-            .layer('RULER');
+            .layer('DRAWING');
     }
 
     protected buildOutlinePath (): PathBuilder {
@@ -190,7 +190,7 @@ export abstract class BaseTool implements ToolMode {
             .strokeOpacity(this.toolMetadata.shapeStrokeOpacity)
             .locked(true)
             .name('AoE Outline')
-            .layer('RULER');
+            .layer('DRAWING');
     }
 
     protected buildLabel (): TextBuilder {
@@ -209,6 +209,6 @@ export abstract class BaseTool implements ToolMode {
             .metadata({ createdBy: getId() })
             .locked(true)
             .name('AoE Label')
-            .layer('RULER');
+            .layer('DRAWING');
     }
 }
