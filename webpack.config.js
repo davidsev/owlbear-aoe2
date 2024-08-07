@@ -9,6 +9,7 @@ module.exports = {
     output: {
         filename: 'app.js',
         path: path.resolve(__dirname, 'dist'),
+        publicPath: process.env.URL_PREFIX || '',
         clean: true,
     },
     devtool: (process.env.NODE_ENV === 'development' ? 'inline-source-map' : false),
