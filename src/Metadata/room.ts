@@ -51,7 +51,6 @@ export class RoomMetadata {
     hexConeSizeSnapping: number = 1;
     hexCircleStartPoints: StartPoint[] = [StartPoint.CENTER];
     hexCircleSizeSnapping: number = 1;
-    hexCubeWidth: number = 60;
     hexCubeStartPoints: StartPoint[] = [StartPoint.CORNER];
     hexCubeOverlapThreshold: number = 0.1;
     hexCubeSizeSnapping: number = 1;
