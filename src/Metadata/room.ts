@@ -1,5 +1,6 @@
+import { CachedRoomMetadata, RoomMetadataMapper } from '@davidsev/owlbear-utils';
 import { getId } from '../Utils/getId';
-import { CachedRoomMetadata } from '@davidsev/owlbear-utils/js/Metadata/Cached/Room';
+import { Metadata } from '@owlbear-rodeo/sdk';
 
 export enum SquareConeStyle {
     TEMPLATE = 'TEMPLATE',
@@ -56,4 +57,65 @@ export class RoomMetadata {
     hexCubeSizeSnapping: number = 1;
 }
 
-export const roomMetadata = new CachedRoomMetadata(getId(), new RoomMetadata);
+const nameMap: [name: string, letter: string][] = [
+    ['squareConeStyle', 'a'],
+    ['squareConeWidth', 'b'],
+    ['squareConeStartPoints', 'c'],
+    ['squareConeOverlapThreshold', 'd'],
+    ['squareConeSizeSnapping', 'e'],
+    ['squareConeDirection', 'f'],
+    ['squareCircleStartPoints', 'g'],
+    ['squareCircleSizeSnapping', 'h'],
+    ['squareCubeStyle', 'i'],
+    ['squareCubeStartPoints', 'j'],
+    ['squareCubeSizeSnapping', 'k'],
+    ['squareCubeOverlapThreshold', 'l'],
+    ['squareCubeDirection', 'm'],
+    ['hexConeStyle', 'n'],
+    ['hexConeWidth', 'o'],
+    ['hexConeStartPoints', 'p'],
+    ['hexConeOverlapThreshold', 'q'],
+    ['hexConeSizeSnapping', 'r'],
+    ['hexCircleStartPoints', 's'],
+    ['hexCircleSizeSnapping', 't'],
+    ['hexCubeStartPoints', 'u'],
+    ['hexCubeOverlapThreshold', 'v'],
+    ['hexCubeSizeSnapping', 'w'],
+];
+
+class MyRoomMetadataMapper extends RoomMetadataMapper<RoomMetadata> {
+    protected transformLoadingValues (values: Metadata): Metadata {
+        const newValues: Metadata = {};
+
+        // Foreach letter key, replace it with the name key.
+        for (const [key, value] of Object.entries(values)) {
+            const newName = nameMap.find(([name, letter]) => letter == key);
+            if (newName)
+                newValues[newName[0]] = value;
+            else
+                newValues[key] = value;
+        }
+
+        return newValues;
+    }
+
+    protected transformSavingValues (values: Metadata): Metadata {
+        const newValues: Metadata = {};
+        for (const [key, value] of Object.entries(values)) {
+            // Only save debugIntersection if it's true.
+            if (key === 'debugIntersection' && value === true) {
+                newValues['debugIntersection'] = value;
+            }
+            // Otherwise, save the value under the letter key.
+            const newKey = nameMap.find(([name, letter]) => name == key);
+            if (newKey)
+                newValues[newKey[1]] = value;
+            else
+                newValues[key] = value;
+        }
+        return newValues;
+    }
+}
+
+const roomMetadataMapper = new MyRoomMetadataMapper(getId(), new RoomMetadata);
+export const roomMetadata = new CachedRoomMetadata(roomMetadataMapper);
