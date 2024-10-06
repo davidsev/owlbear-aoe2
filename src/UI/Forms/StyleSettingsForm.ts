@@ -33,7 +33,7 @@ export class StyleSettingsForm extends BaseElement {
         super();
 
         // Update the metadata when the form changes.
-        for (const [key, input] of Object.entries(this.inputs)) {
+        for (const [, input] of Object.entries(this.inputs)) {
             input.addEventListener('change', this.formChanged.bind(this));
         }
 

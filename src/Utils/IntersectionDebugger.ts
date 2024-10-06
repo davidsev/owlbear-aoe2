@@ -16,7 +16,7 @@ export class IntersectionDebugger {
         const items = await OBR.scene.local.getItems();
         const toDelete: string[] = [];
         for (const item of items) {
-            if (item.metadata.hasOwnProperty('aoe-debug')) {
+            if (Object.prototype.hasOwnProperty.call(item.metadata, 'aoe-debug')) {
                 toDelete.push(item.id);
             }
         }

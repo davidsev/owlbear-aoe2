@@ -47,7 +47,7 @@ export function calculateArea (points: Vector2[], debug: IntersectionDebugger | 
     for (let i = 2; i < points.length; i++) {
         const p2 = points[i - 1];
         const p3 = points[i];
-        polygonArea += calculateArea([points[0], p2, p3], debug);
+        polygonArea += calculateArea([p1, p2, p3], debug);
     }
 
     return polygonArea;

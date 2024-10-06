@@ -9,7 +9,7 @@ export class BaseElement extends LitElement {
         unsafeCSS(style),
     ];
 
-    protected firstUpdated (_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
+    protected firstUpdated (_changedProperties: PropertyValueMap<unknown> | Map<PropertyKey, unknown>): void {
         super.firstUpdated(_changedProperties);
 
         // Update the theme to match OBR

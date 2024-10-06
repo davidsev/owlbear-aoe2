@@ -54,7 +54,7 @@ export class ConeHexShape extends BaseShape {
         const direction = this.direction;
 
         // Get the axial coordinates of the start cell
-        const [q, r, s] = startCell.axialCoords;
+        const [q, r] = startCell.axialCoords;
 
         // Calculate the distance in cells
         const distance = this.roundedDistance / grid.dpi;
@@ -71,17 +71,17 @@ export class ConeHexShape extends BaseShape {
         // Map the triangle back onto the grid
         const cellClass = grid.type == 'HEX_VERTICAL' ? VHex : HHex;
         if (direction == '+q')
-            return cellCoords.map(([a, b, c]) => cellClass.fromAxial(q + a, r + b));
+            return cellCoords.map(([a, b]) => cellClass.fromAxial(q + a, r + b));
         if (direction == '-q')
-            return cellCoords.map(([a, b, c]) => cellClass.fromAxial(q - a, r - b));
+            return cellCoords.map(([a, b]) => cellClass.fromAxial(q - a, r - b));
         if (direction == '+r')
-            return cellCoords.map(([a, b, c]) => cellClass.fromAxial(q + b, r + a));
+            return cellCoords.map(([a, b]) => cellClass.fromAxial(q + b, r + a));
         if (direction == '-r')
-            return cellCoords.map(([a, b, c]) => cellClass.fromAxial(q - b, r - a));
+            return cellCoords.map(([a, b]) => cellClass.fromAxial(q - b, r - a));
         if (direction == '+s')
-            return cellCoords.map(([a, b, c]) => cellClass.fromAxial(q - c + 1, r + b));
+            return cellCoords.map(([, b, c]) => cellClass.fromAxial(q - c + 1, r + b));
         if (direction == '-s')
-            return cellCoords.map(([a, b, c]) => cellClass.fromAxial(q + c - 1, r - b));
+            return cellCoords.map(([, b, c]) => cellClass.fromAxial(q + c - 1, r - b));
 
         return [];
     }

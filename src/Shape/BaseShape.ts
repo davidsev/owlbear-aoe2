@@ -6,7 +6,7 @@ export abstract class BaseShape {
 
     private _start: Point;
     private _end: Point;
-    public readonly _cache: Map<string | symbol, any> = new Map();
+    public readonly _cache: Map<string | symbol, unknown> = new Map();
 
     constructor () {
         this._start = new Point(0, 0);
@@ -75,7 +75,7 @@ export abstract class BaseShape {
 }
 
 export function cached () {
-    return function (func: Function, context: ClassGetterDecoratorContext) {
+    return function (func: () => unknown) {
         return function (this: any) {
             if (this._cache.has(func.name)) {
                 return this._cache.get(func.name);

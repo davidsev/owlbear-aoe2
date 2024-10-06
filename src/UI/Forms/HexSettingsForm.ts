@@ -65,7 +65,7 @@ export class HexSettingsForm extends BaseElement {
         this.inputs.cubeSizeSnapping.step = '0.1';
 
         // Update the metadata when the form changes.
-        for (const [key, input] of Object.entries(this.inputs)) {
+        for (const [, input] of Object.entries(this.inputs)) {
             input.addEventListener('change', this.formChanged.bind(this));
         }
 
@@ -109,7 +109,7 @@ export class HexSettingsForm extends BaseElement {
         this.templateConeFields.style.display = roomMetadata.data.hexConeStyle == HexConeStyle.TEMPLATE ? 'initial' : 'none';
     }
 
-    protected firstUpdated (_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
+    protected firstUpdated (_changedProperties: PropertyValueMap<unknown> | Map<PropertyKey, unknown>) {
         super.firstUpdated(_changedProperties);
         this.showOrHideFields();
 

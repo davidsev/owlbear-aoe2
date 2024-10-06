@@ -97,7 +97,7 @@ class MyRoomMetadataMapper extends RoomMetadataMapper<RoomMetadata> {
 
         // Foreach letter key, replace it with the name key.
         for (const [key, value] of Object.entries(values)) {
-            const newName = nameMap.find(([name, letter]) => letter == key);
+            const newName = nameMap.find(([, letter]) => letter == key);
             if (newName)
                 newValues[newName[0]] = value;
             else
@@ -115,7 +115,7 @@ class MyRoomMetadataMapper extends RoomMetadataMapper<RoomMetadata> {
                 newValues['debugIntersection'] = value;
             }
             // Otherwise, save the value under the letter key.
-            const newKey = nameMap.find(([name, letter]) => name == key);
+            const newKey = nameMap.find(([name]) => name == key);
             if (newKey)
                 newValues[newKey[1]] = value;
             else

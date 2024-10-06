@@ -96,7 +96,7 @@ export class SquareSettingsForm extends BaseElement {
         this.inputs.cubeSizeSnapping.step = '0.1';
 
         // Update the metadata when the form changes.
-        for (const [key, input] of Object.entries(this.inputs)) {
+        for (const [, input] of Object.entries(this.inputs)) {
             input.addEventListener('change', this.formChanged.bind(this));
         }
 
@@ -150,7 +150,7 @@ export class SquareSettingsForm extends BaseElement {
         this.templateCubeFields.style.display = roomMetadata.data.squareCubeStyle == SquareCubeStyle.TEMPLATE ? 'initial' : 'none';
     }
 
-    protected firstUpdated (_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
+    protected firstUpdated (_changedProperties: PropertyValueMap<unknown> | Map<PropertyKey, unknown>) {
         super.firstUpdated(_changedProperties);
         this.showOrHideFields();
 

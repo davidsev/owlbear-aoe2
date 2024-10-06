@@ -22,9 +22,9 @@ export class TabBar extends BaseElement {
         `;
     }
 
-    protected firstUpdated (_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
+    protected firstUpdated (_changedProperties: PropertyValueMap<unknown> | Map<PropertyKey, unknown>): void {
         super.firstUpdated(_changedProperties);
-        this.shadowRoot?.querySelector('slot')?.addEventListener('slotchange', (e) => this.requestUpdate());
+        this.shadowRoot?.querySelector('slot')?.addEventListener('slotchange', () => this.requestUpdate());
         if (this.buttons.length)
             this.selectTab(this.buttons.filter((pane) => pane.active)[0] || this.buttons[0]);
     }

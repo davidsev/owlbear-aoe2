@@ -25,7 +25,7 @@ export class CellOutliner {
         const lineCounts = new Map<string, [LineSegment, number]>();
         for (const line of lines) {
             const key = line.p1.toString() + line.p2.toString();
-            const [_, count] = lineCounts.get(key) ?? [line, 0];
+            const [, count] = lineCounts.get(key) ?? [line, 0];
             lineCounts.set(key, [line, count + 1]);
         }
         const externalLines: LineSegment[] = [];

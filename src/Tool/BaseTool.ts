@@ -160,7 +160,7 @@ export abstract class BaseTool implements ToolMode {
 
     cleanup () {
         if (this.currentArea) {
-            const [update, stop] = this.currentArea.interaction;
+            const [, stop] = this.currentArea.interaction;
             stop();
         }
         this.currentArea = undefined;
