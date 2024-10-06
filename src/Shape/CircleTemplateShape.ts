@@ -70,7 +70,8 @@ export class CircleTemplateShape extends BaseShape {
         // Check every square.
         const cells: Cell[] = [];
         for (const cell of grid.iterateCellsBoundingPoints(boundingSquare)) {
-            if (this.roundedStart.distanceTo(cell.center) <= this.roundedDistance) {
+            // Match all cells that are within the circle.  The +2 is to avoid rounding errors when it's dead center of a cell.
+            if (this.roundedStart.distanceTo(cell.center) <= this.roundedDistance + 2) {
                 cells.push(cell);
             }
         }
