@@ -44,7 +44,7 @@ export class RoomMetadata {
     squareConeSizeSnapping: number = 1;
     squareConeDirection: SquareDirection = SquareDirection.ALL;
     squareCircleStyle: SquareCircleStyle = SquareCircleStyle.TEMPLATE;
-    squareCircleStartPoints: StartPoint[] = [StartPoint.CENTER];
+    squareCircleStartPoints: StartPoint[] = [StartPoint.CORNER];
     squareCircleSizeSnapping: number = 1;
     squareCubeStyle: SquareCubeStyle = SquareCubeStyle.SQUARE;
     squareCubeStartPoints: StartPoint[] = [StartPoint.CORNER];
@@ -56,7 +56,7 @@ export class RoomMetadata {
     hexConeStartPoints: StartPoint[] = [StartPoint.CORNER];
     hexConeOverlapThreshold: number = 0.1;
     hexConeSizeSnapping: number = 1;
-    hexCircleStartPoints: StartPoint[] = [StartPoint.CENTER];
+    hexCircleStartPoints: StartPoint[] = [StartPoint.CORNER];
     hexCircleSizeSnapping: number = 1;
     hexCubeStartPoints: StartPoint[] = [StartPoint.CORNER];
     hexCubeOverlapThreshold: number = 0.1;
