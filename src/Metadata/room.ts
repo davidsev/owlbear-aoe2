@@ -13,6 +13,11 @@ export enum SquareCubeStyle {
     SQUARE = 'SQUARE',
 }
 
+export enum SquareCircleStyle {
+    TEMPLATE = 'TEMPLATE',
+    PATHFINDER = 'PATHFINDER',
+}
+
 export enum StartPoint {
     CORNER = 'CORNER',
     CENTER = 'CENTER',
@@ -38,6 +43,7 @@ export class RoomMetadata {
     squareConeOverlapThreshold: number = 0.1;
     squareConeSizeSnapping: number = 1;
     squareConeDirection: SquareDirection = SquareDirection.ALL;
+    squareCircleStyle: SquareCircleStyle = SquareCircleStyle.TEMPLATE;
     squareCircleStartPoints: StartPoint[] = [StartPoint.CENTER];
     squareCircleSizeSnapping: number = 1;
     squareCubeStyle: SquareCubeStyle = SquareCubeStyle.SQUARE;
@@ -64,6 +70,7 @@ const nameMap: [name: string, letter: string][] = [
     ['squareConeOverlapThreshold', 'd'],
     ['squareConeSizeSnapping', 'e'],
     ['squareConeDirection', 'f'],
+    ['squareCircleStyle', 'x'],
     ['squareCircleStartPoints', 'g'],
     ['squareCircleSizeSnapping', 'h'],
     ['squareCubeStyle', 'i'],
@@ -81,6 +88,7 @@ const nameMap: [name: string, letter: string][] = [
     ['hexCubeStartPoints', 'u'],
     ['hexCubeOverlapThreshold', 'v'],
     ['hexCubeSizeSnapping', 'w'],
+    ['squareCircleStyle', 'x'],
 ];
 
 class MyRoomMetadataMapper extends RoomMetadataMapper<RoomMetadata> {

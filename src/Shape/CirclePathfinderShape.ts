@@ -1,44 +1,18 @@
 import { BaseShape, cached } from './BaseShape';
 import { Cell, grid, Point, SnapTo } from '@davidsev/owlbear-utils';
 import { Command, PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
-import { StartPoint } from '../Metadata/room';
+import { Measure } from '@davidsev/owlbear-utils/js/Grid/MeasurementFunctions';
 
-export class CircleShape extends BaseShape {
-
-    constructor (
-        public readonly startPoints: StartPoint[],
-        public readonly sizeSnapping: number,
-    ) {
-        super();
-    }
+export class CirclePathfinderShape extends BaseShape {
 
     @cached()
     private get roundedStart (): Point {
-        if (!this.startPoints.length)
-            return this.start;
-
-        const allowedSnapPoints: SnapTo[] = [];
-        if (this.startPoints.includes(StartPoint.CORNER))
-            allowedSnapPoints.push(SnapTo.CORNER);
-        if (this.startPoints.includes(StartPoint.CENTER))
-            allowedSnapPoints.push(SnapTo.CENTER);
-        if (this.startPoints.includes(StartPoint.EDGE))
-            allowedSnapPoints.push(SnapTo.EDGE);
-        return grid.snapTo(this.start, allowedSnapPoints.reduce((a, b) => a | b));
+        return grid.snapTo(this.start, SnapTo.CORNER);
     }
 
     @cached()
     public get roundedDistance (): number {
-        const snapTo = this.sizeSnapping * grid.dpi;
-        if (snapTo === 0)
-            return this.distance;
-        return Math.round(this.distance / snapTo) * snapTo;
-    }
-
-    @cached()
-    private get roundedEnd (): Point {
-        const vector = this.end.sub(this.start);
-        return this.roundedStart.add(vector.scale(this.roundedDistance / this.distance));
+        return Math.round(Measure.alternatingSquare(this.roundedStart, this.end)) * grid.dpi;
     }
 
     @cached()
@@ -59,6 +33,7 @@ export class CircleShape extends BaseShape {
 
     @cached()
     public get cells (): Cell[] {
+
         // Work out the bounding area of the circle.
         const boundingSquare = [
             grid.getCell(this.roundedStart.add({ x: -this.roundedDistance, y: -this.roundedDistance })),
@@ -70,9 +45,11 @@ export class CircleShape extends BaseShape {
         // Check every square.
         const cells: Cell[] = [];
         for (const cell of grid.iterateCellsBoundingPoints(boundingSquare)) {
-            if (this.roundedStart.distanceTo(cell.center) <= this.roundedDistance) {
+            // Find which corner is farthest from the center, and check if it's within the circle.
+            const distances = cell.corners.map(corner => Measure.alternatingSquare(this.roundedStart, corner));
+            const maxDistance = Math.max(...distances);
+            if (maxDistance * grid.dpi <= this.roundedDistance)
                 cells.push(cell);
-            }
         }
 
         return cells;
