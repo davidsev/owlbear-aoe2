@@ -1,5 +1,5 @@
 import { BaseShape, cached } from './BaseShape';
-import { Cell, grid, Point, SnapTo, Square } from '@davidsev/owlbear-utils';
+import { Cell, grid, Point, SnapTo } from '@davidsev/owlbear-utils';
 import { PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
 import { getDirection8 } from '../Utils/Geometry/getDirection';
 
@@ -144,7 +144,7 @@ export class ConePathfinderShape extends BaseShape {
                     if (value) {
                         const x = rootX + templateX * xMove;
                         const y = rootY + templateY * yMove;
-                        cells.push(Square.fromCoords({ x, y }));
+                        cells.push(grid.getCell({ x, y }));
                     }
                 }
             }
@@ -168,7 +168,7 @@ export class ConePathfinderShape extends BaseShape {
                         if (value) {
                             const x = rootX + templateX * xMove;
                             const y = rootY + templateY * yMove;
-                            cells.push(Square.fromCoords({ x, y }));
+                            cells.push(grid.getCell({ x, y }));
                         }
                     }
                 }
@@ -191,7 +191,7 @@ export class ConePathfinderShape extends BaseShape {
                         if (value) {
                             const x = rootX + templateX * xMove;
                             const y = rootY + templateY * yMove;
-                            cells.push(Square.fromCoords({ x, y }));
+                            cells.push(grid.getCell({ x, y }));
                         }
                     }
                 }

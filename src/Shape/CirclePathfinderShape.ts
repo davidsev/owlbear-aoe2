@@ -1,9 +1,15 @@
 import { BaseShape, cached } from './BaseShape';
 import { Cell, grid, Point, SnapTo } from '@davidsev/owlbear-utils';
 import { Command, PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
-import { Measure } from '@davidsev/owlbear-utils/js/Grid/MeasurementFunctions';
 
 export class CirclePathfinderShape extends BaseShape {
+
+    // D&D 5e's alternating diagonal rule: every other diagonal move costs double.  This is
+    // independent of the scene's configured measurement style, so we override it here regardless.
+    @cached()
+    private get alternatingGrid () {
+        return grid.snapshot.withMeasurement('ALTERNATING');
+    }
 
     @cached()
     private get roundedStart (): Point {
@@ -12,7 +18,7 @@ export class CirclePathfinderShape extends BaseShape {
 
     @cached()
     public get roundedDistance (): number {
-        return Math.round(Measure.alternatingSquare(this.roundedStart, this.end)) * grid.dpi;
+        return Math.round(this.alternatingGrid.measure(this.roundedStart, this.end)) * grid.dpi;
     }
 
     @cached()
@@ -46,7 +52,7 @@ export class CirclePathfinderShape extends BaseShape {
         const cells: Cell[] = [];
         for (const cell of grid.iterateCellsBoundingPoints(boundingSquare)) {
             // Find which corner is farthest from the center, and check if it's within the circle.
-            const distances = cell.corners.map(corner => Measure.alternatingSquare(this.roundedStart, corner));
+            const distances = cell.corners.map(corner => this.alternatingGrid.measure(this.roundedStart, corner));
             const maxDistance = Math.max(...distances);
             if (maxDistance * grid.dpi <= this.roundedDistance)
                 cells.push(cell);

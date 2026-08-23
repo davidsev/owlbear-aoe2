@@ -1,11 +1,17 @@
 import { BaseShape, cached } from './BaseShape';
-import { Cell, grid, HHex, Point, SnapTo, VHex } from '@davidsev/owlbear-utils';
+import { BaseHex, Cell, grid, HHex, HHexGrid, Point, SnapTo, VHex, VHexGrid } from '@davidsev/owlbear-utils';
 import { PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
 import { calculateCenter } from '../Utils/Geometry/calculateCenter';
-import { BaseHex } from '@davidsev/owlbear-utils/js/Grid/Cell/BaseHex';
-import { xy_to_axial_h, xy_to_axial_v } from '@davidsev/owlbear-utils/js/Grid/HexFunctions';
 
 export class ConeHexShape extends BaseShape {
+
+    /** The current grid, narrowed to the two hex types this shape supports. */
+    private get hexGrid (): VHexGrid | HHexGrid {
+        const snapshot = grid.snapshot;
+        if (snapshot.type !== 'HEX_VERTICAL' && snapshot.type !== 'HEX_HORIZONTAL')
+            throw new Error(`Grid type "${snapshot.type}" not supported by ConeHexShape`);
+        return snapshot;
+    }
 
     @cached()
     public get roundedDistance (): number {
@@ -28,9 +34,7 @@ export class ConeHexShape extends BaseShape {
     @cached()
     private get direction (): '-q' | '+q' | '-r' | '+r' | '-s' | '+s' {
         const direction = this.end.sub(this.start);
-        const [q, r] = grid.type == 'HEX_VERTICAL'
-            ? xy_to_axial_v(direction.x, direction.y)
-            : xy_to_axial_h(direction.x, direction.y);
+        const [q, r] = this.hexGrid.xy_to_axial(direction.x, direction.y);
         const s = -q - r;
         const abs_q = Math.abs(q);
         const abs_r = Math.abs(r);
@@ -69,19 +73,21 @@ export class ConeHexShape extends BaseShape {
         }
 
         // Map the triangle back onto the grid
-        const cellClass = grid.type == 'HEX_VERTICAL' ? VHex : HHex;
+        const hexGrid = this.hexGrid;
+        const fromAxial = (q: number, r: number): VHex | HHex =>
+            hexGrid.type == 'HEX_VERTICAL' ? VHex.fromAxial(q, r, hexGrid) : HHex.fromAxial(q, r, hexGrid);
         if (direction == '+q')
-            return cellCoords.map(([a, b]) => cellClass.fromAxial(q + a, r + b));
+            return cellCoords.map(([a, b]) => fromAxial(q + a, r + b));
         if (direction == '-q')
-            return cellCoords.map(([a, b]) => cellClass.fromAxial(q - a, r - b));
+            return cellCoords.map(([a, b]) => fromAxial(q - a, r - b));
         if (direction == '+r')
-            return cellCoords.map(([a, b]) => cellClass.fromAxial(q + b, r + a));
+            return cellCoords.map(([a, b]) => fromAxial(q + b, r + a));
         if (direction == '-r')
-            return cellCoords.map(([a, b]) => cellClass.fromAxial(q - b, r - a));
+            return cellCoords.map(([a, b]) => fromAxial(q - b, r - a));
         if (direction == '+s')
-            return cellCoords.map(([, b, c]) => cellClass.fromAxial(q - c + 1, r + b));
+            return cellCoords.map(([, b, c]) => fromAxial(q - c + 1, r + b));
         if (direction == '-s')
-            return cellCoords.map(([, b, c]) => cellClass.fromAxial(q + c - 1, r - b));
+            return cellCoords.map(([, b, c]) => fromAxial(q + c - 1, r - b));
 
         return [];
     }

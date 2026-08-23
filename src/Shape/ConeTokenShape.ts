@@ -1,5 +1,5 @@
 import { BaseShape, cached } from './BaseShape';
-import { Cell, grid, Point, SnapTo, Square } from '@davidsev/owlbear-utils';
+import { Cell, grid, Point, SnapTo } from '@davidsev/owlbear-utils';
 import { Command, PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
 import { getDirection4, getDirection8 } from '../Utils/Geometry/getDirection';
 import { Triangle } from '../Utils/Geometry/Shape/Triangle';
@@ -116,28 +116,28 @@ export class ConeTokenShape extends BaseShape {
             for (let x = this.roundedStart.x; x < this.roundedStart.x + this.roundedDistance; x += grid.dpi) {
                 const row: Cell[] = [];
                 for (let y = this.roundedStart.y - this.roundedDistance * 1.5; y < this.roundedStart.y + this.roundedDistance * 1.5; y += grid.dpi)
-                    row.push(Square.fromCoords({ x, y }));
+                    row.push(grid.getCell({ x, y }));
                 cells.push(row);
             }
         } else if (axis == '-x') {
             for (let x = this.roundedStart.x - grid.dpi; x >= this.roundedStart.x - this.roundedDistance; x -= grid.dpi) {
                 const row: Cell[] = [];
                 for (let y = this.roundedStart.y - this.roundedDistance * 1.5; y < this.roundedStart.y + this.roundedDistance * 1.5; y += grid.dpi)
-                    row.push(Square.fromCoords({ x, y }));
+                    row.push(grid.getCell({ x, y }));
                 cells.push(row);
             }
         } else if (axis == '+y') {
             for (let y = this.roundedStart.y; y < this.roundedStart.y + this.roundedDistance; y += grid.dpi) {
                 const row: Cell[] = [];
                 for (let x = this.roundedStart.x - this.roundedDistance * 1.5; x < this.roundedStart.x + this.roundedDistance * 1.5; x += grid.dpi)
-                    row.push(Square.fromCoords({ x, y }));
+                    row.push(grid.getCell({ x, y }));
                 cells.push(row);
             }
         } else if (axis == '-y') {
             for (let y = this.roundedStart.y - grid.dpi; y >= this.roundedStart.y - this.roundedDistance; y -= grid.dpi) {
                 const row: Cell[] = [];
                 for (let x = this.roundedStart.x - this.roundedDistance * 1.5; x < this.roundedStart.x + this.roundedDistance * 1.5; x += grid.dpi)
-                    row.push(Square.fromCoords({ x, y }));
+                    row.push(grid.getCell({ x, y }));
                 cells.push(row);
             }
         }

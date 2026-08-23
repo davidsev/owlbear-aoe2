@@ -46,7 +46,7 @@ export abstract class BaseTool implements ToolMode {
 
     // When they start drawing, create the shape.
     async onToolDragStart (context: ToolContext, event: ToolEvent) {
-        this.toolMetadata = toolMetadata.clean(context.metadata);
+        this.toolMetadata = toolMetadata.setDefaultValues(context.metadata);
 
         // Make the items.
         const areaItem = this.buildAreaPath().build();

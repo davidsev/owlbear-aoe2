@@ -1,7 +1,7 @@
 import { LitElement, PropertyValueMap, unsafeCSS } from 'lit';
 import OBR, { Theme } from '@owlbear-rodeo/sdk';
 import style from './baseCSS.css';
-import { awaitScene } from '@davidsev/owlbear-utils/js/awaitScene';
+import { awaitScene } from '@davidsev/owlbear-utils';
 
 export class BaseElement extends LitElement {
     // Define scoped styles right with your component, in plain CSS
