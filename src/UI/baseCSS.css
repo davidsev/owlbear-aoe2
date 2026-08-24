@@ -6,14 +6,14 @@
  *  background is the main background color
  *  panel is the background color for panels and controls etc
  */
-:host([data-theme=light]) {
+:host([data-theme='light']) {
     --text-rgb: 0, 0, 0;
     --theme-rgb: 187, 153, 255;
     --background-rgb: 229, 231, 235;
     --panel-rgb: 242, 243, 249;
 }
 
-:host([data-theme=dark]) {
+:host([data-theme='dark']) {
     --text-rgb: 255, 255, 255;
     --theme-rgb: 187, 153, 255;
     --background-rgb: 46, 49, 66;
@@ -33,7 +33,10 @@
 }
 
 /* Form controls */
-input[type=text], input[type=number], select, div.input {
+input[type='text'],
+input[type='number'],
+select,
+div.input {
     display: block;
     width: 100%;
     padding: 0.5em 0.5em 0.2em 0.5em;
@@ -44,7 +47,9 @@ input[type=text], input[type=number], select, div.input {
     outline: none;
     line-height: 1;
 
-    &:focus, &:focus-visible, &.active {
+    &:focus,
+    &:focus-visible,
+    &.active {
         border-bottom: 3px solid var(--theme-color);
         padding-bottom: calc(0.2em - 2px);
         outline: none;
@@ -57,7 +62,7 @@ input[type=text], input[type=number], select, div.input {
 }
 
 /* Remove the default number input field spinner */
-input[type=number] {
+input[type='number'] {
     -moz-appearance: textfield;
 }
 

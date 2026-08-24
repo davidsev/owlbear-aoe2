@@ -7,12 +7,11 @@ import { CubeSimpleShape } from '../Shape/CubeSimpleShape';
 import { grid } from '@davidsev/owlbear-utils';
 
 export class CubeTool extends BaseTool {
-
     readonly label = 'Cube';
     readonly icon = '/icons/cube.svg';
     readonly id = getId('cube');
 
-    protected getShape (): BaseShape {
+    protected getShape(): BaseShape {
         if (grid.type === 'HEX_HORIZONTAL' || grid.type === 'HEX_VERTICAL') {
             return new CubeTemplateShape(
                 roomMetadata.data.hexCubeStartPoints,
@@ -23,7 +22,8 @@ export class CubeTool extends BaseTool {
         } else {
             if (roomMetadata.data.squareCubeStyle === SquareCubeStyle.SQUARE) {
                 return new CubeSimpleShape();
-            } else { // TEMPLATE
+            } else {
+                // TEMPLATE
                 return new CubeTemplateShape(
                     roomMetadata.data.squareCubeStartPoints,
                     roomMetadata.data.squareCubeOverlapThreshold,

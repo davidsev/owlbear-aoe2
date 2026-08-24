@@ -8,11 +8,10 @@ import { getId } from '../../Utils/getId';
 
 @customElement('form-footer')
 export class FormFooter extends BaseElement {
-
     static styles = baseCSS(style);
 
     // Render the UI as a function of component state
-    render () {
+    render() {
         return html`
             <main>
                 <a href="https://github.com/davidsev/owlbear-aoe2" target="_blank">AoE Shapes v${VERSION}</a>
@@ -22,7 +21,7 @@ export class FormFooter extends BaseElement {
         `;
     }
 
-    async deleteAll () {
+    async deleteAll() {
         const itemsToDelete = await OBR.scene.items.getItems((item: Item) => item.metadata?.createdBy === getId());
         const idsToDelete = itemsToDelete.map((item: Item) => item.id);
         await OBR.scene.items.deleteItems(idsToDelete);

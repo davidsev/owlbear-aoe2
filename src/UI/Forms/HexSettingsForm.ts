@@ -9,7 +9,6 @@ import { baseCSS } from '../baseCSS';
 
 @customElement('hex-settings-form')
 export class HexSettingsForm extends BaseElement {
-
     static styles = baseCSS(style);
 
     private readonly inputs = {
@@ -50,7 +49,7 @@ export class HexSettingsForm extends BaseElement {
     @query('div#cubeForm', true)
     private accessor cubeForm!: HTMLDivElement;
 
-    constructor () {
+    constructor() {
         super();
 
         // Set up the inputs.
@@ -82,7 +81,7 @@ export class HexSettingsForm extends BaseElement {
         this.inputs.cubeSizeSnapping.valueAsNumber = roomMetadata.data.hexCubeSizeSnapping;
     }
 
-    private formChanged (e?: Event) {
+    private formChanged(e?: Event) {
         // Only run if the form is valid.
         if (e && e.target instanceof HTMLInputElement && !e.target.form?.checkValidity()) {
             return;
@@ -105,11 +104,11 @@ export class HexSettingsForm extends BaseElement {
         this.showOrHideFields();
     }
 
-    private showOrHideFields () {
+    private showOrHideFields() {
         this.templateConeFields.style.display = roomMetadata.data.hexConeStyle === HexConeStyle.TEMPLATE ? 'initial' : 'none';
     }
 
-    protected firstUpdated (_changedProperties: PropertyValueMap<unknown> | Map<PropertyKey, unknown>) {
+    protected firstUpdated(_changedProperties: PropertyValueMap<unknown> | Map<PropertyKey, unknown>) {
         super.firstUpdated(_changedProperties);
         this.showOrHideFields();
 
@@ -117,7 +116,7 @@ export class HexSettingsForm extends BaseElement {
         this.requestUpdate();
     }
 
-    private setConeDefaults () {
+    private setConeDefaults() {
         this.inputs.coneStyle.value = roomMetadata.defaultValues.hexConeStyle;
         this.inputs.coneWidth.value = (roomMetadata.defaultValues.hexConeWidth || '').toString();
         this.inputs.coneStartPoints.value = roomMetadata.defaultValues.hexConeStartPoints;
@@ -126,13 +125,13 @@ export class HexSettingsForm extends BaseElement {
         this.formChanged();
     }
 
-    private setCircleDefaults () {
+    private setCircleDefaults() {
         this.inputs.circleStartPoints.value = roomMetadata.defaultValues.hexCircleStartPoints;
         this.inputs.circleSizeSnapping.value = roomMetadata.defaultValues.hexCircleSizeSnapping.toString();
         this.formChanged();
     }
 
-    private setCubeDefaults () {
+    private setCubeDefaults() {
         this.inputs.cubeStartPoints.value = roomMetadata.defaultValues.hexCubeStartPoints;
         this.inputs.cubeOverlapThreshold.value = (roomMetadata.defaultValues.hexCubeOverlapThreshold * 100).toString();
         this.inputs.cubeSizeSnapping.value = roomMetadata.defaultValues.hexCubeSizeSnapping.toString();
@@ -140,7 +139,7 @@ export class HexSettingsForm extends BaseElement {
     }
 
     // Render the UI as a function of component state
-    render () {
+    render() {
         return html`
             <tab-bar>
                 <tab-button .target=${this.coneForm}>Cone</tab-button>
@@ -271,4 +270,3 @@ export class HexSettingsForm extends BaseElement {
         `;
     }
 }
-

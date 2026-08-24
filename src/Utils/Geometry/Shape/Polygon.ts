@@ -8,21 +8,17 @@ import { IntersectionDebugger } from '../../IntersectionDebugger';
 import { calculateCenter } from '../calculateCenter';
 
 export abstract class Polygon implements Iterable<Point> {
+    public constructor(public readonly points: Point[]) {}
 
-    public constructor (
-        public readonly points: Point[],
-    ) {
-    }
-
-    public [Symbol.iterator] (): Iterator<Point> {
+    public [Symbol.iterator](): Iterator<Point> {
         return this.points[Symbol.iterator]();
     }
 
-    public get center (): Point {
+    public get center(): Point {
         return calculateCenter(this.points);
     }
 
-    public get lines (): LineSegment[] {
+    public get lines(): LineSegment[] {
         const lines: LineSegment[] = [];
         for (let i = 0; i < this.points.length; i++) {
             lines.push(new LineSegment(this.points[i], this.points[(i + 1) % this.points.length]));
@@ -30,7 +26,7 @@ export abstract class Polygon implements Iterable<Point> {
         return lines;
     }
 
-    public intersectsCellPercentage (cell: Cell): number {
+    public intersectsCellPercentage(cell: Cell): number {
         const debugMode = roomMetadata.data.debugIntersection && cell.containsPoint(new Point(0, 0));
         const debug = debugMode ? IntersectionDebugger.getInstance() : null;
         debug?.clear();
@@ -40,8 +36,7 @@ export abstract class Polygon implements Iterable<Point> {
 
         // Find any for points of the cell that are inside the polygon.
         for (const point of cell.corners) {
-            if (this.containsPoint(point))
-                intersectionShape.push(point);
+            if (this.containsPoint(point)) intersectionShape.push(point);
         }
 
         // If the cell is completely inside the polygon, then 100%.
@@ -51,8 +46,7 @@ export abstract class Polygon implements Iterable<Point> {
 
         // Find any points of the polygon that are inside the cell.
         for (const point of this) {
-            if (cell.containsPoint(point))
-                intersectionShape.push(point);
+            if (cell.containsPoint(point)) intersectionShape.push(point);
         }
 
         // And find any points where the lines intersect.
@@ -77,10 +71,10 @@ export abstract class Polygon implements Iterable<Point> {
         const polygonArea = calculateArea(uniqueSortedPoints, debug);
 
         // Compare to the area of the cell.
-        return polygonArea / calculateArea(cell.corners) * 100;
+        return (polygonArea / calculateArea(cell.corners)) * 100;
     }
 
-    public abstract containsPoint (point: Vector2): boolean;
+    public abstract containsPoint(point: Vector2): boolean;
 
-    public abstract toString (): string;
+    public abstract toString(): string;
 }

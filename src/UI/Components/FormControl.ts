@@ -6,7 +6,6 @@ import { baseCSS } from '../baseCSS';
 
 @customElement('form-control')
 export class FormControl extends BaseElement {
-
     static styles = baseCSS(style);
 
     // Declare reactive properties
@@ -17,7 +16,7 @@ export class FormControl extends BaseElement {
     accessor inputs!: HTMLElement[];
 
     // Render the UI as a function of component state
-    render () {
+    render() {
         return html`
             <main>
                 <label @click="${this.labelClicked}">${this.label}</label>
@@ -26,9 +25,8 @@ export class FormControl extends BaseElement {
         `;
     }
 
-    private labelClicked () {
-        if (!this.inputs.length)
-            return;
+    private labelClicked() {
+        if (!this.inputs.length) return;
 
         this.inputs[0].focus();
     }

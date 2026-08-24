@@ -5,11 +5,9 @@ import { awaitScene } from '@davidsev/owlbear-utils';
 
 export class BaseElement extends LitElement {
     // Define scoped styles right with your component, in plain CSS
-    static styles = [
-        unsafeCSS(style),
-    ];
+    static styles = [unsafeCSS(style)];
 
-    protected firstUpdated (_changedProperties: PropertyValueMap<unknown> | Map<PropertyKey, unknown>): void {
+    protected firstUpdated(_changedProperties: PropertyValueMap<unknown> | Map<PropertyKey, unknown>): void {
         super.firstUpdated(_changedProperties);
 
         // Update the theme to match OBR
@@ -19,7 +17,7 @@ export class BaseElement extends LitElement {
         });
     }
 
-    private updateTheme (theme: Theme): void {
+    private updateTheme(theme: Theme): void {
         this.setAttribute('data-theme', theme.mode === 'DARK' ? 'dark' : 'light');
     }
 }

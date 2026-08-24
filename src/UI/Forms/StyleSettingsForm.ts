@@ -9,7 +9,6 @@ import { SelectEnum } from '../Components/SelectEnum';
 
 @customElement('style-settings-form')
 export class StyleSettingsForm extends BaseElement {
-
     static styles = baseCSS(style);
 
     private readonly inputs = {
@@ -29,7 +28,7 @@ export class StyleSettingsForm extends BaseElement {
         }),
     };
 
-    constructor () {
+    constructor() {
         super();
 
         // Update the metadata when the form changes.
@@ -38,10 +37,10 @@ export class StyleSettingsForm extends BaseElement {
         }
 
         // Load the metadata into the form.
-        toolMetadata.get().then((metadata) => this.setFromMetadata(metadata));
+        toolMetadata.get().then(metadata => this.setFromMetadata(metadata));
     }
 
-    private setFromMetadata (metadata: ToolMetadata) {
+    private setFromMetadata(metadata: ToolMetadata) {
         this.inputs.areaFill.color = metadata.areaFillColor;
         this.inputs.areaFill.opacity = metadata.areaFillOpacity;
         this.inputs.areaStroke.color = metadata.areaStrokeColor;
@@ -54,7 +53,7 @@ export class StyleSettingsForm extends BaseElement {
         this.inputs.labelMode.value = metadata.labelDisplayMode;
     }
 
-    private async formChanged (e?: Event) {
+    private async formChanged(e?: Event) {
         // Only run if the form is valid.
         if (e && e.target instanceof HTMLInputElement && !e.target.form?.checkValidity()) {
             return;
@@ -75,12 +74,12 @@ export class StyleSettingsForm extends BaseElement {
         });
     }
 
-    private setDefaults () {
+    private setDefaults() {
         this.setFromMetadata(toolMetadata.defaultValues);
         this.formChanged();
     }
 
-    render () {
+    render() {
         return html`
             <form style="padding-top: 1em">
 
@@ -124,4 +123,3 @@ export class StyleSettingsForm extends BaseElement {
         `;
     }
 }
-

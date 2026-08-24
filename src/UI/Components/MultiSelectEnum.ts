@@ -6,16 +6,14 @@ import { baseCSS } from '../baseCSS';
 
 @customElement('multi-select-enum')
 export class MultiSelectEnum<T extends Record<string, string>> extends BaseElement {
-
     static styles = baseCSS(style);
 
-    constructor (options: T) {
+    constructor(options: T) {
         super();
         this.options = options;
 
         // Make sure we have a tabindex so onblur works
-        if (this.tabIndex < 0)
-            this.tabIndex = 0;
+        if (this.tabIndex < 0) this.tabIndex = 0;
 
         this.addEventListener('focus', this.show.bind(this));
         this.addEventListener('blur', this.hide.bind(this));
@@ -33,7 +31,7 @@ export class MultiSelectEnum<T extends Record<string, string>> extends BaseEleme
     accessor checkboxes!: NodeListOf<HTMLInputElement>;
 
     // Render the UI as a function of component state
-    render () {
+    render() {
         return html`
             <main>
                 <div class="${this.active ? 'hidden' : 'input'}" @click="${this.show}">
@@ -43,34 +41,35 @@ export class MultiSelectEnum<T extends Record<string, string>> extends BaseEleme
                     ${this.valuesString}
                 </div>
                 <div id="dropdown" class="${this.active ? '' : 'hidden'}">
-                    ${Object.entries(this.options).map(([value, label]) => html`
+                    ${Object.entries(this.options).map(
+                        ([value, label]) => html`
                         <label>
                             <input type="checkbox" value="${value}" @change="${this.changeHandler}"
                                    .checked=${this.value.includes(value)}>
                             ${label}
                         </label>
-                    `)}
+                    `,
+                    )}
                 </div>
             </main>
         `;
     }
 
-    get valuesString (): string {
-        if (this.value.length)
-            return this.value.map(v => this.options[v]).join(', ');
+    get valuesString(): string {
+        if (this.value.length) return this.value.map(v => this.options[v]).join(', ');
         else return 'None';
     }
 
-    private show () {
+    private show() {
         this.active = true;
     }
 
-    private hide () {
+    private hide() {
         this.active = false;
     }
 
-    private changeHandler () {
-        this.value = [...this.checkboxes].map(cb => cb.checked ? cb.value : null).filter(v => v) as (keyof T)[];
+    private changeHandler() {
+        this.value = [...this.checkboxes].map(cb => (cb.checked ? cb.value : null)).filter(v => v) as (keyof T)[];
         this.dispatchEvent(new Event('change'));
     }
 }

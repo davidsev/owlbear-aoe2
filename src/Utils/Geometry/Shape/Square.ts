@@ -4,15 +4,13 @@ import { dot } from '../vectorFunctions';
 import { Polygon } from './Polygon';
 
 export class Square extends Polygon {
-
     public readonly p1: Point;
     public readonly p2: Point;
     public readonly p3: Point;
     public readonly p4: Point;
     public readonly isAABB: boolean;
 
-    public constructor (corner: Vector2, oppositeCorner: Vector2) {
-
+    public constructor(corner: Vector2, oppositeCorner: Vector2) {
         const p1 = new Point(corner);
         const p3 = new Point(oppositeCorner);
 
@@ -32,7 +30,7 @@ export class Square extends Polygon {
     }
 
     // Formula from https://math.stackexchange.com/questions/190111/how-to-check-if-a-point-is-inside-a-rectangle
-    public containsPoint (point: Vector2): boolean {
+    public containsPoint(point: Vector2): boolean {
         if (this.isAABB) {
             const minX = Math.min(this.p1.x, this.p3.x);
             const maxX = Math.max(this.p1.x, this.p3.x);
@@ -53,7 +51,7 @@ export class Square extends Polygon {
         }
     }
 
-    public toString (): string {
+    public toString(): string {
         return `Square(${this.p1} -> ${this.p3})`;
     }
 }

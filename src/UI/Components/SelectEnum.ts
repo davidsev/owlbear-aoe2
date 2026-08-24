@@ -6,16 +6,14 @@ import { baseCSS } from '../baseCSS';
 
 @customElement('select-enum')
 export class SelectEnum<T extends Record<string, string>> extends BaseElement {
-
     static styles = baseCSS(style);
 
-    constructor (options: T) {
+    constructor(options: T) {
         super();
         this.options = options;
 
         // Make sure we have a tabindex so onblur works
-        if (this.tabIndex < 0)
-            this.tabIndex = 0;
+        if (this.tabIndex < 0) this.tabIndex = 0;
 
         this.addEventListener('focus', this.show.bind(this));
         this.addEventListener('blur', this.hide.bind(this));
@@ -30,7 +28,7 @@ export class SelectEnum<T extends Record<string, string>> extends BaseElement {
     accessor active: boolean = false;
 
     // Render the UI as a function of component state
-    render () {
+    render() {
         return html`
             <main>
                 <div class="${this.active ? 'hidden' : 'input'}" @click="${this.show}">
@@ -40,26 +38,28 @@ export class SelectEnum<T extends Record<string, string>> extends BaseElement {
                     ${this.options[this.value]}
                 </div>
                 <div id="dropdown" class="${this.active ? '' : 'hidden'}">
-                    ${Object.entries(this.options).map(([value, label]) => html`
+                    ${Object.entries(this.options).map(
+                        ([value, label]) => html`
                         <div @click="${this.selectItem.bind(this, value)}"
                              class="item ${value === this.value ? 'active' : ''}">
                             ${label}
                         </div>
-                    `)}
+                    `,
+                    )}
                 </div>
             </main>
         `;
     }
 
-    private show () {
+    private show() {
         this.active = true;
     }
 
-    private hide () {
+    private hide() {
         this.active = false;
     }
 
-    private selectItem (item: string) {
+    private selectItem(item: string) {
         this.value = item;
         this.dispatchEvent(new Event('change'));
     }

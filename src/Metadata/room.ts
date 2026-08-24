@@ -92,22 +92,20 @@ const nameMap: [name: string, letter: string][] = [
 ];
 
 class MyRoomMetadataMapper extends RoomMetadataMapper<RoomMetadata> {
-    protected transformLoadingValues (values: Metadata): Metadata {
+    protected transformLoadingValues(values: Metadata): Metadata {
         const newValues: Metadata = {};
 
         // Foreach letter key, replace it with the name key.
         for (const [key, value] of Object.entries(values)) {
             const newName = nameMap.find(([, letter]) => letter === key);
-            if (newName)
-                newValues[newName[0]] = value;
-            else
-                newValues[key] = value;
+            if (newName) newValues[newName[0]] = value;
+            else newValues[key] = value;
         }
 
         return newValues;
     }
 
-    protected transformSavingValues (values: Metadata): Metadata {
+    protected transformSavingValues(values: Metadata): Metadata {
         const newValues: Metadata = {};
         for (const [key, value] of Object.entries(values)) {
             // Only save debugIntersection if it's true.
@@ -116,14 +114,12 @@ class MyRoomMetadataMapper extends RoomMetadataMapper<RoomMetadata> {
             }
             // Otherwise, save the value under the letter key.
             const newKey = nameMap.find(([name]) => name === key);
-            if (newKey)
-                newValues[newKey[1]] = value;
-            else
-                newValues[key] = value;
+            if (newKey) newValues[newKey[1]] = value;
+            else newValues[key] = value;
         }
         return newValues;
     }
 }
 
-const roomMetadataMapper = new MyRoomMetadataMapper(getId(), new RoomMetadata);
+const roomMetadataMapper = new MyRoomMetadataMapper(getId(), new RoomMetadata());
 export const roomMetadata = new CachedRoomMetadata(roomMetadataMapper);

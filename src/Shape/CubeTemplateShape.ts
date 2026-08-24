@@ -6,8 +6,7 @@ import { Square } from '../Utils/Geometry/Shape/Square';
 import { getDirection4, getDirection8 } from '../Utils/Geometry/getDirection';
 
 export class CubeTemplateShape extends BaseShape {
-
-    constructor (
+    constructor(
         public readonly startPoints: StartPoint[],
         public readonly overlapThreshold: number,
         public readonly sizeSnapping: number,
@@ -17,22 +16,21 @@ export class CubeTemplateShape extends BaseShape {
     }
 
     @cached()
-    private get roundedStart (): Point {
-        if (!this.startPoints.length)
-            return this.start;
+    private get roundedStart(): Point {
+        if (!this.startPoints.length) return this.start;
 
         const allowedSnapPoints: SnapTo[] = [];
-        if (this.startPoints.includes(StartPoint.CORNER))
-            allowedSnapPoints.push(SnapTo.CORNER);
-        if (this.startPoints.includes(StartPoint.CENTER))
-            allowedSnapPoints.push(SnapTo.CENTER);
-        if (this.startPoints.includes(StartPoint.EDGE))
-            allowedSnapPoints.push(SnapTo.EDGE);
-        return grid.snapTo(this.start, allowedSnapPoints.reduce((a, b) => a | b));
+        if (this.startPoints.includes(StartPoint.CORNER)) allowedSnapPoints.push(SnapTo.CORNER);
+        if (this.startPoints.includes(StartPoint.CENTER)) allowedSnapPoints.push(SnapTo.CENTER);
+        if (this.startPoints.includes(StartPoint.EDGE)) allowedSnapPoints.push(SnapTo.EDGE);
+        return grid.snapTo(
+            this.start,
+            allowedSnapPoints.reduce((a, b) => a | b),
+        );
     }
 
     @cached()
-    public get roundedDistance (): number {
+    public get roundedDistance(): number {
         // Calculate the distance between the start and end points.
         // If the vector is axis aligned, then use the length.
         // If it's diagonal, then we need to calculate what size triangle gets us that hypotenuse.
@@ -47,46 +45,41 @@ export class CubeTemplateShape extends BaseShape {
         const dist = diagonalDist * (1 - diagonality) + aaDist * diagonality;
 
         const snapTo = this.sizeSnapping * grid.dpi;
-        if (snapTo === 0)
-            return dist;
+        if (snapTo === 0) return dist;
 
         return Math.round(dist / snapTo) * snapTo;
     }
 
     @cached()
-    private get roundedEnd (): Point {
+    private get roundedEnd(): Point {
         const vector = this.end.sub(this.start);
 
         // If the direction isn't locked, then just fix the length and we're done.
-        if (this.directionSnapping === SquareDirection.ALL)
-            return this.roundedStart.add(vector.scale(this.roundedDistance * Math.SQRT2 / this.distance));
+        if (this.directionSnapping === SquareDirection.ALL) return this.roundedStart.add(vector.scale((this.roundedDistance * Math.SQRT2) / this.distance));
 
         // Otherwise we need to snap to the nearest valid direction.
         const direction = this.directionSnapping === SquareDirection.FOUR ? getDirection4(vector) : getDirection8(vector);
-        if (!direction)
-            return this.roundedStart;
+        if (!direction) return this.roundedStart;
 
         // Work out how far to move in the direction.  If it's diagonal, then we need to not move the full distance.
         let move = new Point(this.roundedDistance * direction.x, this.roundedDistance * direction.y);
-        if (direction.x !== 0 && direction.y !== 0)
-            move = move.scale(Math.SQRT2 / 2);
+        if (direction.x !== 0 && direction.y !== 0) move = move.scale(Math.SQRT2 / 2);
 
         return this.roundedStart.add(move.scale(Math.SQRT2));
-
     }
 
     @cached()
-    private get square (): Square {
+    private get square(): Square {
         return new Square(this.roundedStart, this.roundedEnd);
     }
 
     @cached()
-    public get labelPosition (): Point {
+    public get labelPosition(): Point {
         return this.square.center;
     }
 
     @cached()
-    public get outline (): PathCommand[] {
+    public get outline(): PathCommand[] {
         const triangle = this.square;
         return [
             [Command.MOVE, triangle.p1.x, triangle.p1.y],
@@ -98,14 +91,13 @@ export class CubeTemplateShape extends BaseShape {
     }
 
     @cached()
-    public get cells (): Cell[] {
+    public get cells(): Cell[] {
         const cells: Cell[] = [];
         const square = this.square;
 
         const searchArea = grid.iterateCellsBoundingPoints(square.points.map(point => grid.getCell(point)));
         for (const cell of searchArea) {
-            if (square.intersectsCellPercentage(cell) > this.overlapThreshold * 100)
-                cells.push(cell);
+            if (square.intersectsCellPercentage(cell) > this.overlapThreshold * 100) cells.push(cell);
         }
         return cells;
     }

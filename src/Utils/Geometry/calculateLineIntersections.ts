@@ -2,8 +2,7 @@ import { type LineSegment, Point } from '@davidsev/owlbear-utils';
 import { cross, dot } from './vectorFunctions';
 
 // algorithm from https://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect/565282#565282
-export function calculateLineIntersections (line1: LineSegment, line2: LineSegment): Point[] {
-
+export function calculateLineIntersections(line1: LineSegment, line2: LineSegment): Point[] {
     const p = line1.p1;
     const r = line1.p2.sub(line1.p1);
     const q = line2.p1;
@@ -23,19 +22,22 @@ export function calculateLineIntersections (line1: LineSegment, line2: LineSegme
         const t1 = t0 + dot(s, r) / dot(r, r);
 
         // Overlap:  t0 and t1 are the points on line1 where the intersections happen, return them both.
-        if (t0 >= 0 && t0 <= 1 || t1 >= 0 && t1 <= 1) {
+        if ((t0 >= 0 && t0 <= 1) || (t1 >= 0 && t1 <= 1)) {
             const points: Point[] = [];
             if (t0 >= 0 && t0 <= 1)
-                points.push(new Point({
-                    x: line1.p1.x + (line1.p2.x - line1.p1.x) * t0,
-                    y: line1.p1.y + (line1.p2.y - line1.p1.y) * t0,
-                }));
+                points.push(
+                    new Point({
+                        x: line1.p1.x + (line1.p2.x - line1.p1.x) * t0,
+                        y: line1.p1.y + (line1.p2.y - line1.p1.y) * t0,
+                    }),
+                );
             if (t1 >= 0 && t1 <= 1)
                 points.push(
                     new Point({
                         x: line1.p1.x + (line1.p2.x - line1.p1.x) * t1,
                         y: line1.p1.y + (line1.p2.y - line1.p1.y) * t1,
-                    }));
+                    }),
+                );
             return points;
         }
 
@@ -56,16 +58,17 @@ export function calculateLineIntersections (line1: LineSegment, line2: LineSegme
 
     // Intersection.  t is how far along line1 the intersection is, u is how far along line2.
     if (!isZeroIsh(r_s) && t >= 0 && t <= 1 && u >= 0 && u <= 1) {
-        return [new Point({
-            x: line1.p1.x + (line1.p2.x - line1.p1.x) * t,
-            y: line1.p1.y + (line1.p2.y - line1.p1.y) * t,
-        })];
+        return [
+            new Point({
+                x: line1.p1.x + (line1.p2.x - line1.p1.x) * t,
+                y: line1.p1.y + (line1.p2.y - line1.p1.y) * t,
+            }),
+        ];
     }
 
     return [];
 }
 
-function isZeroIsh (x: number) {
+function isZeroIsh(x: number) {
     return Math.abs(x) < 1 / 1000000;
 }
-

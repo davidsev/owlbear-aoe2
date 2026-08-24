@@ -9,18 +9,17 @@ import { grid } from '@davidsev/owlbear-utils';
 import { ConeHexShape } from '../Shape/ConeHexShape';
 
 export class ConeTool extends BaseTool {
-
     readonly label = 'Cone';
     readonly icon = '/icons/cone.svg';
     readonly id = getId('cone');
 
-    protected getShape (): BaseShape {
+    protected getShape(): BaseShape {
         if (grid.type === 'HEX_HORIZONTAL' || grid.type === 'HEX_VERTICAL') {
             if (roomMetadata.data.hexConeStyle === HexConeStyle.EQUILATERAL) {
                 return new ConeHexShape();
             } else {
                 return new ConeTemplateShape(
-                    (roomMetadata.data.hexConeWidth % 180) * Math.PI / 180,
+                    ((roomMetadata.data.hexConeWidth % 180) * Math.PI) / 180,
                     roomMetadata.data.hexConeStartPoints,
                     roomMetadata.data.hexConeOverlapThreshold,
                     roomMetadata.data.hexConeSizeSnapping,
@@ -32,9 +31,10 @@ export class ConeTool extends BaseTool {
                 return new ConePathfinderShape();
             } else if (roomMetadata.data.squareConeStyle === SquareConeStyle.TOKEN) {
                 return new ConeTokenShape();
-            } else { // TEMPLATE
+            } else {
+                // TEMPLATE
                 return new ConeTemplateShape(
-                    ((roomMetadata.data.squareConeWidth || 53.1) % 180) * Math.PI / 180,
+                    (((roomMetadata.data.squareConeWidth || 53.1) % 180) * Math.PI) / 180,
                     roomMetadata.data.squareConeStartPoints,
                     roomMetadata.data.squareConeOverlapThreshold,
                     roomMetadata.data.squareConeSizeSnapping,

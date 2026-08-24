@@ -2,21 +2,13 @@ import { customElement, query } from 'lit/decorators.js';
 import { html, type PropertyValueMap } from 'lit';
 import { BaseElement } from '../BaseElement';
 import { SelectEnum } from '../Components/SelectEnum';
-import {
-    roomMetadata,
-    SquareCircleStyle,
-    SquareConeStyle,
-    SquareCubeStyle,
-    SquareDirection,
-    StartPoint,
-} from '../../Metadata/room';
+import { roomMetadata, SquareCircleStyle, SquareConeStyle, SquareCubeStyle, SquareDirection, StartPoint } from '../../Metadata/room';
 import { MultiSelectEnum } from '../Components/MultiSelectEnum';
 import style from './SettingsForm.css';
 import { baseCSS } from '../baseCSS';
 
 @customElement('square-settings-form')
 export class SquareSettingsForm extends BaseElement {
-
     static styles = baseCSS(style);
 
     private readonly inputs = {
@@ -80,7 +72,7 @@ export class SquareSettingsForm extends BaseElement {
     @query('div#cubeForm', true)
     private accessor cubeForm!: HTMLDivElement;
 
-    constructor () {
+    constructor() {
         super();
 
         // Set up the inputs.
@@ -117,7 +109,7 @@ export class SquareSettingsForm extends BaseElement {
         this.inputs.cubeDirection.value = roomMetadata.data.squareCubeDirection;
     }
 
-    private formChanged (e?: Event) {
+    private formChanged(e?: Event) {
         // Only run if the form is valid.
         if (e && e.target instanceof HTMLInputElement && !e.target.form?.checkValidity()) {
             return;
@@ -144,13 +136,13 @@ export class SquareSettingsForm extends BaseElement {
         this.showOrHideFields();
     }
 
-    private showOrHideFields () {
+    private showOrHideFields() {
         this.templateConeFields.style.display = roomMetadata.data.squareConeStyle === SquareConeStyle.TEMPLATE ? 'initial' : 'none';
         this.templateCircleFields.style.display = roomMetadata.data.squareCircleStyle === SquareCircleStyle.TEMPLATE ? 'initial' : 'none';
         this.templateCubeFields.style.display = roomMetadata.data.squareCubeStyle === SquareCubeStyle.TEMPLATE ? 'initial' : 'none';
     }
 
-    protected firstUpdated (_changedProperties: PropertyValueMap<unknown> | Map<PropertyKey, unknown>) {
+    protected firstUpdated(_changedProperties: PropertyValueMap<unknown> | Map<PropertyKey, unknown>) {
         super.firstUpdated(_changedProperties);
         this.showOrHideFields();
 
@@ -158,7 +150,7 @@ export class SquareSettingsForm extends BaseElement {
         this.requestUpdate();
     }
 
-    private setConeDefaults () {
+    private setConeDefaults() {
         this.inputs.coneStyle.value = roomMetadata.defaultValues.squareConeStyle;
         this.inputs.coneWidth.value = (roomMetadata.defaultValues.squareConeWidth || '').toString();
         this.inputs.coneStartPoints.value = roomMetadata.defaultValues.squareConeStartPoints;
@@ -168,14 +160,14 @@ export class SquareSettingsForm extends BaseElement {
         this.formChanged();
     }
 
-    private setCircleDefaults () {
+    private setCircleDefaults() {
         this.inputs.circleStyle.value = roomMetadata.defaultValues.squareCircleStyle;
         this.inputs.circleStartPoints.value = roomMetadata.defaultValues.squareCircleStartPoints;
         this.inputs.circleSizeSnapping.value = roomMetadata.defaultValues.squareCircleSizeSnapping.toString();
         this.formChanged();
     }
 
-    private setCubeDefaults () {
+    private setCubeDefaults() {
         this.inputs.cubeStyle.value = roomMetadata.defaultValues.squareCubeStyle;
         this.inputs.cubeStartPoints.value = roomMetadata.defaultValues.squareCubeStartPoints;
         this.inputs.cubeOverlapThreshold.value = (roomMetadata.defaultValues.squareCubeOverlapThreshold * 100).toString();
@@ -185,7 +177,7 @@ export class SquareSettingsForm extends BaseElement {
     }
 
     // Render the UI as a function of component state
-    render () {
+    render() {
         return html`
             <tab-bar>
                 <tab-button .target=${this.coneForm}>Cone</tab-button>
@@ -377,4 +369,3 @@ export class SquareSettingsForm extends BaseElement {
         `;
     }
 }
-

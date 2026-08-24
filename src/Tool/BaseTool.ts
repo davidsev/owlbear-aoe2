@@ -18,44 +18,43 @@ import type { TextBuilder } from '@owlbear-rodeo/sdk/lib/builders/TextBuilder';
 import { LabelDisplayMode, ShapeDisplayMode, toolMetadata, type ToolMetadata } from '../Metadata/tool';
 
 export abstract class BaseTool implements ToolMode {
-
     abstract readonly label: string;
     abstract readonly icon: string;
     abstract readonly id: string;
 
     private currentArea?: {
-        interaction: InteractionManager<Item[]>,
-        shape: BaseShape,
+        interaction: InteractionManager<Item[]>;
+        shape: BaseShape;
     } = undefined;
 
     public toolMetadata: ToolMetadata = toolMetadata.defaultValues;
 
     /** The icon that will be displayed in the toolbar. */
-    get icons (): ToolIcon[] {
-        return [{
-            icon: URL_PREFIX + this.icon,
-            label: this.label,
-            filter: {
-                activeTools: [getId('tool')],
+    get icons(): ToolIcon[] {
+        return [
+            {
+                icon: URL_PREFIX + this.icon,
+                label: this.label,
+                filter: {
+                    activeTools: [getId('tool')],
+                },
             },
-        }];
+        ];
     }
 
     /** Get the shape that has the implementation to use for this area */
-    protected abstract getShape (): BaseShape;
+    protected abstract getShape(): BaseShape;
 
     // When they start drawing, create the shape.
-    async onToolDragStart (context: ToolContext, event: ToolEvent) {
+    async onToolDragStart(context: ToolContext, event: ToolEvent) {
         this.toolMetadata = toolMetadata.setDefaultValues(context.metadata);
 
         // Make the items.
         const areaItem = this.buildAreaPath().build();
         let outlineItem: Path | null = null;
-        if (this.toolMetadata.shapeDisplayMode !== ShapeDisplayMode.NEVER)
-            outlineItem = this.buildOutlinePath().attachedTo(areaItem.id).build();
+        if (this.toolMetadata.shapeDisplayMode !== ShapeDisplayMode.NEVER) outlineItem = this.buildOutlinePath().attachedTo(areaItem.id).build();
         let labelItem: Text | null = null;
-        if (this.toolMetadata.labelDisplayMode !== LabelDisplayMode.NEVER)
-            labelItem = this.buildLabel().attachedTo(areaItem.id).build();
+        if (this.toolMetadata.labelDisplayMode !== LabelDisplayMode.NEVER) labelItem = this.buildLabel().attachedTo(areaItem.id).build();
         const items: (Item | null)[] = [areaItem, outlineItem, labelItem];
 
         // Start drawing.
@@ -68,28 +67,24 @@ export abstract class BaseTool implements ToolMode {
     }
 
     /** Get the items out of the array returned by the interaction update */
-    private getItems (items: Item[]): [Path, Path?, Text?] {
+    private getItems(items: Item[]): [Path, Path?, Text?] {
         return [items.shift() as Path, items.shift() as Path, items.shift() as Text];
     }
 
     /** Update the items based on the current mouse position */
-    private async updateItems (area: Path, outline ?: Path, label?: Text) {
-        if (!this.currentArea)
-            return;
+    private async updateItems(area: Path, outline?: Path, label?: Text) {
+        if (!this.currentArea) return;
 
         // Check if the line is long enough etc
         if (!this.currentArea.shape.isValid) {
-            if (outline)
-                outline.commands = [];
+            if (outline) outline.commands = [];
             area.commands = [];
-            if (label)
-                label.visible = false;
+            if (label) label.visible = false;
             return;
         }
 
         // Update the outline
-        if (outline)
-            outline.commands = this.currentArea.shape.outline;
+        if (outline) outline.commands = this.currentArea.shape.outline;
 
         // Update the area
         area.commands = this.currentArea.shape.areaPath;
@@ -103,7 +98,7 @@ export abstract class BaseTool implements ToolMode {
         }
     }
 
-    async onToolDragMove (_context: ToolContext, event: ToolEvent) {
+    async onToolDragMove(_context: ToolContext, event: ToolEvent) {
         if (this.currentArea) {
             const [update] = this.currentArea.interaction;
             update((items: Item[]) => {
@@ -115,8 +110,7 @@ export abstract class BaseTool implements ToolMode {
         }
     }
 
-    async onToolDragEnd (_context: ToolContext, event: ToolEvent) {
-
+    async onToolDragEnd(_context: ToolContext, event: ToolEvent) {
         if (this.currentArea) {
             // Do a final update of the shape.
             const [update, stop] = this.currentArea.interaction;
@@ -131,17 +125,14 @@ export abstract class BaseTool implements ToolMode {
             if (this.currentArea.shape.isValid) {
                 const [area, outline, label] = this.getItems(Array.from(items));
                 const itemsToKeep: Item[] = [area];
-                if (this.toolMetadata.shapeDisplayMode === ShapeDisplayMode.ALWAYS && outline)
-                    itemsToKeep.push(outline);
-                if (this.toolMetadata.labelDisplayMode === LabelDisplayMode.ALWAYS && label)
-                    itemsToKeep.push(label);
+                if (this.toolMetadata.shapeDisplayMode === ShapeDisplayMode.ALWAYS && outline) itemsToKeep.push(outline);
+                if (this.toolMetadata.labelDisplayMode === LabelDisplayMode.ALWAYS && label) itemsToKeep.push(label);
                 await OBR.scene.items.addItems(itemsToKeep);
 
                 // And attach them to eachother.
                 if (itemsToKeep.length > 1) {
                     await OBR.scene.items.updateItems(itemsToKeep, (items: Item[]) => {
-                        for (let i = 0; i < items.length - 1; i++)
-                            items[i].attachedTo = items[i + 1 % items.length].id;
+                        for (let i = 0; i < items.length - 1; i++) items[i].attachedTo = items[(i + 1) % items.length].id;
                     });
                 }
             }
@@ -154,11 +145,11 @@ export abstract class BaseTool implements ToolMode {
         this.cleanup();
     }
 
-    onToolDragCancel () {
+    onToolDragCancel() {
         this.cleanup();
     }
 
-    cleanup () {
+    cleanup() {
         if (this.currentArea) {
             const [, stop] = this.currentArea.interaction;
             stop();
@@ -166,7 +157,7 @@ export abstract class BaseTool implements ToolMode {
         this.currentArea = undefined;
     }
 
-    protected buildAreaPath (): PathBuilder {
+    protected buildAreaPath(): PathBuilder {
         return buildPath()
             .commands([])
             .metadata({ createdBy: getId() })
@@ -179,7 +170,7 @@ export abstract class BaseTool implements ToolMode {
             .layer('DRAWING');
     }
 
-    protected buildOutlinePath (): PathBuilder {
+    protected buildOutlinePath(): PathBuilder {
         return buildPath()
             .commands([])
             .metadata({ createdBy: getId() })
@@ -193,7 +184,7 @@ export abstract class BaseTool implements ToolMode {
             .layer('DRAWING');
     }
 
-    protected buildLabel (): TextBuilder {
+    protected buildLabel(): TextBuilder {
         return buildText()
             .plainText('')
             .textType('PLAIN')

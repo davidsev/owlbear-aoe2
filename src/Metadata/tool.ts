@@ -30,4 +30,4 @@ export class ToolMetadata {
     labelDisplayMode: LabelDisplayMode = LabelDisplayMode.DRAWING;
 }
 
-export const toolMetadata = new ToolMetadataMapper(getId('tool'), new ToolMetadata);
+export const toolMetadata = new ToolMetadataMapper(getId('tool'), new ToolMetadata());

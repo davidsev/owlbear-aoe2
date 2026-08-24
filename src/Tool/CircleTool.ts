@@ -7,25 +7,16 @@ import { CirclePathfinderShape } from '../Shape/CirclePathfinderShape';
 import type { BaseShape } from '../Shape/BaseShape';
 
 export class CircleTool extends BaseTool {
-
     readonly label = 'Circle';
     readonly icon = '/icons/circle.svg';
     readonly id = getId('circle');
 
-    protected getShape (): BaseShape {
+    protected getShape(): BaseShape {
         if (grid.type === 'HEX_HORIZONTAL' || grid.type === 'HEX_VERTICAL')
-            return new CircleTemplateShape(
-                roomMetadata.data.hexCircleStartPoints,
-                roomMetadata.data.hexCircleSizeSnapping,
-            );
+            return new CircleTemplateShape(roomMetadata.data.hexCircleStartPoints, roomMetadata.data.hexCircleSizeSnapping);
         else {
-            if (roomMetadata.data.squareCircleStyle === SquareCircleStyle.PATHFINDER)
-                return new CirclePathfinderShape();
-            else
-                return new CircleTemplateShape(
-                    roomMetadata.data.squareCircleStartPoints,
-                    roomMetadata.data.squareCircleSizeSnapping,
-                );
+            if (roomMetadata.data.squareCircleStyle === SquareCircleStyle.PATHFINDER) return new CirclePathfinderShape();
+            else return new CircleTemplateShape(roomMetadata.data.squareCircleStartPoints, roomMetadata.data.squareCircleSizeSnapping);
         }
     }
 }

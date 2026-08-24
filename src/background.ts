@@ -7,15 +7,17 @@ import { SettingsForm } from './Tool/SettingsForm';
 import { toolMetadata } from './Metadata/tool';
 import { StyleForm } from './Tool/StyleForm';
 
-export function initBackground () {
+export function initBackground() {
     OBR.onReady(async () => {
         OBR.tool.create({
             id: getId('tool'),
             shortcut: 'A',
-            icons: [{
-                icon: `${URL_PREFIX}/icons/cone.svg`,
-                label: 'AoE',
-            }],
+            icons: [
+                {
+                    icon: `${URL_PREFIX}/icons/cone.svg`,
+                    label: 'AoE',
+                },
+            ],
             defaultMode: getId('cone'),
             defaultMetadata: toolMetadata.defaultValues as unknown as Metadata,
         });

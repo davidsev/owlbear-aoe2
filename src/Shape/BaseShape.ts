@@ -3,79 +3,79 @@ import type { PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
 import { CellOutliner } from '../Utils/CellOutliner';
 
 export abstract class BaseShape {
-
     private _start: Point;
     private _end: Point;
     public readonly _cache: Map<string | symbol, unknown> = new Map();
 
-    constructor () {
+    constructor() {
         this._start = new Point(0, 0);
         this._end = new Point(0, 0);
     }
 
-    public get start (): Point {
+    public get start(): Point {
         return this._start;
     }
 
-    public set start (value: Point) {
+    public set start(value: Point) {
         this._start = value;
         this._cache.clear();
     }
 
     @cached()
-    public get startCell (): Cell {
+    public get startCell(): Cell {
         return grid.getCell(this._start);
     }
 
-    public get end (): Point {
+    public get end(): Point {
         return this._end;
     }
 
-    public set end (value: Point) {
+    public set end(value: Point) {
         this._end = value;
         this._cache.clear();
     }
 
     @cached()
-    public get endCell (): Cell {
+    public get endCell(): Cell {
         return grid.getCell(this._end);
     }
 
     @cached()
-    public get distance (): number {
+    public get distance(): number {
         return this.start.distanceTo(this.end);
     }
 
     @cached()
-    public get roundedDistance (): number {
+    public get roundedDistance(): number {
         return Math.round(this.distance / grid.dpi) * grid.dpi;
     }
 
     @cached()
-    public get isValid (): boolean {
+    public get isValid(): boolean {
         return this.roundedDistance > 0;
     }
 
-    public abstract get cells (): Cell[];
+    public abstract get cells(): Cell[];
 
-    public abstract get labelPosition (): Point;
+    public abstract get labelPosition(): Point;
 
     @cached()
-    public get labelText (): string {
-        return `${this.roundedDistance / grid.dpi * (grid.gridScale.parsed.multiplier || 0)}${grid.gridScale.parsed.unit || ''}`;
+    public get labelText(): string {
+        return `${(this.roundedDistance / grid.dpi) * (grid.gridScale.parsed.multiplier || 0)}${grid.gridScale.parsed.unit || ''}`;
     }
 
-    public abstract get outline (): PathCommand[];
+    public abstract get outline(): PathCommand[];
 
     @cached()
-    public get areaPath (): PathCommand[] {
+    public get areaPath(): PathCommand[] {
         const outliner = new CellOutliner(this.cells);
         return outliner.getOutlinePath();
     }
 }
 
-export function cached<T> () {
-    return (func: () => T) => function (this: BaseShape): T {
+export function cached<T>() {
+    return (func: () => T) =>
+        function (this: BaseShape): T {
             if (this._cache.has(func.name)) {
                 return this._cache.get(func.name) as T;
             }

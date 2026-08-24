@@ -13,7 +13,7 @@ module.exports = {
         publicPath: process.env.URL_PREFIX || '',
         clean: true,
     },
-    devtool: (process.env.NODE_ENV === 'development' ? 'inline-source-map' : false),
+    devtool: process.env.NODE_ENV === 'development' ? 'inline-source-map' : false,
     module: {
         rules: [
             {
@@ -29,7 +29,7 @@ module.exports = {
     },
     resolve: {
         extensions: ['.ts', '.js', '.css'],
-        fallback: { 'buffer': false }
+        fallback: { buffer: false },
     },
     plugins: [
         new HtmlWebpackPlugin({
@@ -57,7 +57,7 @@ module.exports = {
                         return JSON.stringify(manifest, null, 4);
                     },
                 },
-            ]
+            ],
         }),
     ],
     devServer: {

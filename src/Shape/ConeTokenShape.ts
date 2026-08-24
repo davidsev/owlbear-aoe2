@@ -7,41 +7,36 @@ import { Triangle } from '../Utils/Geometry/Shape/Triangle';
 type axis = '+x' | '-x' | '+y' | '-y';
 
 export class ConeTokenShape extends BaseShape {
-
     @cached()
-    private get roundedStart (): Point {
+    private get roundedStart(): Point {
         return grid.snapTo(this.start, SnapTo.CORNER);
     }
 
     @cached()
-    public get roundedDistance (): number {
+    public get roundedDistance(): number {
         return Math.round(this.distance / grid.dpi) * grid.dpi;
     }
 
     @cached()
-    private get roundedEnd (): Point {
+    private get roundedEnd(): Point {
         const vector = this.end.sub(this.start);
         return this.roundedStart.add(vector.scale(this.roundedDistance / this.distance));
     }
 
     @cached()
-    private get triangle (): Triangle {
-        const vector = this.roundedEnd.sub(this.roundedStart).scale(Math.tan(Math.tan(53.1 * Math.PI / 360)));
-        return new Triangle(
-            this.roundedStart,
-            this.roundedEnd.add(new Point(vector.y, -vector.x)),
-            this.roundedEnd.add(new Point(-vector.y, vector.x)),
-        );
+    private get triangle(): Triangle {
+        const vector = this.roundedEnd.sub(this.roundedStart).scale(Math.tan(Math.tan((53.1 * Math.PI) / 360)));
+        return new Triangle(this.roundedStart, this.roundedEnd.add(new Point(vector.y, -vector.x)), this.roundedEnd.add(new Point(-vector.y, vector.x)));
     }
 
     @cached()
-    public get labelPosition (): Point {
+    public get labelPosition(): Point {
         const triangle = this.triangle;
         return triangle.center;
     }
 
     @cached()
-    public get outline (): PathCommand[] {
+    public get outline(): PathCommand[] {
         const triangle = this.triangle;
         return [
             [Command.MOVE, triangle.p1.x, triangle.p1.y],
@@ -52,10 +47,9 @@ export class ConeTokenShape extends BaseShape {
     }
 
     @cached()
-    public get cells (): Cell[] {
+    public get cells(): Cell[] {
         const axis = this.directionToDraw;
-        if (!axis)
-            return [];
+        if (!axis) return [];
 
         const cellsToCheck = this.getGridSquares(axis);
         const triangle = this.triangle;
@@ -80,12 +74,11 @@ export class ConeTokenShape extends BaseShape {
     // If it's diagonal, we want to be centered on the nearest axis, and will reduce the number of tokens as we move away.
     // If it's not diagonal, we want to be centered on the furthest axis, and will increase the number of tokens as we move away.
     @cached()
-    private get directionToDraw (): axis | null {
+    private get directionToDraw(): axis | null {
         const direction4 = getDirection4(this.end.sub(this.start));
         const direction8 = getDirection8(this.end.sub(this.start));
 
-        if (!direction4 || !direction8)
-            return null;
+        if (!direction4 || !direction8) return null;
 
         // Check the 4 directions.
         if (direction8.x === 0) {
@@ -110,7 +103,7 @@ export class ConeTokenShape extends BaseShape {
     }
 
     // Build a grid of squares to check, in rows.  The first row is nearest the axis.
-    private getGridSquares (axis: axis): Cell[][] {
+    private getGridSquares(axis: axis): Cell[][] {
         let cells: Cell[][] = [];
         if (axis === '+x') {
             for (let x = this.roundedStart.x; x < this.roundedStart.x + this.roundedDistance; x += grid.dpi) {
@@ -145,19 +138,16 @@ export class ConeTokenShape extends BaseShape {
         // We currently have the line nearest the axis in row one, which will get one token.
         // If it's diagonal we want it the other way around.
         const direction8 = getDirection8(this.end.sub(this.start));
-        if (direction8?.x !== 0 && direction8?.y !== 0)
-            cells = cells.reverse();
+        if (direction8?.x !== 0 && direction8?.y !== 0) cells = cells.reverse();
 
         return cells;
     }
 
     /** Get the highest N values from an array. */
-    private maxNofArray<T> (items: T[], getValue: (item: T) => number, count: number = 1): T[] {
-
+    private maxNofArray<T>(items: T[], getValue: (item: T) => number, count: number = 1): T[] {
         // Get the value of each item.
         const values = new Map<T, number>();
-        for (const item of items)
-            values.set(item, getValue(item));
+        for (const item of items) values.set(item, getValue(item));
 
         // Sort the items by their value.
         const sortedValues = [...values.entries()].sort((a, b) => a[1] - b[1]);

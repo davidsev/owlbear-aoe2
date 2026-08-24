@@ -5,12 +5,10 @@ import styles from '../baseCSS.css';
 import { StyleSettingsForm } from './StyleSettingsForm';
 import { FormFooter } from '../Components/FormFooter';
 
-export async function initSettingsForm () {
+export async function initSettingsForm() {
     // Load the page based on grid type
-    if (grid.type === 'SQUARE')
-        document.body.appendChild(new SquareSettingsForm());
-    else
-        document.body.appendChild(new HexSettingsForm());
+    if (grid.type === 'SQUARE') document.body.appendChild(new SquareSettingsForm());
+    else document.body.appendChild(new HexSettingsForm());
 
     const styleSheet = document.createElement('style');
     styleSheet.innerText = styles;
@@ -19,7 +17,7 @@ export async function initSettingsForm () {
     document.body.appendChild(new FormFooter());
 }
 
-export async function initStyleForm () {
+export async function initStyleForm() {
     document.body.appendChild(new StyleSettingsForm());
 
     const styleSheet = document.createElement('style');

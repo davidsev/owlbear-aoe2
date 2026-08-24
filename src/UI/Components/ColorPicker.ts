@@ -6,7 +6,7 @@ import { baseCSS } from '../baseCSS';
 import 'vanilla-colorful/hex-alpha-color-picker.js';
 
 export class ColorPickerChangeEvent extends Event {
-    constructor (
+    constructor(
         public readonly color: string,
         public readonly opacity: number,
         public readonly rgba: string,
@@ -17,7 +17,6 @@ export class ColorPickerChangeEvent extends Event {
 
 @customElement('color-picker')
 export class ColorPicker extends BaseElement {
-
     static styles = baseCSS(style);
 
     @property({ type: String })
@@ -29,7 +28,7 @@ export class ColorPicker extends BaseElement {
     private accessor dialog!: HTMLDialogElement;
 
     // Render the UI as a function of component state
-    render () {
+    render() {
         return html`
             <button @click=${this.showDialog} style="background-color: ${this.rgba}; border-color: ${this.color}">
                 <div style="color: ${this.color}">${(this.opacity * 100).toFixed(0)}%</div>
@@ -37,29 +36,32 @@ export class ColorPicker extends BaseElement {
             <dialog @click=${this.hideDialog}>
                 <div>
                     <hex-alpha-color-picker
-                            .color="${this.color}${Math.floor(this.opacity * 255).toString(16).padStart(2, '0')}"
+                            .color="${this.color}${Math.floor(this.opacity * 255)
+                                .toString(16)
+                                .padStart(2, '0')}"
                             @color-changed="${this.colorChanged}"></hex-alpha-color-picker>
                 </div>
             </dialog>
         `;
     }
 
-    private showDialog () {
+    private showDialog() {
         this.dialog.showModal();
     }
 
-    private hideDialog (e: PointerEvent) {
+    private hideDialog(e: PointerEvent) {
         // Clicks within the dialog should have target set to the div or one of its children.
         // If the target is the dalog itself, then the click was on the backdrop.
-        if (e.target === this.dialog)
-            this.dialog.close();
+        if (e.target === this.dialog) this.dialog.close();
     }
 
-    public get rgba (): string {
-        return `${this.color}${Math.floor(this.opacity * 255).toString(16).padStart(2, '0')}`;
+    public get rgba(): string {
+        return `${this.color}${Math.floor(this.opacity * 255)
+            .toString(16)
+            .padStart(2, '0')}`;
     }
 
-    private colorChanged (e: CustomEvent<{ value: string }>) {
+    private colorChanged(e: CustomEvent<{ value: string }>) {
         this.color = e.detail.value.slice(0, 7);
         const opacity = parseInt(e.detail.value.slice(7), 16) / 255;
         this.opacity = Number.isFinite(opacity) ? opacity : 1;

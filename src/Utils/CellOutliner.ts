@@ -2,24 +2,20 @@ import type { Cell, LineSegment, Point } from '@davidsev/owlbear-utils';
 import { Command, type PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
 
 export class CellOutliner {
-
     public readonly cells: Cell[];
     public readonly outline: Point[][] = [];
 
-    constructor (cells: Cell[]) {
+    constructor(cells: Cell[]) {
         this.cells = cells;
         this.calculateOutline();
     }
 
-    private calculateOutline () {
-
-        if (!this.cells.length)
-            return;
+    private calculateOutline() {
+        if (!this.cells.length) return;
 
         // Break the cells into their constituent line segments.
         const lines: LineSegment[] = [];
-        for (const cell of this.cells)
-            lines.push(...cell.edges);
+        for (const cell of this.cells) lines.push(...cell.edges);
 
         // Count how many times each line shows up, any line that shows up more than once is internal and can be removed.
         const lineCounts = new Map<string, [LineSegment, number]>();
@@ -35,8 +31,7 @@ export class CellOutliner {
             }
         }
 
-        if (!externalLines.length)
-            throw new Error('No external lines found.  Should never happen?');
+        if (!externalLines.length) throw new Error('No external lines found.  Should never happen?');
 
         // Sort the lines into order.  Pick a starting point and then find the next line that has that point etc.
         const points: Point[] = [];
@@ -67,13 +62,12 @@ export class CellOutliner {
         this.outline.push(points);
     }
 
-    public getOutlinePath (): PathCommand[] {
+    public getOutlinePath(): PathCommand[] {
         const commands: PathCommand[] = [];
 
         for (const group of this.outline) {
             const firstPoint = group.shift();
-            if (!firstPoint)
-                return [];
+            if (!firstPoint) return [];
 
             commands.push([Command.MOVE, firstPoint.x, firstPoint.y]);
             for (const point of group) {

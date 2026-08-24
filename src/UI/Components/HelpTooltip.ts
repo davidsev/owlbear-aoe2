@@ -6,14 +6,13 @@ import { baseCSS } from '../baseCSS';
 
 @customElement('help-tooltip')
 export class HelpTooltip extends BaseElement {
-
     static styles = baseCSS(style);
 
     @query('dialog', true)
     private accessor dialog!: HTMLDialogElement;
 
     // Render the UI as a function of component state
-    render () {
+    render() {
         return html`
             <button @click=${this.showDialog}>?</button>
             <dialog @click=${this.hideDialog}>
@@ -24,7 +23,7 @@ export class HelpTooltip extends BaseElement {
         `;
     }
 
-    private showDialog () {
+    private showDialog() {
         const ourRect = this.getBoundingClientRect();
         this.dialog.showModal();
         this.dialog.style.top = `${ourRect.bottom}px`;
@@ -38,10 +37,9 @@ export class HelpTooltip extends BaseElement {
         }
     }
 
-    private hideDialog (e: PointerEvent) {
+    private hideDialog(e: PointerEvent) {
         // Clicks within the dialog should have target set to the div or one of its children.
         // If the target is the dalog itself, then the click was on the backdrop.
-        if (e.target === this.dialog)
-            this.dialog.close();
+        if (e.target === this.dialog) this.dialog.close();
     }
 }

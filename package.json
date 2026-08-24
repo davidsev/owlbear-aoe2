@@ -4,6 +4,7 @@
     "serve": "URL_PREFIX=http://localhost:8090 webpack-dev-server --config-node-env=development --port 8090 --hot",
     "build": "webpack --config-node-env=production",
     "lint": "biome lint .",
+    "format": "biome format --write .",
     "typecheck": "tsc --noEmit",
     "postinstall": "simple-git-hooks"
   },

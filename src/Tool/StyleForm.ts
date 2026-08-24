@@ -2,18 +2,19 @@ import OBR, { type ToolAction, type ToolContext, type ToolIcon } from '@owlbear-
 import { getId } from '../Utils/getId';
 
 export class StyleForm implements ToolAction {
-
     readonly id = getId('style');
 
-    readonly icons: ToolIcon[] = [{
-        icon: `${URL_PREFIX}/icons/style.svg`,
-        label: 'Style',
-        filter: {
-            activeTools: [getId('tool')],
+    readonly icons: ToolIcon[] = [
+        {
+            icon: `${URL_PREFIX}/icons/style.svg`,
+            label: 'Style',
+            filter: {
+                activeTools: [getId('tool')],
+            },
         },
-    }];
+    ];
 
-    onClick (_context: ToolContext, elementId: string): void {
+    onClick(_context: ToolContext, elementId: string): void {
         OBR.popover.open({
             id: getId('style-form'),
             height: 355,

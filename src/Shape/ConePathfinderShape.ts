@@ -72,55 +72,50 @@ const Shapes = {
 const ASSUMED_SQUARE_FEET = 5;
 
 export class ConePathfinderShape extends BaseShape {
-
     @cached()
-    public get roundedDistance (): number {
+    public get roundedDistance(): number {
         const distance = this.distance;
 
-        if (distance < grid.dpi)
-            return 0;
+        if (distance < grid.dpi) return 0;
 
         let currentError = Infinity;
         let currentDistance = 0;
 
         for (const d of Object.keys(Shapes)) {
-            const error = Math.abs(distance - parseInt(d, 10) * grid.dpi / ASSUMED_SQUARE_FEET);
+            const error = Math.abs(distance - (parseInt(d, 10) * grid.dpi) / ASSUMED_SQUARE_FEET);
             if (error < currentError) {
                 currentError = error;
                 currentDistance = parseInt(d, 10);
             }
         }
 
-        return currentDistance * grid.dpi / ASSUMED_SQUARE_FEET;
+        return (currentDistance * grid.dpi) / ASSUMED_SQUARE_FEET;
     }
 
     @cached()
-    public get labelPosition (): Point {
+    public get labelPosition(): Point {
         const direction = getDirection8(this.end.sub(this.start));
-        if (!direction)
-            return this.start;
+        if (!direction) return this.start;
         return grid.snapTo(this.start, SnapTo.CORNER).add({
-            x: direction.x * this.roundedDistance / 2,
-            y: direction.y * this.roundedDistance / 2,
+            x: (direction.x * this.roundedDistance) / 2,
+            y: (direction.y * this.roundedDistance) / 2,
         });
     }
 
-    public get outline (): PathCommand[] {
+    public get outline(): PathCommand[] {
         return [];
     }
 
     @cached()
-    public get cells (): Cell[] {
+    public get cells(): Cell[] {
         // Work out if it's diagonal or not, and which direction.
         const direction = getDirection8(this.end.sub(this.start));
-        if (!direction)
-            return [];
+        if (!direction) return [];
         const isDiagonal = direction.x !== 0 && direction.y !== 0;
 
         // Decide which shape template to use.
-        const distance = this.roundedDistance / grid.dpi * ASSUMED_SQUARE_FEET;
-        if (!this.isValidSize(distance))
-            return [];
+        const distance = (this.roundedDistance / grid.dpi) * ASSUMED_SQUARE_FEET;
+        if (!this.isValidSize(distance)) return [];
         const shape = Shapes[distance][isDiagonal ? 'Diagonal' : 'Orthogonal'];
 
         // work over the cells.
@@ -145,12 +140,14 @@ export class ConePathfinderShape extends BaseShape {
                 }
             }
             return cells;
-        } else { // Orthogonal
+        } else {
+            // Orthogonal
             if (direction.x === 0) {
                 // The center of the starting cell.  We need to move half the cone width to the "left" of the direction we're going.
-                const rootX = distance === 15 ?
-                    grid.snapTo(this.start, SnapTo.CENTER).x - grid.dpi
-                    : grid.snapTo(this.start, SnapTo.CORNER).x - (grid.dpi * (shape[0].length / 2));
+                const rootX =
+                    distance === 15
+                        ? grid.snapTo(this.start, SnapTo.CENTER).x - grid.dpi
+                        : grid.snapTo(this.start, SnapTo.CORNER).x - grid.dpi * (shape[0].length / 2);
                 const rootY = grid.snapTo(this.start, SnapTo.CENTER).y + direction.y;
 
                 // How much to change the coords to move to the next cell.
@@ -172,9 +169,10 @@ export class ConePathfinderShape extends BaseShape {
             } else {
                 // The center of the starting cell.  We need to move half the cone width to the "left" of the direction we're going.
                 const rootX = grid.snapTo(this.start, SnapTo.CENTER).x + direction.x;
-                const rootY = distance === 15 ?
-                    grid.snapTo(this.start, SnapTo.CENTER).y - grid.dpi
-                    : grid.snapTo(this.start, SnapTo.CORNER).y - (grid.dpi * (shape[0].length / 2));
+                const rootY =
+                    distance === 15
+                        ? grid.snapTo(this.start, SnapTo.CENTER).y - grid.dpi
+                        : grid.snapTo(this.start, SnapTo.CORNER).y - grid.dpi * (shape[0].length / 2);
 
                 // How much to change the coords to move to the next cell.
                 const xMove = direction.x * grid.dpi;
@@ -196,7 +194,7 @@ export class ConePathfinderShape extends BaseShape {
         }
     }
 
-    private isValidSize (distance: number): distance is keyof typeof Shapes {
+    private isValidSize(distance: number): distance is keyof typeof Shapes {
         return distance in Shapes;
     }
 }

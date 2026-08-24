@@ -6,7 +6,6 @@ import { baseCSS } from '../baseCSS';
 
 @customElement('tab-button')
 export class TabButton extends BaseElement {
-
     static styles = baseCSS(style);
 
     // Declare reactive properties
@@ -16,7 +15,7 @@ export class TabButton extends BaseElement {
     accessor target: HTMLElement | string = '';
 
     // Render the UI as a function of component state
-    render () {
+    render() {
         return html`
             <div class="${this.active ? 'active' : ''}">
                 <slot></slot>
@@ -24,18 +23,16 @@ export class TabButton extends BaseElement {
         `;
     }
 
-    private getTarget (): HTMLElement | null {
-        if (typeof this.target === 'string')
-            return document.querySelector(this.target);
+    private getTarget(): HTMLElement | null {
+        if (typeof this.target === 'string') return document.querySelector(this.target);
         return this.target;
     }
 
-    protected update (changedProperties: PropertyValues) {
+    protected update(changedProperties: PropertyValues) {
         super.update(changedProperties);
 
         const target = this.getTarget();
-        if (!target)
-            return;
+        if (!target) return;
 
         target.style.display = this.active ? 'initial' : 'none';
     }
