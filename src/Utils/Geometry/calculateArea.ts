@@ -1,7 +1,7 @@
-import { Vector2 } from '@owlbear-rodeo/sdk';
+import type { Vector2 } from '@owlbear-rodeo/sdk';
 import { LineSegment } from '@davidsev/owlbear-utils';
 import { calculateCenter } from './calculateCenter';
-import { IntersectionDebugger } from '../IntersectionDebugger';
+import type { IntersectionDebugger } from '../IntersectionDebugger';
 
 export function calculateArea (points: Vector2[], debug: IntersectionDebugger | null = null): number {
 
@@ -35,7 +35,7 @@ export function calculateArea (points: Vector2[], debug: IntersectionDebugger | 
         }
 
         // Check if the points are all a straight line.
-        if (isNaN(area)) {
+        if (Number.isNaN(area)) {
             return 0;
         }
         return area;

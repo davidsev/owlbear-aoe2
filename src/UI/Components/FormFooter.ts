@@ -3,7 +3,7 @@ import { customElement } from 'lit/decorators.js';
 import { BaseElement } from '../BaseElement';
 import style from './FormFooter.css';
 import { baseCSS } from '../baseCSS';
-import OBR, { Item } from '@owlbear-rodeo/sdk';
+import OBR, { type Item } from '@owlbear-rodeo/sdk';
 import { getId } from '../../Utils/getId';
 
 @customElement('form-footer')

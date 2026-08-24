@@ -1,6 +1,6 @@
 import { BaseShape, cached } from './BaseShape';
-import { Cell, grid, Point, SnapTo } from '@davidsev/owlbear-utils';
-import { Command, PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
+import { type Cell, grid, type Point, SnapTo } from '@davidsev/owlbear-utils';
+import { Command, type PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
 
 export class CirclePathfinderShape extends BaseShape {
 

@@ -1,4 +1,4 @@
-import OBR, { buildPath, buildText, Command, Item, Vector2 } from '@owlbear-rodeo/sdk';
+import OBR, { buildPath, buildText, Command, type Item, type Vector2 } from '@owlbear-rodeo/sdk';
 
 export class IntersectionDebugger {
 

@@ -27,7 +27,7 @@ export class HelpTooltip extends BaseElement {
     private showDialog () {
         const ourRect = this.getBoundingClientRect();
         this.dialog.showModal();
-        this.dialog.style.top = ourRect.bottom + 'px';
+        this.dialog.style.top = `${ourRect.bottom}px`;
 
         // If the bottom of the dialog is off the screen, move it up.
         const dialogRect = this.dialog.getBoundingClientRect();
@@ -41,7 +41,7 @@ export class HelpTooltip extends BaseElement {
     private hideDialog (e: PointerEvent) {
         // Clicks within the dialog should have target set to the div or one of its children.
         // If the target is the dalog itself, then the click was on the backdrop.
-        if (e.target == this.dialog)
+        if (e.target === this.dialog)
             this.dialog.close();
     }
 }

@@ -1,5 +1,5 @@
 import { customElement, query } from 'lit/decorators.js';
-import { html, PropertyValueMap } from 'lit';
+import { html, type PropertyValueMap } from 'lit';
 import { BaseElement } from '../BaseElement';
 import { SelectEnum } from '../Components/SelectEnum';
 import { HexConeStyle, roomMetadata, StartPoint } from '../../Metadata/room';
@@ -93,12 +93,12 @@ export class HexSettingsForm extends BaseElement {
             hexConeStyle: this.inputs.coneStyle.value,
             hexConeWidth: this.inputs.coneWidth.valueAsNumber,
             hexConeStartPoints: this.inputs.coneStartPoints.value,
-            hexConeOverlapThreshold: parseInt(this.inputs.coneOverlapThreshold.value) / 100,
+            hexConeOverlapThreshold: parseInt(this.inputs.coneOverlapThreshold.value, 10) / 100,
             hexConeSizeSnapping: parseFloat(this.inputs.coneSizeSnapping.value),
             hexCircleStartPoints: this.inputs.circleStartPoints.value,
             hexCircleSizeSnapping: parseFloat(this.inputs.circleSizeSnapping.value),
             hexCubeStartPoints: this.inputs.cubeStartPoints.value,
-            hexCubeOverlapThreshold: parseInt(this.inputs.cubeOverlapThreshold.value) / 100,
+            hexCubeOverlapThreshold: parseInt(this.inputs.cubeOverlapThreshold.value, 10) / 100,
             hexCubeSizeSnapping: parseFloat(this.inputs.cubeSizeSnapping.value),
         });
 
@@ -106,7 +106,7 @@ export class HexSettingsForm extends BaseElement {
     }
 
     private showOrHideFields () {
-        this.templateConeFields.style.display = roomMetadata.data.hexConeStyle == HexConeStyle.TEMPLATE ? 'initial' : 'none';
+        this.templateConeFields.style.display = roomMetadata.data.hexConeStyle === HexConeStyle.TEMPLATE ? 'initial' : 'none';
     }
 
     protected firstUpdated (_changedProperties: PropertyValueMap<unknown> | Map<PropertyKey, unknown>) {

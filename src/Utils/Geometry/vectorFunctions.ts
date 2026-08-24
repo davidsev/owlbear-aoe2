@@ -1,4 +1,4 @@
-import { Vector2 } from '@owlbear-rodeo/sdk';
+import type { Vector2 } from '@owlbear-rodeo/sdk';
 
 export function dot (lhs: Vector2, rhs: Vector2): number {
     return lhs.x * rhs.x + lhs.y * rhs.y;

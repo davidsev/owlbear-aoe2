@@ -1,6 +1,6 @@
 import { BaseShape, cached } from './BaseShape';
-import { Cell, grid, Point, SnapTo } from '@davidsev/owlbear-utils';
-import { Command, PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
+import { type Cell, grid, Point, SnapTo } from '@davidsev/owlbear-utils';
+import { Command, type PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
 import { Triangle } from '../Utils/Geometry/Shape/Triangle';
 import { SquareDirection, StartPoint } from '../Metadata/room';
 import { getDirection4, getDirection8 } from '../Utils/Geometry/getDirection';
@@ -56,7 +56,7 @@ export class ConeTemplateShape extends BaseShape {
         // Work out how far to move in the direction.  If it's diagonal, then we need to not move the full distance.
         let move = new Point(this.roundedDistance * direction.x, this.roundedDistance * direction.y);
         if (direction.x !== 0 && direction.y !== 0)
-            move = move.scale(1.414 / 2);
+            move = move.scale(Math.SQRT2 / 2);
 
         return this.roundedStart.add(move);
     }

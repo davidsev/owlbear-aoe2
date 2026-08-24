@@ -1,6 +1,6 @@
 import { BaseShape, cached } from './BaseShape';
-import { BaseHex, Cell, grid, HHex, HHexGrid, Point, SnapTo, VHex, VHexGrid } from '@davidsev/owlbear-utils';
-import { PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
+import { BaseHex, type Cell, grid, HHex, type HHexGrid, type Point, SnapTo, VHex, type VHexGrid } from '@davidsev/owlbear-utils';
+import type { PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
 import { calculateCenter } from '../Utils/Geometry/calculateCenter';
 
 export class ConeHexShape extends BaseShape {
@@ -41,9 +41,9 @@ export class ConeHexShape extends BaseShape {
         const abs_s = Math.abs(s);
         const max = Math.max(abs_q, abs_r, abs_s);
 
-        if (max == abs_q)
+        if (max === abs_q)
             return q > 0 ? '+q' : '-q';
-        if (max == abs_r)
+        if (max === abs_r)
             return r > 0 ? '+r' : '-r';
         return s > 0 ? '+s' : '-s';
     }
@@ -75,18 +75,18 @@ export class ConeHexShape extends BaseShape {
         // Map the triangle back onto the grid
         const hexGrid = this.hexGrid;
         const fromAxial = (q: number, r: number): VHex | HHex =>
-            hexGrid.type == 'HEX_VERTICAL' ? VHex.fromAxial(q, r, hexGrid) : HHex.fromAxial(q, r, hexGrid);
-        if (direction == '+q')
+            hexGrid.type === 'HEX_VERTICAL' ? VHex.fromAxial(q, r, hexGrid) : HHex.fromAxial(q, r, hexGrid);
+        if (direction === '+q')
             return cellCoords.map(([a, b]) => fromAxial(q + a, r + b));
-        if (direction == '-q')
+        if (direction === '-q')
             return cellCoords.map(([a, b]) => fromAxial(q - a, r - b));
-        if (direction == '+r')
+        if (direction === '+r')
             return cellCoords.map(([a, b]) => fromAxial(q + b, r + a));
-        if (direction == '-r')
+        if (direction === '-r')
             return cellCoords.map(([a, b]) => fromAxial(q - b, r - a));
-        if (direction == '+s')
+        if (direction === '+s')
             return cellCoords.map(([, b, c]) => fromAxial(q - c + 1, r + b));
-        if (direction == '-s')
+        if (direction === '-s')
             return cellCoords.map(([, b, c]) => fromAxial(q + c - 1, r - b));
 
         return [];

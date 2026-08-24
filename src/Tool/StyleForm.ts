@@ -1,4 +1,4 @@
-import OBR, { ToolAction, ToolContext, ToolIcon } from '@owlbear-rodeo/sdk';
+import OBR, { type ToolAction, type ToolContext, type ToolIcon } from '@owlbear-rodeo/sdk';
 import { getId } from '../Utils/getId';
 
 export class StyleForm implements ToolAction {
@@ -6,19 +6,19 @@ export class StyleForm implements ToolAction {
     readonly id = getId('style');
 
     readonly icons: ToolIcon[] = [{
-        icon: URL_PREFIX + '/icons/style.svg',
+        icon: `${URL_PREFIX}/icons/style.svg`,
         label: 'Style',
         filter: {
             activeTools: [getId('tool')],
         },
     }];
 
-    onClick (context: ToolContext, elementId: string): void {
+    onClick (_context: ToolContext, elementId: string): void {
         OBR.popover.open({
             id: getId('style-form'),
             height: 355,
             width: 350,
-            url: URL_PREFIX + '/frame.html#style-form',
+            url: `${URL_PREFIX}/frame.html#style-form`,
             anchorElementId: elementId,
             anchorOrigin: {
                 horizontal: 'CENTER',

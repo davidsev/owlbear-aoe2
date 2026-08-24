@@ -1,4 +1,4 @@
-import { Vector2 } from '@owlbear-rodeo/sdk';
+import type { Vector2 } from '@owlbear-rodeo/sdk';
 import { Point } from '@davidsev/owlbear-utils';
 import { dot } from '../vectorFunctions';
 import { Polygon } from './Polygon';
@@ -28,7 +28,7 @@ export class Square extends Polygon {
         this.p2 = p2;
         this.p3 = p3;
         this.p4 = p4;
-        this.isAABB = Math.abs(diagonal.x) == Math.abs(diagonal.y);
+        this.isAABB = Math.abs(diagonal.x) === Math.abs(diagonal.y);
     }
 
     // Formula from https://math.stackexchange.com/questions/190111/how-to-check-if-a-point-is-inside-a-rectangle

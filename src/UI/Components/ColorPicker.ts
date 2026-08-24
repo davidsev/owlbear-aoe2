@@ -4,7 +4,6 @@ import { BaseElement } from '../BaseElement';
 import style from './ColorPicker.css';
 import { baseCSS } from '../baseCSS';
 import 'vanilla-colorful/hex-alpha-color-picker.js';
-import { HexAlphaColorPicker } from 'vanilla-colorful/hex-alpha-color-picker';
 
 export class ColorPickerChangeEvent extends Event {
     constructor (
@@ -28,8 +27,6 @@ export class ColorPicker extends BaseElement {
 
     @query('dialog', true)
     private accessor dialog!: HTMLDialogElement;
-    @query('hex-alpha-color-picker', true)
-    private accessor picker!: HexAlphaColorPicker;
 
     // Render the UI as a function of component state
     render () {
@@ -54,7 +51,7 @@ export class ColorPicker extends BaseElement {
     private hideDialog (e: PointerEvent) {
         // Clicks within the dialog should have target set to the div or one of its children.
         // If the target is the dalog itself, then the click was on the backdrop.
-        if (e.target == this.dialog)
+        if (e.target === this.dialog)
             this.dialog.close();
     }
 

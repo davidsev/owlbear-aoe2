@@ -1,21 +1,21 @@
 import OBR, {
     buildPath,
     buildText,
-    InteractionManager,
-    Item,
-    Path,
-    Text,
-    ToolContext,
-    ToolEvent,
-    ToolIcon,
-    ToolMode,
+    type InteractionManager,
+    type Item,
+    type Path,
+    type Text,
+    type ToolContext,
+    type ToolEvent,
+    type ToolIcon,
+    type ToolMode,
 } from '@owlbear-rodeo/sdk';
 import { getId } from '../Utils/getId';
-import { BaseShape } from '../Shape/BaseShape';
-import { PathBuilder } from '@owlbear-rodeo/sdk/lib/builders/PathBuilder';
+import type { BaseShape } from '../Shape/BaseShape';
+import type { PathBuilder } from '@owlbear-rodeo/sdk/lib/builders/PathBuilder';
 import { Point } from '@davidsev/owlbear-utils';
-import { TextBuilder } from '@owlbear-rodeo/sdk/lib/builders/TextBuilder';
-import { LabelDisplayMode, ShapeDisplayMode, toolMetadata, ToolMetadata } from '../Metadata/tool';
+import type { TextBuilder } from '@owlbear-rodeo/sdk/lib/builders/TextBuilder';
+import { LabelDisplayMode, ShapeDisplayMode, toolMetadata, type ToolMetadata } from '../Metadata/tool';
 
 export abstract class BaseTool implements ToolMode {
 
@@ -51,10 +51,10 @@ export abstract class BaseTool implements ToolMode {
         // Make the items.
         const areaItem = this.buildAreaPath().build();
         let outlineItem: Path | null = null;
-        if (this.toolMetadata.shapeDisplayMode != ShapeDisplayMode.NEVER)
+        if (this.toolMetadata.shapeDisplayMode !== ShapeDisplayMode.NEVER)
             outlineItem = this.buildOutlinePath().attachedTo(areaItem.id).build();
         let labelItem: Text | null = null;
-        if (this.toolMetadata.labelDisplayMode != LabelDisplayMode.NEVER)
+        if (this.toolMetadata.labelDisplayMode !== LabelDisplayMode.NEVER)
             labelItem = this.buildLabel().attachedTo(areaItem.id).build();
         const items: (Item | null)[] = [areaItem, outlineItem, labelItem];
 
@@ -103,7 +103,7 @@ export abstract class BaseTool implements ToolMode {
         }
     }
 
-    async onToolDragMove (context: ToolContext, event: ToolEvent) {
+    async onToolDragMove (_context: ToolContext, event: ToolEvent) {
         if (this.currentArea) {
             const [update] = this.currentArea.interaction;
             update((items: Item[]) => {
@@ -115,7 +115,7 @@ export abstract class BaseTool implements ToolMode {
         }
     }
 
-    async onToolDragEnd (context: ToolContext, event: ToolEvent) {
+    async onToolDragEnd (_context: ToolContext, event: ToolEvent) {
 
         if (this.currentArea) {
             // Do a final update of the shape.
@@ -131,9 +131,9 @@ export abstract class BaseTool implements ToolMode {
             if (this.currentArea.shape.isValid) {
                 const [area, outline, label] = this.getItems(Array.from(items));
                 const itemsToKeep: Item[] = [area];
-                if (this.toolMetadata.shapeDisplayMode == ShapeDisplayMode.ALWAYS && outline)
+                if (this.toolMetadata.shapeDisplayMode === ShapeDisplayMode.ALWAYS && outline)
                     itemsToKeep.push(outline);
-                if (this.toolMetadata.labelDisplayMode == LabelDisplayMode.ALWAYS && label)
+                if (this.toolMetadata.labelDisplayMode === LabelDisplayMode.ALWAYS && label)
                     itemsToKeep.push(label);
                 await OBR.scene.items.addItems(itemsToKeep);
 

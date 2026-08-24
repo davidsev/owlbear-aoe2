@@ -1,5 +1,5 @@
-import { Cell, grid, Point, SnapTo } from '@davidsev/owlbear-utils';
-import { PathCommand } from '@owlbear-rodeo/sdk';
+import { type Cell, grid, Point, SnapTo } from '@davidsev/owlbear-utils';
+import type { PathCommand } from '@owlbear-rodeo/sdk';
 import { BaseShape, cached } from './BaseShape';
 import { getDiagonalDirection4 } from '../Utils/Geometry/getDirection';
 

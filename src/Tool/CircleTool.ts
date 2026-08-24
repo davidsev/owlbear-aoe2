@@ -4,7 +4,7 @@ import { CircleTemplateShape } from '../Shape/CircleTemplateShape';
 import { roomMetadata, SquareCircleStyle } from '../Metadata/room';
 import { grid } from '@davidsev/owlbear-utils';
 import { CirclePathfinderShape } from '../Shape/CirclePathfinderShape';
-import { BaseShape } from '../Shape/BaseShape';
+import type { BaseShape } from '../Shape/BaseShape';
 
 export class CircleTool extends BaseTool {
 
@@ -13,13 +13,13 @@ export class CircleTool extends BaseTool {
     readonly id = getId('circle');
 
     protected getShape (): BaseShape {
-        if (grid.type == 'HEX_HORIZONTAL' || grid.type == 'HEX_VERTICAL')
+        if (grid.type === 'HEX_HORIZONTAL' || grid.type === 'HEX_VERTICAL')
             return new CircleTemplateShape(
                 roomMetadata.data.hexCircleStartPoints,
                 roomMetadata.data.hexCircleSizeSnapping,
             );
         else {
-            if (roomMetadata.data.squareCircleStyle == SquareCircleStyle.PATHFINDER)
+            if (roomMetadata.data.squareCircleStyle === SquareCircleStyle.PATHFINDER)
                 return new CirclePathfinderShape();
             else
                 return new CircleTemplateShape(

@@ -1,11 +1,11 @@
-import { Vector2 } from '@owlbear-rodeo/sdk';
+import type { Vector2 } from '@owlbear-rodeo/sdk';
 import { Point } from '@davidsev/owlbear-utils';
 
 /** Get a normalized direction vector, in one of the 8 compass points.
  *  In OBR right and down are positive.
  */
 export function getDirection8 (vector: Vector2): Point | null {
-    if (vector.x == 0 && vector.y == 0)
+    if (vector.x === 0 && vector.y === 0)
         return null;
     const angle = Math.atan2(vector.y, vector.x);
 
@@ -32,7 +32,7 @@ export function getDirection8 (vector: Vector2): Point | null {
  *  In OBR right and down are positive.
  */
 export function getDirection4 (vector: Vector2): Point | null {
-    if (vector.x == 0 && vector.y == 0)
+    if (vector.x === 0 && vector.y === 0)
         return null;
     const angle = Math.atan2(vector.y, vector.x);
 
@@ -49,7 +49,7 @@ export function getDirection4 (vector: Vector2): Point | null {
  *  In OBR right and down are positive.
  */
 export function getDiagonalDirection4 (vector: Vector2): Point | null {
-    if (vector.x == 0 && vector.y == 0)
+    if (vector.x === 0 && vector.y === 0)
         return null;
     return new Point(Math.sign(vector.x), Math.sign(vector.y));
 }

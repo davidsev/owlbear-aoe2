@@ -1,4 +1,4 @@
-import { Vector2 } from '@owlbear-rodeo/sdk';
+import type { Vector2 } from '@owlbear-rodeo/sdk';
 import { Point } from '@davidsev/owlbear-utils';
 import { Polygon } from './Polygon';
 

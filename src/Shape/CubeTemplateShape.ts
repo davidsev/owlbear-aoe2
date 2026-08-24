@@ -1,6 +1,6 @@
 import { BaseShape, cached } from './BaseShape';
-import { Cell, grid, Point, SnapTo } from '@davidsev/owlbear-utils';
-import { Command, PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
+import { type Cell, grid, Point, SnapTo } from '@davidsev/owlbear-utils';
+import { Command, type PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
 import { SquareDirection, StartPoint } from '../Metadata/room';
 import { Square } from '../Utils/Geometry/Shape/Square';
 import { getDirection4, getDirection8 } from '../Utils/Geometry/getDirection';
@@ -38,7 +38,7 @@ export class CubeTemplateShape extends BaseShape {
         // If it's diagonal, then we need to calculate what size triangle gets us that hypotenuse.
         const vector = this.end.sub(this.start);
         const aaDist = Math.max(Math.abs(vector.x), Math.abs(vector.y));
-        const diagonalDist = Math.max(Math.abs(vector.x), Math.abs(vector.y)) / 1.414;
+        const diagonalDist = Math.max(Math.abs(vector.x), Math.abs(vector.y)) / Math.SQRT2;
 
         // Decide which of the two distances to use based on the angle of the vector.
         const bigComponent = Math.max(Math.abs(vector.x), Math.abs(vector.y));
@@ -59,7 +59,7 @@ export class CubeTemplateShape extends BaseShape {
 
         // If the direction isn't locked, then just fix the length and we're done.
         if (this.directionSnapping === SquareDirection.ALL)
-            return this.roundedStart.add(vector.scale(this.roundedDistance * 1.414 / this.distance));
+            return this.roundedStart.add(vector.scale(this.roundedDistance * Math.SQRT2 / this.distance));
 
         // Otherwise we need to snap to the nearest valid direction.
         const direction = this.directionSnapping === SquareDirection.FOUR ? getDirection4(vector) : getDirection8(vector);
@@ -69,9 +69,9 @@ export class CubeTemplateShape extends BaseShape {
         // Work out how far to move in the direction.  If it's diagonal, then we need to not move the full distance.
         let move = new Point(this.roundedDistance * direction.x, this.roundedDistance * direction.y);
         if (direction.x !== 0 && direction.y !== 0)
-            move = move.scale(1.414 / 2);
+            move = move.scale(Math.SQRT2 / 2);
 
-        return this.roundedStart.add(move.scale(1.414));
+        return this.roundedStart.add(move.scale(Math.SQRT2));
 
     }
 

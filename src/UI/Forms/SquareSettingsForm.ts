@@ -1,5 +1,5 @@
 import { customElement, query } from 'lit/decorators.js';
-import { html, PropertyValueMap } from 'lit';
+import { html, type PropertyValueMap } from 'lit';
 import { BaseElement } from '../BaseElement';
 import { SelectEnum } from '../Components/SelectEnum';
 import {
@@ -128,7 +128,7 @@ export class SquareSettingsForm extends BaseElement {
             squareConeStyle: this.inputs.coneStyle.value,
             squareConeWidth: this.inputs.coneWidth.valueAsNumber,
             squareConeStartPoints: this.inputs.coneStartPoints.value,
-            squareConeOverlapThreshold: parseInt(this.inputs.coneOverlapThreshold.value) / 100,
+            squareConeOverlapThreshold: parseInt(this.inputs.coneOverlapThreshold.value, 10) / 100,
             squareConeSizeSnapping: parseFloat(this.inputs.coneSizeSnapping.value),
             squareConeDirection: this.inputs.coneDirection.value,
             squareCircleStyle: this.inputs.circleStyle.value,
@@ -136,7 +136,7 @@ export class SquareSettingsForm extends BaseElement {
             squareCircleSizeSnapping: parseFloat(this.inputs.circleSizeSnapping.value),
             squareCubeStyle: this.inputs.cubeStyle.value,
             squareCubeStartPoints: this.inputs.cubeStartPoints.value,
-            squareCubeOverlapThreshold: parseInt(this.inputs.cubeOverlapThreshold.value) / 100,
+            squareCubeOverlapThreshold: parseInt(this.inputs.cubeOverlapThreshold.value, 10) / 100,
             squareCubeSizeSnapping: parseFloat(this.inputs.cubeSizeSnapping.value),
             squareCubeDirection: this.inputs.cubeDirection.value,
         });
@@ -145,9 +145,9 @@ export class SquareSettingsForm extends BaseElement {
     }
 
     private showOrHideFields () {
-        this.templateConeFields.style.display = roomMetadata.data.squareConeStyle == SquareConeStyle.TEMPLATE ? 'initial' : 'none';
-        this.templateCircleFields.style.display = roomMetadata.data.squareCircleStyle == SquareCircleStyle.TEMPLATE ? 'initial' : 'none';
-        this.templateCubeFields.style.display = roomMetadata.data.squareCubeStyle == SquareCubeStyle.TEMPLATE ? 'initial' : 'none';
+        this.templateConeFields.style.display = roomMetadata.data.squareConeStyle === SquareConeStyle.TEMPLATE ? 'initial' : 'none';
+        this.templateCircleFields.style.display = roomMetadata.data.squareCircleStyle === SquareCircleStyle.TEMPLATE ? 'initial' : 'none';
+        this.templateCubeFields.style.display = roomMetadata.data.squareCubeStyle === SquareCubeStyle.TEMPLATE ? 'initial' : 'none';
     }
 
     protected firstUpdated (_changedProperties: PropertyValueMap<unknown> | Map<PropertyKey, unknown>) {

@@ -1,6 +1,6 @@
 import { CachedRoomMetadata, RoomMetadataMapper } from '@davidsev/owlbear-utils';
 import { getId } from '../Utils/getId';
-import { Metadata } from '@owlbear-rodeo/sdk';
+import type { Metadata } from '@owlbear-rodeo/sdk';
 
 export enum SquareConeStyle {
     TEMPLATE = 'TEMPLATE',
@@ -97,7 +97,7 @@ class MyRoomMetadataMapper extends RoomMetadataMapper<RoomMetadata> {
 
         // Foreach letter key, replace it with the name key.
         for (const [key, value] of Object.entries(values)) {
-            const newName = nameMap.find(([, letter]) => letter == key);
+            const newName = nameMap.find(([, letter]) => letter === key);
             if (newName)
                 newValues[newName[0]] = value;
             else
@@ -112,10 +112,10 @@ class MyRoomMetadataMapper extends RoomMetadataMapper<RoomMetadata> {
         for (const [key, value] of Object.entries(values)) {
             // Only save debugIntersection if it's true.
             if (key === 'debugIntersection' && value === true) {
-                newValues['debugIntersection'] = value;
+                newValues.debugIntersection = value;
             }
             // Otherwise, save the value under the letter key.
-            const newKey = nameMap.find(([name]) => name == key);
+            const newKey = nameMap.find(([name]) => name === key);
             if (newKey)
                 newValues[newKey[1]] = value;
             else

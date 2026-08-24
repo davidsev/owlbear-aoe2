@@ -1,5 +1,5 @@
-import { LitElement, PropertyValueMap, unsafeCSS } from 'lit';
-import OBR, { Theme } from '@owlbear-rodeo/sdk';
+import { LitElement, type PropertyValueMap, unsafeCSS } from 'lit';
+import OBR, { type Theme } from '@owlbear-rodeo/sdk';
 import style from './baseCSS.css';
 import { awaitScene } from '@davidsev/owlbear-utils';
 

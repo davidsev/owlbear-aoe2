@@ -1,5 +1,5 @@
 import { Point } from '@davidsev/owlbear-utils';
-import { Vector2 } from '@owlbear-rodeo/sdk';
+import type { Vector2 } from '@owlbear-rodeo/sdk';
 
 export function calculateCenter (points: Vector2[]): Point {
     let x = 0;

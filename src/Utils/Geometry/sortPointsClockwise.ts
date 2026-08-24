@@ -1,4 +1,4 @@
-import { Vector2 } from '@owlbear-rodeo/sdk';
+import type { Vector2 } from '@owlbear-rodeo/sdk';
 import { calculateCenter } from './calculateCenter';
 
 // Adapted from https://stackoverflow.com/questions/6989100/sort-points-in-clockwise-order/6989383#6989383
@@ -6,14 +6,14 @@ export function sortPointsClockwise<T extends Vector2> (points: T[]): T[] {
     const center = calculateCenter(points);
 
     points.sort((a, b) => {
-        if (a.x == b.x && a.y == b.y)
+        if (a.x === b.x && a.y === b.y)
             return 0;
 
         if (a.x - center.x >= 0 && b.x - center.x < 0)
             return 1;
         if (a.x - center.x < 0 && b.x - center.x >= 0)
             return -1;
-        if (a.x - center.x == 0 && b.x - center.x == 0) {
+        if (a.x - center.x === 0 && b.x - center.x === 0) {
             if (a.y - center.y >= 0 || b.y - center.y >= 0)
                 return a.y > b.y ? 1 : -1;
             return b.y > a.y ? 1 : -1;

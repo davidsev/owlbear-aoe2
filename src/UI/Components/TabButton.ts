@@ -1,4 +1,4 @@
-import { html, PropertyValues } from 'lit';
+import { html, type PropertyValues } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { BaseElement } from '../BaseElement';
 import style from './TabButton.css';

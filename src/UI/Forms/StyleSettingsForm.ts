@@ -4,7 +4,7 @@ import { BaseElement } from '../BaseElement';
 import style from './StyleForm.css';
 import { baseCSS } from '../baseCSS';
 import { ColorPicker } from '../Components/ColorPicker';
-import { LabelDisplayMode, ShapeDisplayMode, ToolMetadata, toolMetadata } from '../../Metadata/tool';
+import { LabelDisplayMode, ShapeDisplayMode, type ToolMetadata, toolMetadata } from '../../Metadata/tool';
 import { SelectEnum } from '../Components/SelectEnum';
 
 @customElement('style-settings-form')

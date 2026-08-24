@@ -1,5 +1,5 @@
-import { Vector2 } from '@owlbear-rodeo/sdk';
-import { Cell, LineSegment, Point } from '@davidsev/owlbear-utils';
+import type { Vector2 } from '@owlbear-rodeo/sdk';
+import { type Cell, LineSegment, Point } from '@davidsev/owlbear-utils';
 import { calculateLineIntersections } from '../calculateLineIntersections';
 import { sortPointsClockwise } from '../sortPointsClockwise';
 import { calculateArea } from '../calculateArea';
@@ -45,7 +45,7 @@ export abstract class Polygon implements Iterable<Point> {
         }
 
         // If the cell is completely inside the polygon, then 100%.
-        if (intersectionShape.length == cell.corners.length) {
+        if (intersectionShape.length === cell.corners.length) {
             return 100;
         }
 

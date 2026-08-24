@@ -1,5 +1,5 @@
-import { Cell, grid, Point } from '@davidsev/owlbear-utils';
-import { PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
+import { type Cell, grid, Point } from '@davidsev/owlbear-utils';
+import type { PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
 import { CellOutliner } from '../Utils/CellOutliner';
 
 export abstract class BaseShape {
@@ -74,15 +74,13 @@ export abstract class BaseShape {
     }
 }
 
-export function cached () {
-    return function (func: () => unknown) {
-        return function (this: any) {
+export function cached<T> () {
+    return (func: () => T) => function (this: BaseShape): T {
             if (this._cache.has(func.name)) {
-                return this._cache.get(func.name);
+                return this._cache.get(func.name) as T;
             }
             const result = func.apply(this);
             this._cache.set(func.name, result);
             return result;
         };
-    };
 }

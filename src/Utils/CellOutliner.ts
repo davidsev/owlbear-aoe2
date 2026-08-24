@@ -1,5 +1,5 @@
-import { Cell, LineSegment, Point } from '@davidsev/owlbear-utils';
-import { Command, PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
+import type { Cell, LineSegment, Point } from '@davidsev/owlbear-utils';
+import { Command, type PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
 
 export class CellOutliner {
 

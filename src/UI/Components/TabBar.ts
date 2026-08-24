@@ -1,4 +1,4 @@
-import { html, PropertyValueMap } from 'lit';
+import { html, type PropertyValueMap } from 'lit';
 import { customElement, queryAssignedElements } from 'lit/decorators.js';
 import { BaseElement } from '../BaseElement';
 import style from './TabBar.css';

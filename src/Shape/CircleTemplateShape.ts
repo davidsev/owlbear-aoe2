@@ -1,6 +1,6 @@
 import { BaseShape, cached } from './BaseShape';
-import { Cell, grid, Point, SnapTo } from '@davidsev/owlbear-utils';
-import { Command, PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
+import { type Cell, grid, type Point, SnapTo } from '@davidsev/owlbear-utils';
+import { Command, type PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
 import { StartPoint } from '../Metadata/room';
 
 export class CircleTemplateShape extends BaseShape {
@@ -33,12 +33,6 @@ export class CircleTemplateShape extends BaseShape {
         if (snapTo === 0)
             return this.distance;
         return Math.round(this.distance / snapTo) * snapTo;
-    }
-
-    @cached()
-    private get roundedEnd (): Point {
-        const vector = this.end.sub(this.start);
-        return this.roundedStart.add(vector.scale(this.roundedDistance / this.distance));
     }
 
     @cached()

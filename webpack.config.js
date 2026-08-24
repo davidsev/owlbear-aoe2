@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require('node:path');
 const copyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const DefinePlugin = require('webpack').DefinePlugin;
@@ -48,8 +48,8 @@ module.exports = {
                 {
                     from: 'static/manifest.json',
                     force: true,
-                    transform: (content, path) => {
-                        let manifest = JSON.parse(content.toString());
+                    transform: (content, _path) => {
+                        const manifest = JSON.parse(content.toString());
                         manifest.version = version;
                         const url_prefix = process.env.URL_PREFIX || '';
                         manifest.background_url = url_prefix + manifest.background_url;

@@ -3,7 +3,7 @@ import { getId } from '../Utils/getId';
 import { ConeTemplateShape } from '../Shape/ConeTemplateShape';
 import { HexConeStyle, roomMetadata, SquareConeStyle, SquareDirection } from '../Metadata/room';
 import { ConePathfinderShape } from '../Shape/ConePathfinderShape';
-import { BaseShape } from '../Shape/BaseShape';
+import type { BaseShape } from '../Shape/BaseShape';
 import { ConeTokenShape } from '../Shape/ConeTokenShape';
 import { grid } from '@davidsev/owlbear-utils';
 import { ConeHexShape } from '../Shape/ConeHexShape';
@@ -15,8 +15,8 @@ export class ConeTool extends BaseTool {
     readonly id = getId('cone');
 
     protected getShape (): BaseShape {
-        if (grid.type == 'HEX_HORIZONTAL' || grid.type == 'HEX_VERTICAL') {
-            if (roomMetadata.data.hexConeStyle == HexConeStyle.EQUILATERAL) {
+        if (grid.type === 'HEX_HORIZONTAL' || grid.type === 'HEX_VERTICAL') {
+            if (roomMetadata.data.hexConeStyle === HexConeStyle.EQUILATERAL) {
                 return new ConeHexShape();
             } else {
                 return new ConeTemplateShape(
@@ -28,9 +28,9 @@ export class ConeTool extends BaseTool {
                 );
             }
         } else {
-            if (roomMetadata.data.squareConeStyle == SquareConeStyle.PATHFINDER) {
+            if (roomMetadata.data.squareConeStyle === SquareConeStyle.PATHFINDER) {
                 return new ConePathfinderShape();
-            } else if (roomMetadata.data.squareConeStyle == SquareConeStyle.TOKEN) {
+            } else if (roomMetadata.data.squareConeStyle === SquareConeStyle.TOKEN) {
                 return new ConeTokenShape();
             } else { // TEMPLATE
                 return new ConeTemplateShape(

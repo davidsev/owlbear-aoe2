@@ -1,6 +1,6 @@
 import { BaseShape, cached } from './BaseShape';
-import { Cell, grid, Point, SnapTo } from '@davidsev/owlbear-utils';
-import { PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
+import { type Cell, grid, type Point, SnapTo } from '@davidsev/owlbear-utils';
+import type { PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
 import { getDirection8 } from '../Utils/Geometry/getDirection';
 
 const Shapes = {
@@ -73,10 +73,6 @@ const ASSUMED_SQUARE_FEET = 5;
 
 export class ConePathfinderShape extends BaseShape {
 
-    constructor () {
-        super();
-    }
-
     @cached()
     public get roundedDistance (): number {
         const distance = this.distance;
@@ -91,7 +87,7 @@ export class ConePathfinderShape extends BaseShape {
             const error = Math.abs(distance - parseInt(d, 10) * grid.dpi / ASSUMED_SQUARE_FEET);
             if (error < currentError) {
                 currentError = error;
-                currentDistance = parseInt(d);
+                currentDistance = parseInt(d, 10);
             }
         }
 
@@ -119,7 +115,7 @@ export class ConePathfinderShape extends BaseShape {
         const direction = getDirection8(this.end.sub(this.start));
         if (!direction)
             return [];
-        const isDiagonal = direction.x != 0 && direction.y != 0;
+        const isDiagonal = direction.x !== 0 && direction.y !== 0;
 
         // Decide which shape template to use.
         const distance = this.roundedDistance / grid.dpi * ASSUMED_SQUARE_FEET;
@@ -150,9 +146,9 @@ export class ConePathfinderShape extends BaseShape {
             }
             return cells;
         } else { // Orthogonal
-            if (direction.x == 0) {
+            if (direction.x === 0) {
                 // The center of the starting cell.  We need to move half the cone width to the "left" of the direction we're going.
-                const rootX = distance == 15 ?
+                const rootX = distance === 15 ?
                     grid.snapTo(this.start, SnapTo.CENTER).x - grid.dpi
                     : grid.snapTo(this.start, SnapTo.CORNER).x - (grid.dpi * (shape[0].length / 2));
                 const rootY = grid.snapTo(this.start, SnapTo.CENTER).y + direction.y;
@@ -176,7 +172,7 @@ export class ConePathfinderShape extends BaseShape {
             } else {
                 // The center of the starting cell.  We need to move half the cone width to the "left" of the direction we're going.
                 const rootX = grid.snapTo(this.start, SnapTo.CENTER).x + direction.x;
-                const rootY = distance == 15 ?
+                const rootY = distance === 15 ?
                     grid.snapTo(this.start, SnapTo.CENTER).y - grid.dpi
                     : grid.snapTo(this.start, SnapTo.CORNER).y - (grid.dpi * (shape[0].length / 2));
 

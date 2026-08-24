@@ -1,4 +1,4 @@
-import OBR, { Metadata } from '@owlbear-rodeo/sdk';
+import OBR, { type Metadata } from '@owlbear-rodeo/sdk';
 import { getId } from './Utils/getId';
 import { ConeTool } from './Tool/ConeTool';
 import { CircleTool } from './Tool/CircleTool';
@@ -13,7 +13,7 @@ export function initBackground () {
             id: getId('tool'),
             shortcut: 'A',
             icons: [{
-                icon: URL_PREFIX + '/icons/cone.svg',
+                icon: `${URL_PREFIX}/icons/cone.svg`,
                 label: 'AoE',
             }],
             defaultMode: getId('cone'),
