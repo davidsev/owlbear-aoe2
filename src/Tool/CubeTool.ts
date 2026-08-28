@@ -12,8 +12,10 @@ export class CubeTool extends BaseTool {
     readonly id = getId('cube');
 
     protected getShape(): BaseShape {
-        if (grid.type === 'HEX_HORIZONTAL' || grid.type === 'HEX_VERTICAL') {
+        const gridSnapshot = grid.snapshot;
+        if (gridSnapshot.type === 'HEX_HORIZONTAL' || gridSnapshot.type === 'HEX_VERTICAL') {
             return new CubeTemplateShape(
+                gridSnapshot,
                 roomMetadata.data.hexCubeStartPoints,
                 roomMetadata.data.hexCubeOverlapThreshold,
                 roomMetadata.data.hexCubeSizeSnapping,
@@ -21,10 +23,11 @@ export class CubeTool extends BaseTool {
             );
         } else {
             if (roomMetadata.data.squareCubeStyle === SquareCubeStyle.SQUARE) {
-                return new CubeSimpleShape();
+                return new CubeSimpleShape(gridSnapshot);
             } else {
                 // TEMPLATE
                 return new CubeTemplateShape(
+                    gridSnapshot,
                     roomMetadata.data.squareCubeStartPoints,
                     roomMetadata.data.squareCubeOverlapThreshold,
                     roomMetadata.data.squareCubeSizeSnapping,

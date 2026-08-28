@@ -1,5 +1,5 @@
 import { BaseShape, cached } from './BaseShape';
-import { type Cell, grid, Point, SnapTo } from '@davidsev/owlbear-utils';
+import { type Cell, type Grid, Point, SnapTo } from '@davidsev/owlbear-utils';
 import { Command, type PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
 import { SquareDirection, StartPoint } from '../Metadata/room';
 import { Square } from '../Utils/Geometry/Shape/Square';
@@ -7,12 +7,13 @@ import { getDirection4, getDirection8 } from '../Utils/Geometry/getDirection';
 
 export class CubeTemplateShape extends BaseShape {
     constructor(
+        grid: Grid,
         public readonly startPoints: StartPoint[],
         public readonly overlapThreshold: number,
         public readonly sizeSnapping: number,
         public readonly directionSnapping: SquareDirection,
     ) {
-        super();
+        super(grid);
     }
 
     @cached()
@@ -23,7 +24,7 @@ export class CubeTemplateShape extends BaseShape {
         if (this.startPoints.includes(StartPoint.CORNER)) allowedSnapPoints.push(SnapTo.CORNER);
         if (this.startPoints.includes(StartPoint.CENTER)) allowedSnapPoints.push(SnapTo.CENTER);
         if (this.startPoints.includes(StartPoint.EDGE)) allowedSnapPoints.push(SnapTo.EDGE);
-        return grid.snapTo(
+        return this.grid.snapTo(
             this.start,
             allowedSnapPoints.reduce((a, b) => a | b),
         );
@@ -44,7 +45,7 @@ export class CubeTemplateShape extends BaseShape {
         const diagonality = Math.atan2(smallComponent, bigComponent) / (1.57 / 2);
         const dist = diagonalDist * (1 - diagonality) + aaDist * diagonality;
 
-        const snapTo = this.sizeSnapping * grid.dpi;
+        const snapTo = this.sizeSnapping * this.grid.dpi;
         if (snapTo === 0) return dist;
 
         return Math.round(dist / snapTo) * snapTo;
@@ -95,7 +96,7 @@ export class CubeTemplateShape extends BaseShape {
         const cells: Cell[] = [];
         const square = this.square;
 
-        const searchArea = grid.iterateCellsBoundingPoints(square.points.map(point => grid.getCell(point)));
+        const searchArea = this.grid.iterateCellsBoundingPoints(square.points.map(point => this.grid.getCell(point)));
         for (const cell of searchArea) {
             if (square.intersectsCellPercentage(cell) > this.overlapThreshold * 100) cells.push(cell);
         }

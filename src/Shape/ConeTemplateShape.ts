@@ -1,5 +1,5 @@
 import { BaseShape, cached } from './BaseShape';
-import { type Cell, grid, Point, SnapTo } from '@davidsev/owlbear-utils';
+import { type Cell, type Grid, Point, SnapTo } from '@davidsev/owlbear-utils';
 import { Command, type PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
 import { Triangle } from '../Utils/Geometry/Shape/Triangle';
 import { SquareDirection, StartPoint } from '../Metadata/room';
@@ -7,13 +7,14 @@ import { getDirection4, getDirection8 } from '../Utils/Geometry/getDirection';
 
 export class ConeTemplateShape extends BaseShape {
     constructor(
+        grid: Grid,
         public readonly widthRads: number,
         public readonly startPoints: StartPoint[],
         public readonly overlapThreshold: number,
         public readonly sizeSnapping: number,
         public readonly directionSnapping: SquareDirection,
     ) {
-        super();
+        super(grid);
     }
 
     @cached()
@@ -24,7 +25,7 @@ export class ConeTemplateShape extends BaseShape {
         if (this.startPoints.includes(StartPoint.CORNER)) allowedSnapPoints.push(SnapTo.CORNER);
         if (this.startPoints.includes(StartPoint.CENTER)) allowedSnapPoints.push(SnapTo.CENTER);
         if (this.startPoints.includes(StartPoint.EDGE)) allowedSnapPoints.push(SnapTo.EDGE);
-        return grid.snapTo(
+        return this.grid.snapTo(
             this.start,
             allowedSnapPoints.reduce((a, b) => a | b),
         );
@@ -32,7 +33,7 @@ export class ConeTemplateShape extends BaseShape {
 
     @cached()
     public get roundedDistance(): number {
-        const snapTo = this.sizeSnapping * grid.dpi;
+        const snapTo = this.sizeSnapping * this.grid.dpi;
         if (snapTo === 0) return this.distance;
         return Math.round(this.distance / snapTo) * snapTo;
     }
@@ -83,7 +84,7 @@ export class ConeTemplateShape extends BaseShape {
         const cells: Cell[] = [];
         const triangle = this.triangle;
 
-        const searchArea = grid.iterateCellsBoundingPoints(triangle.points.map(point => grid.getCell(point)));
+        const searchArea = this.grid.iterateCellsBoundingPoints(triangle.points.map(point => this.grid.getCell(point)));
         for (const cell of searchArea) {
             if (triangle.intersectsCellPercentage(cell) > this.overlapThreshold * 100) cells.push(cell);
         }

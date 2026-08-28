@@ -1,14 +1,15 @@
 import { BaseShape, cached } from './BaseShape';
-import { type Cell, grid, type Point, SnapTo } from '@davidsev/owlbear-utils';
+import { type Cell, type Grid, type Point, SnapTo } from '@davidsev/owlbear-utils';
 import { Command, type PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
 import { StartPoint } from '../Metadata/room';
 
 export class CircleTemplateShape extends BaseShape {
     constructor(
+        grid: Grid,
         public readonly startPoints: StartPoint[],
         public readonly sizeSnapping: number,
     ) {
-        super();
+        super(grid);
     }
 
     @cached()
@@ -19,7 +20,7 @@ export class CircleTemplateShape extends BaseShape {
         if (this.startPoints.includes(StartPoint.CORNER)) allowedSnapPoints.push(SnapTo.CORNER);
         if (this.startPoints.includes(StartPoint.CENTER)) allowedSnapPoints.push(SnapTo.CENTER);
         if (this.startPoints.includes(StartPoint.EDGE)) allowedSnapPoints.push(SnapTo.EDGE);
-        return grid.snapTo(
+        return this.grid.snapTo(
             this.start,
             allowedSnapPoints.reduce((a, b) => a | b),
         );
@@ -27,7 +28,7 @@ export class CircleTemplateShape extends BaseShape {
 
     @cached()
     public get roundedDistance(): number {
-        const snapTo = this.sizeSnapping * grid.dpi;
+        const snapTo = this.sizeSnapping * this.grid.dpi;
         if (snapTo === 0) return this.distance;
         return Math.round(this.distance / snapTo) * snapTo;
     }
@@ -80,15 +81,15 @@ export class CircleTemplateShape extends BaseShape {
     public get cells(): Cell[] {
         // Work out the bounding area of the circle.
         const boundingSquare = [
-            grid.getCell(this.roundedStart.add({ x: -this.roundedDistance, y: -this.roundedDistance })),
-            grid.getCell(this.roundedStart.add({ x: this.roundedDistance, y: -this.roundedDistance })),
-            grid.getCell(this.roundedStart.add({ x: this.roundedDistance, y: this.roundedDistance })),
-            grid.getCell(this.roundedStart.add({ x: -this.roundedDistance, y: this.roundedDistance })),
+            this.grid.getCell(this.roundedStart.add({ x: -this.roundedDistance, y: -this.roundedDistance })),
+            this.grid.getCell(this.roundedStart.add({ x: this.roundedDistance, y: -this.roundedDistance })),
+            this.grid.getCell(this.roundedStart.add({ x: this.roundedDistance, y: this.roundedDistance })),
+            this.grid.getCell(this.roundedStart.add({ x: -this.roundedDistance, y: this.roundedDistance })),
         ];
 
         // Check every square.
         const cells: Cell[] = [];
-        for (const cell of grid.iterateCellsBoundingPoints(boundingSquare)) {
+        for (const cell of this.grid.iterateCellsBoundingPoints(boundingSquare)) {
             // Match all cells that are within the circle.  The +2 is to avoid rounding errors when it's dead center of a cell.
             if (this.roundedStart.distanceTo(cell.center) <= this.roundedDistance + 2) {
                 cells.push(cell);

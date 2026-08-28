@@ -1,13 +1,13 @@
-import { type Cell, grid, Point } from '@davidsev/owlbear-utils';
+import { type Cell, type Grid, Point } from '@davidsev/owlbear-utils';
 import type { PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
 import { CellOutliner } from '../Utils/CellOutliner';
 
-export abstract class BaseShape {
+export abstract class BaseShape<G extends Grid = Grid> {
     private _start: Point;
     private _end: Point;
     public readonly _cache: Map<string | symbol, unknown> = new Map();
 
-    constructor() {
+    constructor(public readonly grid: G) {
         this._start = new Point(0, 0);
         this._end = new Point(0, 0);
     }
@@ -22,8 +22,8 @@ export abstract class BaseShape {
     }
 
     @cached()
-    public get startCell(): Cell {
-        return grid.getCell(this._start);
+    public get startCell(): ReturnType<G['getCell']> {
+        return this.grid.getCell(this._start) as ReturnType<G['getCell']>;
     }
 
     public get end(): Point {
@@ -36,8 +36,8 @@ export abstract class BaseShape {
     }
 
     @cached()
-    public get endCell(): Cell {
-        return grid.getCell(this._end);
+    public get endCell(): ReturnType<G['getCell']> {
+        return this.grid.getCell(this._end) as ReturnType<G['getCell']>;
     }
 
     @cached()
@@ -47,7 +47,7 @@ export abstract class BaseShape {
 
     @cached()
     public get roundedDistance(): number {
-        return Math.round(this.distance / grid.dpi) * grid.dpi;
+        return Math.round(this.distance / this.grid.dpi) * this.grid.dpi;
     }
 
     @cached()
@@ -61,7 +61,7 @@ export abstract class BaseShape {
 
     @cached()
     public get labelText(): string {
-        return `${(this.roundedDistance / grid.dpi) * (grid.gridScale.parsed.multiplier || 0)}${grid.gridScale.parsed.unit || ''}`;
+        return `${(this.roundedDistance / this.grid.dpi) * (this.grid.gridScale.parsed.multiplier || 0)}${this.grid.gridScale.parsed.unit || ''}`;
     }
 
     public abstract get outline(): PathCommand[];

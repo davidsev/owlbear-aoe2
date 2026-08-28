@@ -1,5 +1,5 @@
 import { BaseShape, cached } from './BaseShape';
-import { type Cell, grid, type Point, SnapTo } from '@davidsev/owlbear-utils';
+import { type Cell, type Point, SnapTo } from '@davidsev/owlbear-utils';
 import type { PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
 import { getDirection8 } from '../Utils/Geometry/getDirection';
 
@@ -76,27 +76,27 @@ export class ConePathfinderShape extends BaseShape {
     public get roundedDistance(): number {
         const distance = this.distance;
 
-        if (distance < grid.dpi) return 0;
+        if (distance < this.grid.dpi) return 0;
 
         let currentError = Infinity;
         let currentDistance = 0;
 
         for (const d of Object.keys(Shapes)) {
-            const error = Math.abs(distance - (parseInt(d, 10) * grid.dpi) / ASSUMED_SQUARE_FEET);
+            const error = Math.abs(distance - (parseInt(d, 10) * this.grid.dpi) / ASSUMED_SQUARE_FEET);
             if (error < currentError) {
                 currentError = error;
                 currentDistance = parseInt(d, 10);
             }
         }
 
-        return (currentDistance * grid.dpi) / ASSUMED_SQUARE_FEET;
+        return (currentDistance * this.grid.dpi) / ASSUMED_SQUARE_FEET;
     }
 
     @cached()
     public get labelPosition(): Point {
         const direction = getDirection8(this.end.sub(this.start));
         if (!direction) return this.start;
-        return grid.snapTo(this.start, SnapTo.CORNER).add({
+        return this.grid.snapTo(this.start, SnapTo.CORNER).add({
             x: (direction.x * this.roundedDistance) / 2,
             y: (direction.y * this.roundedDistance) / 2,
         });
@@ -114,19 +114,19 @@ export class ConePathfinderShape extends BaseShape {
         const isDiagonal = direction.x !== 0 && direction.y !== 0;
 
         // Decide which shape template to use.
-        const distance = (this.roundedDistance / grid.dpi) * ASSUMED_SQUARE_FEET;
+        const distance = (this.roundedDistance / this.grid.dpi) * ASSUMED_SQUARE_FEET;
         if (!this.isValidSize(distance)) return [];
         const shape = Shapes[distance][isDiagonal ? 'Diagonal' : 'Orthogonal'];
 
         // work over the cells.
         if (isDiagonal) {
             // How much to change the coords to move to the next cell.
-            const xMove = direction.x * grid.dpi;
-            const yMove = direction.y * grid.dpi;
+            const xMove = direction.x * this.grid.dpi;
+            const yMove = direction.y * this.grid.dpi;
 
             // The center of the starting cell
-            const rootX = grid.snapTo(this.start, SnapTo.CORNER).x + xMove / 2;
-            const rootY = grid.snapTo(this.start, SnapTo.CORNER).y + yMove / 2;
+            const rootX = this.grid.snapTo(this.start, SnapTo.CORNER).x + xMove / 2;
+            const rootY = this.grid.snapTo(this.start, SnapTo.CORNER).y + yMove / 2;
 
             const cells: Cell[] = [];
             // Loop all the cells in the shape, calculate the matching cell, and add it.
@@ -135,7 +135,7 @@ export class ConePathfinderShape extends BaseShape {
                     if (value) {
                         const x = rootX + templateX * xMove;
                         const y = rootY + templateY * yMove;
-                        cells.push(grid.getCell({ x, y }));
+                        cells.push(this.grid.getCell({ x, y }));
                     }
                 }
             }
@@ -146,13 +146,13 @@ export class ConePathfinderShape extends BaseShape {
                 // The center of the starting cell.  We need to move half the cone width to the "left" of the direction we're going.
                 const rootX =
                     distance === 15
-                        ? grid.snapTo(this.start, SnapTo.CENTER).x - grid.dpi
-                        : grid.snapTo(this.start, SnapTo.CORNER).x - grid.dpi * (shape[0].length / 2);
-                const rootY = grid.snapTo(this.start, SnapTo.CENTER).y + direction.y;
+                        ? this.grid.snapTo(this.start, SnapTo.CENTER).x - this.grid.dpi
+                        : this.grid.snapTo(this.start, SnapTo.CORNER).x - this.grid.dpi * (shape[0].length / 2);
+                const rootY = this.grid.snapTo(this.start, SnapTo.CENTER).y + direction.y;
 
                 // How much to change the coords to move to the next cell.
-                const xMove = grid.dpi;
-                const yMove = direction.y * grid.dpi;
+                const xMove = this.grid.dpi;
+                const yMove = direction.y * this.grid.dpi;
 
                 const cells: Cell[] = [];
                 // Loop all the cells in the shape, calculate the matching cell, and add it.
@@ -161,22 +161,22 @@ export class ConePathfinderShape extends BaseShape {
                         if (value) {
                             const x = rootX + templateX * xMove;
                             const y = rootY + templateY * yMove;
-                            cells.push(grid.getCell({ x, y }));
+                            cells.push(this.grid.getCell({ x, y }));
                         }
                     }
                 }
                 return cells;
             } else {
                 // The center of the starting cell.  We need to move half the cone width to the "left" of the direction we're going.
-                const rootX = grid.snapTo(this.start, SnapTo.CENTER).x + direction.x;
+                const rootX = this.grid.snapTo(this.start, SnapTo.CENTER).x + direction.x;
                 const rootY =
                     distance === 15
-                        ? grid.snapTo(this.start, SnapTo.CENTER).y - grid.dpi
-                        : grid.snapTo(this.start, SnapTo.CORNER).y - grid.dpi * (shape[0].length / 2);
+                        ? this.grid.snapTo(this.start, SnapTo.CENTER).y - this.grid.dpi
+                        : this.grid.snapTo(this.start, SnapTo.CORNER).y - this.grid.dpi * (shape[0].length / 2);
 
                 // How much to change the coords to move to the next cell.
-                const xMove = direction.x * grid.dpi;
-                const yMove = grid.dpi;
+                const xMove = direction.x * this.grid.dpi;
+                const yMove = this.grid.dpi;
 
                 const cells: Cell[] = [];
                 // Loop all the cells in the shape, calculate the matching cell, and add it.
@@ -185,7 +185,7 @@ export class ConePathfinderShape extends BaseShape {
                         if (value) {
                             const x = rootX + templateX * xMove;
                             const y = rootY + templateY * yMove;
-                            cells.push(grid.getCell({ x, y }));
+                            cells.push(this.grid.getCell({ x, y }));
                         }
                     }
                 }

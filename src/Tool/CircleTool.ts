@@ -12,11 +12,12 @@ export class CircleTool extends BaseTool {
     readonly id = getId('circle');
 
     protected getShape(): BaseShape {
-        if (grid.type === 'HEX_HORIZONTAL' || grid.type === 'HEX_VERTICAL')
-            return new CircleTemplateShape(roomMetadata.data.hexCircleStartPoints, roomMetadata.data.hexCircleSizeSnapping);
+        const gridSnapshot = grid.snapshot;
+        if (gridSnapshot.type === 'HEX_HORIZONTAL' || gridSnapshot.type === 'HEX_VERTICAL')
+            return new CircleTemplateShape(gridSnapshot, roomMetadata.data.hexCircleStartPoints, roomMetadata.data.hexCircleSizeSnapping);
         else {
-            if (roomMetadata.data.squareCircleStyle === SquareCircleStyle.PATHFINDER) return new CirclePathfinderShape();
-            else return new CircleTemplateShape(roomMetadata.data.squareCircleStartPoints, roomMetadata.data.squareCircleSizeSnapping);
+            if (roomMetadata.data.squareCircleStyle === SquareCircleStyle.PATHFINDER) return new CirclePathfinderShape(gridSnapshot);
+            else return new CircleTemplateShape(gridSnapshot, roomMetadata.data.squareCircleStartPoints, roomMetadata.data.squareCircleSizeSnapping);
         }
     }
 }

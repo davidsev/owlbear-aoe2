@@ -14,11 +14,13 @@ export class ConeTool extends BaseTool {
     readonly id = getId('cone');
 
     protected getShape(): BaseShape {
-        if (grid.type === 'HEX_HORIZONTAL' || grid.type === 'HEX_VERTICAL') {
+        const gridSnapshot = grid.snapshot;
+        if (gridSnapshot.type === 'HEX_HORIZONTAL' || gridSnapshot.type === 'HEX_VERTICAL') {
             if (roomMetadata.data.hexConeStyle === HexConeStyle.EQUILATERAL) {
-                return new ConeHexShape();
+                return new ConeHexShape(gridSnapshot);
             } else {
                 return new ConeTemplateShape(
+                    gridSnapshot,
                     ((roomMetadata.data.hexConeWidth % 180) * Math.PI) / 180,
                     roomMetadata.data.hexConeStartPoints,
                     roomMetadata.data.hexConeOverlapThreshold,
@@ -28,12 +30,13 @@ export class ConeTool extends BaseTool {
             }
         } else {
             if (roomMetadata.data.squareConeStyle === SquareConeStyle.PATHFINDER) {
-                return new ConePathfinderShape();
+                return new ConePathfinderShape(gridSnapshot);
             } else if (roomMetadata.data.squareConeStyle === SquareConeStyle.TOKEN) {
-                return new ConeTokenShape();
+                return new ConeTokenShape(gridSnapshot);
             } else {
                 // TEMPLATE
                 return new ConeTemplateShape(
+                    gridSnapshot,
                     (((roomMetadata.data.squareConeWidth || 53.1) % 180) * Math.PI) / 180,
                     roomMetadata.data.squareConeStartPoints,
                     roomMetadata.data.squareConeOverlapThreshold,

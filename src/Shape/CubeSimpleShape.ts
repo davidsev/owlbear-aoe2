@@ -1,4 +1,4 @@
-import { type Cell, grid, Point, SnapTo } from '@davidsev/owlbear-utils';
+import { type Cell, Point, SnapTo } from '@davidsev/owlbear-utils';
 import type { PathCommand } from '@owlbear-rodeo/sdk';
 import { BaseShape, cached } from './BaseShape';
 import { getDiagonalDirection4 } from '../Utils/Geometry/getDirection';
@@ -6,14 +6,14 @@ import { getDiagonalDirection4 } from '../Utils/Geometry/getDirection';
 export class CubeSimpleShape extends BaseShape {
     @cached()
     private get roundedStart(): Point {
-        return grid.snapTo(this.start, SnapTo.CORNER);
+        return this.grid.snapTo(this.start, SnapTo.CORNER);
     }
 
     @cached()
     public get roundedDistance(): number {
         const vector = this.end.sub(this.start);
         const dist = Math.max(Math.abs(vector.x), Math.abs(vector.y));
-        return Math.round(dist / grid.dpi) * grid.dpi;
+        return Math.round(dist / this.grid.dpi) * this.grid.dpi;
     }
 
     @cached()
@@ -39,16 +39,16 @@ export class CubeSimpleShape extends BaseShape {
         const direction = getDiagonalDirection4(this.end.sub(this.start));
         if (!direction) return [];
 
-        const squares = Math.round(this.roundedDistance / grid.dpi);
+        const squares = Math.round(this.roundedDistance / this.grid.dpi);
         const start = this.roundedStart.add(direction);
         const cells: Cell[] = [];
         for (let x = 0; x < squares; x++) {
             for (let y = 0; y < squares; y++) {
                 cells.push(
-                    grid.getCell(
+                    this.grid.getCell(
                         start.add({
-                            x: x * grid.dpi * direction.x,
-                            y: y * grid.dpi * direction.y,
+                            x: x * this.grid.dpi * direction.x,
+                            y: y * this.grid.dpi * direction.y,
                         }),
                     ),
                 );
