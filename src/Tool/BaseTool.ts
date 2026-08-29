@@ -12,6 +12,7 @@ import OBR, {
 } from '@owlbear-rodeo/sdk';
 import { getId } from '../Utils/getId';
 import type { BaseShape } from '../Shape/BaseShape';
+import type { DrawableShape } from '../Shape/DrawableShape';
 import type { PathBuilder } from '@owlbear-rodeo/sdk/lib/builders/PathBuilder';
 import { grid, type HHexGrid, Point, type SquareGrid, type VHexGrid } from '@davidsev/owlbear-utils';
 import type { TextBuilder } from '@owlbear-rodeo/sdk/lib/builders/TextBuilder';
@@ -26,7 +27,7 @@ export abstract class BaseTool implements ToolMode {
 
     private currentArea?: {
         interaction: InteractionManager<Item[]>;
-        shape: BaseShape;
+        shape: DrawableShape;
     } = undefined;
 
     public toolMetadata: ToolMetadata = toolMetadata.defaultValues;
@@ -45,7 +46,7 @@ export abstract class BaseTool implements ToolMode {
     }
 
     /** Get the shape that has the implementation to use for this area */
-    protected getShape(): BaseShape {
+    protected getShape(): DrawableShape {
         const gridSnapshot = grid.snapshot;
         switch (gridSnapshot.type) {
             case 'HEX_HORIZONTAL':

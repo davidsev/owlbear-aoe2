@@ -1,7 +1,8 @@
-import type { BaseAxonometricGrid, Cell } from '@davidsev/owlbear-utils';
+import type { BaseAxonometricGrid } from '@davidsev/owlbear-utils';
 import { Point } from '@davidsev/owlbear-utils';
 import { Command, type PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
-import { BaseShape } from './BaseShape';
+import type { BaseShape } from './BaseShape';
+import type { DrawableShape } from './DrawableShape';
 
 /**
  * Runs a square-grid shape on an axonometric grid by working in "grid space": the linear map
@@ -12,30 +13,34 @@ import { BaseShape } from './BaseShape';
  * mapped back.  The map is affine, so straight lines, bezier control points, and area ratios
  * (overlap thresholds) all survive the round trip; angles and distances deliberately don't, which
  * is what skews the shape to the grid.
+ *
+ * Everything the tools read comes from the inner shape, so this implements DrawableShape rather
+ * than extending BaseShape: there's nothing to inherit that wouldn't be in the wrong space.
  */
-export class AxonometricShapeAdapter extends BaseShape<BaseAxonometricGrid> {
+export class AxonometricShapeAdapter implements DrawableShape {
+    private _start: Point = new Point(0, 0);
+    private _end: Point = new Point(0, 0);
+
     constructor(
-        grid: BaseAxonometricGrid,
-        public readonly squareShape: BaseShape,
-    ) {
-        super(grid);
-    }
+        private readonly grid: BaseAxonometricGrid,
+        private readonly squareShape: BaseShape,
+    ) {}
 
     public get start(): Point {
-        return super.start;
+        return this._start;
     }
 
     public set start(value: Point) {
-        super.start = value;
+        this._start = value;
         this.squareShape.start = this.toGridSpace(value);
     }
 
     public get end(): Point {
-        return super.end;
+        return this._end;
     }
 
     public set end(value: Point) {
-        super.end = value;
+        this._end = value;
         this.squareShape.end = this.toGridSpace(value);
     }
 
@@ -89,10 +94,6 @@ export class AxonometricShapeAdapter extends BaseShape<BaseAxonometricGrid> {
         return this.squareShape.isValid;
     }
 
-    public get roundedDistance(): number {
-        return this.squareShape.roundedDistance;
-    }
-
     public get labelText(): string {
         return this.squareShape.labelText;
     }
@@ -107,10 +108,5 @@ export class AxonometricShapeAdapter extends BaseShape<BaseAxonometricGrid> {
 
     public get areaPath(): PathCommand[] {
         return this.mapCommands(this.squareShape.areaPath);
-    }
-
-    public get cells(): Cell[] {
-        // Cell centers map exactly between the two spaces, so converting centers gives the matching real cells.
-        return this.squareShape.cells.map(cell => this.grid.getCell(this.fromGridSpace(cell.center)));
     }
 }

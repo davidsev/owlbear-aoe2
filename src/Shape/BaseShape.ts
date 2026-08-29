@@ -1,8 +1,9 @@
 import { type Cell, type Grid, Point } from '@davidsev/owlbear-utils';
 import type { PathCommand } from '@owlbear-rodeo/sdk/lib/types/items/Path';
 import { CellOutliner } from '../Utils/CellOutliner';
+import type { DrawableShape } from './DrawableShape';
 
-export abstract class BaseShape<G extends Grid = Grid> {
+export abstract class BaseShape<G extends Grid = Grid> implements DrawableShape {
     private _start: Point;
     private _end: Point;
     public readonly _cache: Map<string | symbol, unknown> = new Map();
