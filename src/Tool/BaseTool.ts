@@ -13,9 +13,11 @@ import OBR, {
 import { getId } from '../Utils/getId';
 import type { BaseShape } from '../Shape/BaseShape';
 import type { PathBuilder } from '@owlbear-rodeo/sdk/lib/builders/PathBuilder';
-import { Point } from '@davidsev/owlbear-utils';
+import { grid, type HHexGrid, Point, type SquareGrid, type VHexGrid } from '@davidsev/owlbear-utils';
 import type { TextBuilder } from '@owlbear-rodeo/sdk/lib/builders/TextBuilder';
 import { LabelDisplayMode, ShapeDisplayMode, toolMetadata, type ToolMetadata } from '../Metadata/tool';
+import { AxonometricShapeAdapter } from '../Shape/AxonometricShapeAdapter';
+import { buildFakeSquareGrid } from '../Utils/buildFakeSquareGrid';
 
 export abstract class BaseTool implements ToolMode {
     abstract readonly label: string;
@@ -43,7 +45,28 @@ export abstract class BaseTool implements ToolMode {
     }
 
     /** Get the shape that has the implementation to use for this area */
-    protected abstract getShape(): BaseShape;
+    protected getShape(): BaseShape {
+        const gridSnapshot = grid.snapshot;
+        switch (gridSnapshot.type) {
+            case 'HEX_HORIZONTAL':
+            case 'HEX_VERTICAL':
+                return this.getHexShape(gridSnapshot);
+            case 'ISOMETRIC':
+            case 'DIMETRIC':
+                return new AxonometricShapeAdapter(gridSnapshot, this.getAxonometricShape(buildFakeSquareGrid(gridSnapshot)));
+            default:
+                return this.getSquareShape(gridSnapshot);
+        }
+    }
+
+    /** Get the shape to use for hex grids. */
+    protected abstract getHexShape(grid: VHexGrid | HHexGrid): BaseShape;
+
+    /** Get the shape to use for square grids. */
+    protected abstract getSquareShape(grid: SquareGrid): BaseShape;
+
+    /** Get the shape to use for axonometric grids.  Given a fake square grid (see buildFakeSquareGrid), and wrapped in AxonometricShapeAdapter by the caller. */
+    protected abstract getAxonometricShape(grid: SquareGrid): BaseShape;
 
     // When they start drawing, create the shape.
     async onToolDragStart(context: ToolContext, event: ToolEvent) {
