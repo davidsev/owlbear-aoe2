@@ -61,6 +61,20 @@ export class RoomMetadata {
     hexCubeStartPoints: StartPoint[] = [StartPoint.CORNER];
     hexCubeOverlapThreshold: number = 0.1;
     hexCubeSizeSnapping: number = 1;
+    axonometricConeStyle: SquareConeStyle = SquareConeStyle.TEMPLATE;
+    axonometricConeWidth: number | null = null;
+    axonometricConeStartPoints: StartPoint[] = [StartPoint.CORNER];
+    axonometricConeOverlapThreshold: number = 0.1;
+    axonometricConeSizeSnapping: number = 1;
+    axonometricConeDirection: SquareDirection = SquareDirection.ALL;
+    axonometricCircleStyle: SquareCircleStyle = SquareCircleStyle.TEMPLATE;
+    axonometricCircleStartPoints: StartPoint[] = [StartPoint.CORNER];
+    axonometricCircleSizeSnapping: number = 1;
+    axonometricCubeStyle: SquareCubeStyle = SquareCubeStyle.SQUARE;
+    axonometricCubeStartPoints: StartPoint[] = [StartPoint.CORNER];
+    axonometricCubeOverlapThreshold: number = 0.1;
+    axonometricCubeSizeSnapping: number = 1;
+    axonometricCubeDirection: SquareDirection = SquareDirection.ALL;
 }
 
 const nameMap: [name: string, letter: string][] = [
@@ -89,6 +103,20 @@ const nameMap: [name: string, letter: string][] = [
     ['hexCubeOverlapThreshold', 'v'],
     ['hexCubeSizeSnapping', 'w'],
     ['squareCircleStyle', 'x'],
+    ['axonometricConeStyle', 'A'],
+    ['axonometricConeWidth', 'B'],
+    ['axonometricConeStartPoints', 'C'],
+    ['axonometricConeOverlapThreshold', 'D'],
+    ['axonometricConeSizeSnapping', 'E'],
+    ['axonometricConeDirection', 'F'],
+    ['axonometricCircleStyle', 'G'],
+    ['axonometricCircleStartPoints', 'H'],
+    ['axonometricCircleSizeSnapping', 'I'],
+    ['axonometricCubeStyle', 'J'],
+    ['axonometricCubeStartPoints', 'K'],
+    ['axonometricCubeOverlapThreshold', 'L'],
+    ['axonometricCubeSizeSnapping', 'M'],
+    ['axonometricCubeDirection', 'N'],
 ];
 
 class MyRoomMetadataMapper extends RoomMetadataMapper<RoomMetadata> {

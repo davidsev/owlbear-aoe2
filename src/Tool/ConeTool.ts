@@ -7,6 +7,8 @@ import type { BaseShape } from '../Shape/BaseShape';
 import { ConeTokenShape } from '../Shape/ConeTokenShape';
 import { grid } from '@davidsev/owlbear-utils';
 import { ConeHexShape } from '../Shape/ConeHexShape';
+import { AxonometricShapeAdapter } from '../Shape/AxonometricShapeAdapter';
+import { buildFakeSquareGrid } from '../Utils/buildFakeSquareGrid';
 
 export class ConeTool extends BaseTool {
     readonly label = 'Cone';
@@ -28,6 +30,25 @@ export class ConeTool extends BaseTool {
                     SquareDirection.ALL,
                 );
             }
+        } else if (gridSnapshot.type === 'ISOMETRIC' || gridSnapshot.type === 'DIMETRIC') {
+            const squareGrid = buildFakeSquareGrid(gridSnapshot);
+            let shape: BaseShape;
+            if (roomMetadata.data.axonometricConeStyle === SquareConeStyle.PATHFINDER) {
+                shape = new ConePathfinderShape(squareGrid);
+            } else if (roomMetadata.data.axonometricConeStyle === SquareConeStyle.TOKEN) {
+                shape = new ConeTokenShape(squareGrid);
+            } else {
+                // TEMPLATE
+                shape = new ConeTemplateShape(
+                    squareGrid,
+                    (((roomMetadata.data.axonometricConeWidth || 53.1) % 180) * Math.PI) / 180,
+                    roomMetadata.data.axonometricConeStartPoints,
+                    roomMetadata.data.axonometricConeOverlapThreshold,
+                    roomMetadata.data.axonometricConeSizeSnapping,
+                    roomMetadata.data.axonometricConeDirection,
+                );
+            }
+            return new AxonometricShapeAdapter(gridSnapshot, shape);
         } else {
             if (roomMetadata.data.squareConeStyle === SquareConeStyle.PATHFINDER) {
                 return new ConePathfinderShape(gridSnapshot);
