@@ -19,6 +19,7 @@ import type { TextBuilder } from '@owlbear-rodeo/sdk/lib/builders/TextBuilder';
 import { LabelDisplayMode, ShapeDisplayMode, toolMetadata, type ToolMetadata } from '../Metadata/tool';
 import { AxonometricShapeAdapter } from '../Shape/AxonometricShapeAdapter';
 import { buildFakeSquareGrid } from '../Utils/buildFakeSquareGrid';
+import { EventRateLimiter } from '../Utils/EventRateLimiter';
 
 /** The items that make up one drawn area.  The outline and label are only present if their display mode isn't NEVER. */
 interface AreaItems {
@@ -37,6 +38,8 @@ export abstract class BaseTool implements ToolMode {
         shape: DrawableShape;
         ids: { area: string; outline: string | null; label: string | null };
     } = undefined;
+
+    private readonly moveRateLimiter = new EventRateLimiter(this.onToolDragMoveReal.bind(this));
 
     public toolMetadata: ToolMetadata = toolMetadata.defaultValues;
 
@@ -141,7 +144,11 @@ export abstract class BaseTool implements ToolMode {
         }
     }
 
-    async onToolDragMove(_context: ToolContext, event: ToolEvent) {
+    async onToolDragMove(context: ToolContext, event: ToolEvent) {
+        this.moveRateLimiter.call(context, event);
+    }
+
+    private async onToolDragMoveReal(_context: ToolContext, event: ToolEvent) {
         if (this.currentArea) {
             const [update] = this.currentArea.interaction;
             update((items: Item[]) => {
