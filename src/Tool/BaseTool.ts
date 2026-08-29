@@ -20,6 +20,13 @@ import { LabelDisplayMode, ShapeDisplayMode, toolMetadata, type ToolMetadata } f
 import { AxonometricShapeAdapter } from '../Shape/AxonometricShapeAdapter';
 import { buildFakeSquareGrid } from '../Utils/buildFakeSquareGrid';
 
+/** The items that make up one drawn area.  The outline and label are only present if their display mode isn't NEVER. */
+interface AreaItems {
+    area: Path;
+    outline?: Path;
+    label?: Text;
+}
+
 export abstract class BaseTool implements ToolMode {
     abstract readonly label: string;
     abstract readonly icon: string;
@@ -28,6 +35,7 @@ export abstract class BaseTool implements ToolMode {
     private currentArea?: {
         interaction: InteractionManager<Item[]>;
         shape: DrawableShape;
+        ids: { area: string; outline: string | null; label: string | null };
     } = undefined;
 
     public toolMetadata: ToolMetadata = toolMetadata.defaultValues;
@@ -87,16 +95,27 @@ export abstract class BaseTool implements ToolMode {
         this.currentArea = {
             shape: shape,
             interaction: await OBR.interaction.startItemInteraction(items.filter(i => i !== null) as Item[]),
+            ids: { area: areaItem.id, outline: outlineItem?.id ?? null, label: labelItem?.id ?? null },
         };
     }
 
-    /** Get the items out of the array returned by the interaction update */
-    private getItems(items: Item[]): [Path, Path?, Text?] {
-        return [items.shift() as Path, items.shift() as Path, items.shift() as Text];
+    /** Get the items out of the array returned by the interaction update, matched by id rather than position. */
+    private getItems(items: Item[]): AreaItems | null {
+        if (!this.currentArea) return null;
+        const ids = this.currentArea.ids;
+
+        const area = items.find(i => i.id === ids.area) as Path | undefined;
+        if (!area) return null;
+
+        return {
+            area: area,
+            outline: ids.outline ? (items.find(i => i.id === ids.outline) as Path | undefined) : undefined,
+            label: ids.label ? (items.find(i => i.id === ids.label) as Text | undefined) : undefined,
+        };
     }
 
     /** Update the items based on the current mouse position */
-    private async updateItems(area: Path, outline?: Path, label?: Text) {
+    private updateItems({ area, outline, label }: AreaItems) {
         if (!this.currentArea) return;
 
         // Check if the line is long enough etc
@@ -128,7 +147,8 @@ export abstract class BaseTool implements ToolMode {
             update((items: Item[]) => {
                 if (this.currentArea) {
                     this.currentArea.shape.end = new Point(event.pointerPosition);
-                    this.updateItems(...this.getItems(Array.from(items)));
+                    const areaItems = this.getItems(items);
+                    if (areaItems) this.updateItems(areaItems);
                 }
             });
         }
@@ -141,13 +161,15 @@ export abstract class BaseTool implements ToolMode {
             const items = update((items: Item[]) => {
                 if (this.currentArea) {
                     this.currentArea.shape.end = new Point(event.pointerPosition);
-                    this.updateItems(...this.getItems(Array.from(items)));
+                    const areaItems = this.getItems(items);
+                    if (areaItems) this.updateItems(areaItems);
                 }
             });
 
             // Save the items we want to keep.
-            if (this.currentArea.shape.isValid) {
-                const [area, outline, label] = this.getItems(Array.from(items));
+            const areaItems = this.getItems(items);
+            if (this.currentArea.shape.isValid && areaItems) {
+                const { area, outline, label } = areaItems;
                 const itemsToKeep: Item[] = [area];
                 if (this.toolMetadata.shapeDisplayMode === ShapeDisplayMode.ALWAYS && outline) itemsToKeep.push(outline);
                 if (this.toolMetadata.labelDisplayMode === LabelDisplayMode.ALWAYS && label) itemsToKeep.push(label);
