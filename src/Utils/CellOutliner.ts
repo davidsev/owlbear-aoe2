@@ -33,44 +33,44 @@ export class CellOutliner {
 
         if (!externalLines.length) throw new Error('No external lines found.  Should never happen?');
 
-        // Sort the lines into order.  Pick a starting point and then find the next line that has that point etc.
-        const points: Point[] = [];
-        const firstLine = externalLines.shift() as LineSegment; // We know there's at least one line, so this can't be undefined.
-        points.push(firstLine.p1, firstLine.p2);
-        let currentPoint = firstLine.p2;
-
+        // Sort the lines into order.  Pick a starting point and then find the next line that has that
+        // point etc, until we're back where we started - that's one loop.  Cells can form several
+        // disconnected islands, so keep going until every external line has been used up in some loop.
         while (externalLines.length) {
-            // Find a line with our current point
-            const nextLine = externalLines.find(line => line.p1.equals(currentPoint) || line.p2.equals(currentPoint));
-            if (!nextLine) {
-                throw new Error('Could not find next line.  Should never happen?');
+            const firstLine = externalLines.shift() as LineSegment; // externalLines.length was just checked, so this can't be undefined.
+            const startPoint = firstLine.p1;
+            const points: Point[] = [firstLine.p1, firstLine.p2];
+            let currentPoint = firstLine.p2;
+
+            while (!currentPoint.equals(startPoint)) {
+                // Find a line with our current point
+                const nextLineIndex = externalLines.findIndex(line => line.p1.equals(currentPoint) || line.p2.equals(currentPoint));
+                if (nextLineIndex === -1) {
+                    throw new Error('Could not find next line.  Should never happen?');
+                }
+
+                // Remove the line from the list
+                const [nextLine] = externalLines.splice(nextLineIndex, 1) as [LineSegment];
+
+                // Add the new point to the list and make it the current point
+                const nextPoint = nextLine.p1.equals(currentPoint) ? nextLine.p2 : nextLine.p1;
+                points.push(nextPoint);
+                currentPoint = nextPoint;
             }
 
-            // Remove the line from the list
-            externalLines.splice(externalLines.indexOf(nextLine), 1);
-
-            // Add the new point to the list and make it the current point
-            if (nextLine.p1.equals(currentPoint)) {
-                points.push(nextLine.p2);
-                currentPoint = nextLine.p2;
-            } else {
-                points.push(nextLine.p1);
-                currentPoint = nextLine.p1;
-            }
+            this.outline.push(points);
         }
-
-        this.outline.push(points);
     }
 
     public getOutlinePath(): PathCommand[] {
         const commands: PathCommand[] = [];
 
         for (const group of this.outline) {
-            const firstPoint = group.shift();
-            if (!firstPoint) return [];
+            const [firstPoint, ...rest] = group;
+            if (!firstPoint) continue;
 
             commands.push([Command.MOVE, firstPoint.x, firstPoint.y]);
-            for (const point of group) {
+            for (const point of rest) {
                 commands.push([Command.LINE, point.x, point.y]);
             }
             commands.push([Command.CLOSE]);
