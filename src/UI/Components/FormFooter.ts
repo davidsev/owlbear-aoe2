@@ -1,8 +1,7 @@
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { BaseElement } from '../BaseElement';
+import { BaseElement, baseCSS } from '@davidsev/owlbear-ui';
 import style from './FormFooter.css';
-import { baseCSS } from '../baseCSS';
 import OBR, { type Item } from '@owlbear-rodeo/sdk';
 import { getId } from '../../Utils/getId';
 

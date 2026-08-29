@@ -1,7 +1,3 @@
-:host {
-    display: block;
-}
-
 main {
     position: absolute;
     inset: auto 0 0.125rem 0;

@@ -1,27 +1,32 @@
 import { customElement } from 'lit/decorators.js';
 import { html } from 'lit';
-import { BaseElement } from '../BaseElement';
+import { BaseElement, baseCSS } from '@davidsev/owlbear-ui';
+import '@davidsev/owlbear-ui/color-picker';
+import type { ObUIColorPicker } from '@davidsev/owlbear-ui/components/ColorPicker';
 import style from './StyleForm.css';
-import { baseCSS } from '../baseCSS';
-import { ColorPicker } from '../Components/ColorPicker';
 import { LabelDisplayMode, ShapeDisplayMode, type ToolMetadata, toolMetadata } from '../../Metadata/tool';
-import { SelectEnum } from '../Components/SelectEnum';
+import { enumSelect } from '../Components/controls';
+import { inputsAreValid } from './inputValue';
+
+function colorPicker(): ObUIColorPicker {
+    return document.createElement('obui-color-picker');
+}
 
 @customElement('style-settings-form')
 export class StyleSettingsForm extends BaseElement {
     static styles = baseCSS(style);
 
     private readonly inputs = {
-        areaFill: new ColorPicker(),
-        areaStroke: new ColorPicker(),
-        shapeFill: new ColorPicker(),
-        shapeStroke: new ColorPicker(),
-        shapeMode: new SelectEnum({
+        areaFill: colorPicker(),
+        areaStroke: colorPicker(),
+        shapeFill: colorPicker(),
+        shapeStroke: colorPicker(),
+        shapeMode: enumSelect({
             [ShapeDisplayMode.NEVER]: 'Never Show',
             [ShapeDisplayMode.DRAWING]: 'Show While Drawing',
             [ShapeDisplayMode.ALWAYS]: 'Always Show',
         }),
-        labelMode: new SelectEnum({
+        labelMode: enumSelect({
             [LabelDisplayMode.NEVER]: 'Never Show',
             [LabelDisplayMode.DRAWING]: 'Show While Drawing',
             [LabelDisplayMode.ALWAYS]: 'Always Show',
@@ -55,7 +60,7 @@ export class StyleSettingsForm extends BaseElement {
 
     private async formChanged(e?: Event) {
         // Only run if the form is valid.
-        if (e && e.target instanceof HTMLInputElement && !e.target.form?.checkValidity()) {
+        if (e && !inputsAreValid(this.inputs)) {
             return;
         }
 
@@ -117,7 +122,7 @@ export class StyleSettingsForm extends BaseElement {
                 </div>
 
                 <div class="resetButton">
-                    <button class="btn" type="button" @click=${this.setDefaults}>Reset to default</button>
+                    <obui-button @click=${this.setDefaults}>Reset to default</obui-button>
                 </div>
             </form>
         `;

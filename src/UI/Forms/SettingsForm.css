@@ -1,4 +1,4 @@
-tab-bar {
+obui-tab-bar {
     margin-top: 0.5em;
 }
 
@@ -9,9 +9,10 @@ form {
 div.resetButton {
     display: flex;
     justify-content: end;
+    margin: 0.6em 0 0.35em 0;
 }
 
-help-tooltip {
+obui-help-tooltip {
     margin: 0.2em 0.1em 0 0.5em;
 }
 
@@ -23,9 +24,9 @@ form-control {
     display: flex;
     justify-content: space-between;
 
-    input,
-    select-enum,
-    multi-select-enum {
+    obui-input,
+    obui-select,
+    obui-multi-select {
         flex-grow: 1;
     }
 }

@@ -1,8 +1,7 @@
 import { html } from 'lit';
 import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
-import { BaseElement } from '../BaseElement';
+import { BaseElement, baseCSS } from '@davidsev/owlbear-ui';
 import style from './FormControl.css';
-import { baseCSS } from '../baseCSS';
 
 @customElement('form-control')
 export class FormControl extends BaseElement {
