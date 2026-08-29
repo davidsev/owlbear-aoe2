@@ -32,18 +32,9 @@ export class CubeTemplateShape extends BaseShape {
 
     @cached()
     public get roundedDistance(): number {
-        // Calculate the distance between the start and end points.
-        // If the vector is axis aligned, then use the length.
-        // If it's diagonal, then we need to calculate what size triangle gets us that hypotenuse.
-        const vector = this.end.sub(this.start);
-        const aaDist = Math.max(Math.abs(vector.x), Math.abs(vector.y));
-        const diagonalDist = Math.max(Math.abs(vector.x), Math.abs(vector.y)) / Math.SQRT2;
-
-        // Decide which of the two distances to use based on the angle of the vector.
-        const bigComponent = Math.max(Math.abs(vector.x), Math.abs(vector.y));
-        const smallComponent = Math.min(Math.abs(vector.x), Math.abs(vector.y));
-        const diagonality = Math.atan2(smallComponent, bigComponent) / (1.57 / 2);
-        const dist = diagonalDist * (1 - diagonality) + aaDist * diagonality;
+        // The start and end points are opposite corners of the square (see `square` / `roundedEnd`
+        // below), so the drag length is the square's diagonal and the side is that over root two.
+        const dist = this.distance / Math.SQRT2;
 
         const snapTo = this.sizeSnapping * this.grid.dpi;
         if (snapTo === 0) return dist;
