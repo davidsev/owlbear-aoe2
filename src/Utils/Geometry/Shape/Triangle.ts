@@ -8,10 +8,11 @@ export class Triangle extends Polygon {
     public readonly p3: Point;
 
     public constructor(p1: Vector2, p2: Vector2, p3: Vector2) {
-        super([new Point(p1), new Point(p2), new Point(p3)]);
-        this.p1 = this.points[0];
-        this.p2 = this.points[1];
-        this.p3 = this.points[2];
+        const points: [Point, Point, Point] = [new Point(p1), new Point(p2), new Point(p3)];
+        super(points);
+        this.p1 = points[0];
+        this.p2 = points[1];
+        this.p3 = points[2];
     }
 
     // Formula from https://stackoverflow.com/questions/13300904/determine-whether-point-lies-inside-triangle/13301035#13301035

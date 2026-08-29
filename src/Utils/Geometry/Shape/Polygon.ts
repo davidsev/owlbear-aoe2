@@ -19,11 +19,8 @@ export abstract class Polygon implements Iterable<Point> {
     }
 
     public get lines(): LineSegment[] {
-        const lines: LineSegment[] = [];
-        for (let i = 0; i < this.points.length; i++) {
-            lines.push(new LineSegment(this.points[i], this.points[(i + 1) % this.points.length]));
-        }
-        return lines;
+        // The modulo keeps the index in range, so the next point is never undefined.
+        return this.points.map((point, i) => new LineSegment(point, this.points[(i + 1) % this.points.length] as Point));
     }
 
     public intersectsCellPercentage(cell: Cell): number {

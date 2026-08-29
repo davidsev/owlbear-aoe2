@@ -117,6 +117,8 @@ export class ConePathfinderShape extends BaseShape {
         const distance = (this.roundedDistance / this.grid.dpi) * ASSUMED_SQUARE_FEET;
         if (!this.isValidSize(distance)) return [];
         const shape = Shapes[distance][isDiagonal ? 'Diagonal' : 'Orthogonal'];
+        // Every template has at least one row, so this can't be undefined.
+        const shapeWidth = (shape[0] as number[]).length;
 
         // work over the cells.
         if (isDiagonal) {
@@ -147,7 +149,7 @@ export class ConePathfinderShape extends BaseShape {
                 const rootX =
                     distance === 15
                         ? this.grid.snapTo(this.start, SnapTo.CENTER).x - this.grid.dpi
-                        : this.grid.snapTo(this.start, SnapTo.CORNER).x - this.grid.dpi * (shape[0].length / 2);
+                        : this.grid.snapTo(this.start, SnapTo.CORNER).x - this.grid.dpi * (shapeWidth / 2);
                 const rootY = this.grid.snapTo(this.start, SnapTo.CENTER).y + direction.y;
 
                 // How much to change the coords to move to the next cell.
@@ -172,7 +174,7 @@ export class ConePathfinderShape extends BaseShape {
                 const rootY =
                     distance === 15
                         ? this.grid.snapTo(this.start, SnapTo.CENTER).y - this.grid.dpi
-                        : this.grid.snapTo(this.start, SnapTo.CORNER).y - this.grid.dpi * (shape[0].length / 2);
+                        : this.grid.snapTo(this.start, SnapTo.CORNER).y - this.grid.dpi * (shapeWidth / 2);
 
                 // How much to change the coords to move to the next cell.
                 const xMove = direction.x * this.grid.dpi;

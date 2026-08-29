@@ -23,7 +23,8 @@ module.exports = {
             },
             {
                 test: /\.css$/i,
-                use: ['raw-loader', 'postcss-loader'],
+                type: 'asset/source',
+                use: ['postcss-loader'],
             },
         ],
     },

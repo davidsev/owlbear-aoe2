@@ -3,10 +3,14 @@
   "scripts": {
     "serve": "URL_PREFIX=http://localhost:8090 webpack-dev-server --config-node-env=development --port 8090 --hot",
     "build": "webpack --config-node-env=production",
-    "lint": "biome lint .",
+    "lint": "biome check .",
+    "lint:ci": "biome ci .",
     "format": "biome format --write .",
     "typecheck": "tsc --noEmit",
     "postinstall": "simple-git-hooks"
+  },
+  "engines": {
+    "node": ">=24"
   },
   "keywords": [],
   "author": "",
@@ -24,7 +28,6 @@
     "postcss-import": "^17.0.0",
     "postcss-loader": "^8.1.1",
     "postcss-nesting": "^14.0.1",
-    "raw-loader": "^4.0.2",
     "simple-git-hooks": "^2.13.1",
     "ts-loader": "^9.5.1",
     "typescript": "^5.6.2",

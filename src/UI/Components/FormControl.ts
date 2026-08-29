@@ -26,8 +26,6 @@ export class FormControl extends BaseElement {
     }
 
     private labelClicked() {
-        if (!this.inputs.length) return;
-
-        this.inputs[0].focus();
+        this.inputs[0]?.focus();
     }
 }

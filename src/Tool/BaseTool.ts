@@ -178,7 +178,10 @@ export abstract class BaseTool implements ToolMode {
                 // And attach them to eachother.
                 if (itemsToKeep.length > 1) {
                     await OBR.scene.items.updateItems(itemsToKeep, (items: Item[]) => {
-                        for (let i = 0; i < items.length - 1; i++) items[i].attachedTo = items[(i + 1) % items.length].id;
+                        for (const [i, item] of items.entries()) {
+                            const next = items[i + 1];
+                            if (next) item.attachedTo = next.id;
+                        }
                     });
                 }
             }
