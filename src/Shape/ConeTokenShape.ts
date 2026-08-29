@@ -25,7 +25,8 @@ export class ConeTokenShape extends BaseShape {
 
     @cached()
     private get triangle(): Triangle {
-        const vector = this.roundedEnd.sub(this.roundedStart).scale(Math.tan(Math.tan((53.1 * Math.PI) / 360)));
+        // Scale the perpendicular by tan(half the 53.1° cone angle), giving a triangle as wide as it is long.
+        const vector = this.roundedEnd.sub(this.roundedStart).scale(Math.tan((53.1 * Math.PI) / 360));
         return new Triangle(this.roundedStart, this.roundedEnd.add(new Point(vector.y, -vector.x)), this.roundedEnd.add(new Point(-vector.y, vector.x)));
     }
 
