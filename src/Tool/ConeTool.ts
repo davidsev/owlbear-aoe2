@@ -5,6 +5,7 @@ import { HexConeStyle, roomMetadata, SquareConeStyle, SquareDirection, type Star
 import { ConePathfinderShape } from '../Shape/ConePathfinderShape';
 import type { BaseShape } from '../Shape/BaseShape';
 import { ConeTokenShape } from '../Shape/ConeTokenShape';
+import { ConeHybridShape } from '../Shape/ConeHybridShape';
 import type { HHexGrid, SquareGrid, VHexGrid } from '@davidsev/owlbear-utils';
 import { ConeHexShape } from '../Shape/ConeHexShape';
 
@@ -66,6 +67,8 @@ export class ConeTool extends BaseTool {
                 return new ConePathfinderShape(grid);
             case SquareConeStyle.TOKEN:
                 return new ConeTokenShape(grid);
+            case SquareConeStyle.HYBRID:
+                return new ConeHybridShape(grid, settings.startPoints, settings.sizeSnapping, settings.direction);
             default:
                 return new ConeTemplateShape(
                     grid,

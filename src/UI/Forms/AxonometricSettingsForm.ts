@@ -15,6 +15,7 @@ export class AxonometricSettingsForm extends BaseElement {
             [SquareConeStyle.TEMPLATE]: 'D&D 5e (Template Method)',
             [SquareConeStyle.PATHFINDER]: 'Pathfinder / D&D 3.5',
             [SquareConeStyle.TOKEN]: 'D&D 5e (Token Method)',
+            [SquareConeStyle.HYBRID]: 'D&D 5e (Hybrid Method)',
         }),
         coneWidth: numberInput({ placeholder: 'Width = Height' }),
         coneStartPoints: enumMultiSelect({
@@ -59,6 +60,10 @@ export class AxonometricSettingsForm extends BaseElement {
 
     @query('div#templateConeFields', true)
     private accessor templateConeFields!: HTMLDivElement;
+    @query('div#coneWidthField', true)
+    private accessor coneWidthField!: HTMLDivElement;
+    @query('div#coneOverlapThresholdField', true)
+    private accessor coneOverlapThresholdField!: HTMLDivElement;
     @query('div#templateCircleFields', true)
     private accessor templateCircleFields!: HTMLDivElement;
     @query('div#templateCubeFields', true)
@@ -117,7 +122,12 @@ export class AxonometricSettingsForm extends BaseElement {
     }
 
     private showOrHideFields() {
-        this.templateConeFields.style.display = roomMetadata.data.axonometricConeStyle === SquareConeStyle.TEMPLATE ? '' : 'none';
+        const coneStyle = roomMetadata.data.axonometricConeStyle;
+        this.templateConeFields.style.display = coneStyle === SquareConeStyle.TEMPLATE || coneStyle === SquareConeStyle.HYBRID ? '' : 'none';
+        // The hybrid method takes a fixed number of cells, which is only defined for the default width,
+        // and means the threshold does nothing.
+        this.coneWidthField.style.display = coneStyle === SquareConeStyle.TEMPLATE ? '' : 'none';
+        this.coneOverlapThresholdField.style.display = coneStyle === SquareConeStyle.TEMPLATE ? '' : 'none';
         this.templateCircleFields.style.display = roomMetadata.data.axonometricCircleStyle === SquareCircleStyle.TEMPLATE ? '' : 'none';
         this.templateCubeFields.style.display = roomMetadata.data.axonometricCubeStyle === SquareCubeStyle.TEMPLATE ? '' : 'none';
     }
@@ -178,20 +188,26 @@ export class AxonometricSettingsForm extends BaseElement {
                                     <dd>Variant method from XGtE, which guarantees a consistent number of cells hit at
                                         the cost of wonky shapes.
                                     </dd>
+                                    <dt>D&D 5e (Hybrid Method)</dt>
+                                    <dd>Hits the same number of cells as the token method, but picks them by how much
+                                        the template covers them, giving a more cone-like shape.
+                                    </dd>
                                 </dl>
                             </obui-help-tooltip>
                         </div>
                     </form-control>
                     <div id="templateConeFields">
-                        <form-control label="Width">
-                            <div class="flex">
-                                ${this.inputs.coneWidth}
-                                <obui-help-tooltip>
-                                    The width of the cone, in degrees.<br>
-                                    Leave it blank to use the D&D 5e "Width = Height" method.
-                                </obui-help-tooltip>
-                            </div>
-                        </form-control>
+                        <div id="coneWidthField">
+                            <form-control label="Width">
+                                <div class="flex">
+                                    ${this.inputs.coneWidth}
+                                    <obui-help-tooltip>
+                                        The width of the cone, in degrees.<br>
+                                        Leave it blank to use the D&D 5e "Width = Height" method.
+                                    </obui-help-tooltip>
+                                </div>
+                            </form-control>
+                        </div>
                         <form-control label="Restrict Starting Point">
                             <div class="flex">
                                 ${this.inputs.coneStartPoints}
@@ -202,16 +218,18 @@ export class AxonometricSettingsForm extends BaseElement {
                                 </obui-help-tooltip>
                             </div>
                         </form-control>
-                        <form-control label="Cell Overlap Threshold">
-                            <div class="flex">
-                                ${this.inputs.coneOverlapThreshold}
-                                <obui-help-tooltip>
-                                    How much of a cell needs to be covered for it to be considered "hit" by the
-                                    cone.<br/>
-                                    By D&D 5e RAW this should be 0%, although I recommend using a minimum of 1.
-                                </obui-help-tooltip>
-                            </div>
-                        </form-control>
+                        <div id="coneOverlapThresholdField">
+                            <form-control label="Cell Overlap Threshold">
+                                <div class="flex">
+                                    ${this.inputs.coneOverlapThreshold}
+                                    <obui-help-tooltip>
+                                        How much of a cell needs to be covered for it to be considered "hit" by the
+                                        cone.<br/>
+                                        By D&D 5e RAW this should be 0%, although I recommend using a minimum of 1.
+                                    </obui-help-tooltip>
+                                </div>
+                            </form-control>
+                        </div>
                         <form-control label="Size Snapping">
                             <div class="flex">
                                 ${this.inputs.coneSizeSnapping}

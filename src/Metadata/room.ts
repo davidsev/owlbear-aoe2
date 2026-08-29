@@ -6,6 +6,7 @@ export enum SquareConeStyle {
     TEMPLATE = 'TEMPLATE',
     PATHFINDER = 'PATHFINDER',
     TOKEN = 'TOKEN',
+    HYBRID = 'HYBRID',
 }
 
 export enum SquareCubeStyle {

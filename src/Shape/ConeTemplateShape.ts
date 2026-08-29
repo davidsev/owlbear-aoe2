@@ -18,7 +18,7 @@ export class ConeTemplateShape extends BaseShape {
     }
 
     @cached()
-    private get roundedStart(): Point {
+    protected get roundedStart(): Point {
         if (!this.startPoints.length) return this.start;
 
         const allowedSnapPoints: SnapTo[] = [];
@@ -39,7 +39,7 @@ export class ConeTemplateShape extends BaseShape {
     }
 
     @cached()
-    private get roundedEnd(): Point {
+    protected get roundedEnd(): Point {
         const vector = this.end.sub(this.start);
 
         // If the direction isn't locked, then just fix the length and we're done.
@@ -57,7 +57,7 @@ export class ConeTemplateShape extends BaseShape {
     }
 
     @cached()
-    private get triangle(): Triangle {
+    protected get triangle(): Triangle {
         const vector = this.roundedEnd.sub(this.roundedStart).scale(Math.tan(this.widthRads / 2));
         return new Triangle(this.roundedStart, this.roundedEnd.add(new Point(vector.y, -vector.x)), this.roundedEnd.add(new Point(-vector.y, vector.x)));
     }
