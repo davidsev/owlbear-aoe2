@@ -6,6 +6,7 @@ import { roomMetadata, SquareCircleStyle, SquareConeStyle, SquareCubeStyle, Squa
 import { MultiSelectEnum } from '../Components/MultiSelectEnum';
 import style from './SettingsForm.css';
 import { baseCSS } from '../baseCSS';
+import { numberValue, percentValue } from './inputValue';
 
 @customElement('square-settings-form')
 export class SquareSettingsForm extends BaseElement {
@@ -120,16 +121,16 @@ export class SquareSettingsForm extends BaseElement {
             squareConeStyle: this.inputs.coneStyle.value,
             squareConeWidth: this.inputs.coneWidth.valueAsNumber,
             squareConeStartPoints: this.inputs.coneStartPoints.value,
-            squareConeOverlapThreshold: parseInt(this.inputs.coneOverlapThreshold.value, 10) / 100,
-            squareConeSizeSnapping: parseFloat(this.inputs.coneSizeSnapping.value),
+            squareConeOverlapThreshold: percentValue(this.inputs.coneOverlapThreshold, roomMetadata.defaultValues.squareConeOverlapThreshold),
+            squareConeSizeSnapping: numberValue(this.inputs.coneSizeSnapping, roomMetadata.defaultValues.squareConeSizeSnapping),
             squareConeDirection: this.inputs.coneDirection.value,
             squareCircleStyle: this.inputs.circleStyle.value,
             squareCircleStartPoints: this.inputs.circleStartPoints.value,
-            squareCircleSizeSnapping: parseFloat(this.inputs.circleSizeSnapping.value),
+            squareCircleSizeSnapping: numberValue(this.inputs.circleSizeSnapping, roomMetadata.defaultValues.squareCircleSizeSnapping),
             squareCubeStyle: this.inputs.cubeStyle.value,
             squareCubeStartPoints: this.inputs.cubeStartPoints.value,
-            squareCubeOverlapThreshold: parseInt(this.inputs.cubeOverlapThreshold.value, 10) / 100,
-            squareCubeSizeSnapping: parseFloat(this.inputs.cubeSizeSnapping.value),
+            squareCubeOverlapThreshold: percentValue(this.inputs.cubeOverlapThreshold, roomMetadata.defaultValues.squareCubeOverlapThreshold),
+            squareCubeSizeSnapping: numberValue(this.inputs.cubeSizeSnapping, roomMetadata.defaultValues.squareCubeSizeSnapping),
             squareCubeDirection: this.inputs.cubeDirection.value,
         });
 

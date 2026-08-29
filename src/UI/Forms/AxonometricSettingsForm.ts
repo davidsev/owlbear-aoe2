@@ -6,6 +6,7 @@ import { roomMetadata, SquareCircleStyle, SquareConeStyle, SquareCubeStyle, Squa
 import { MultiSelectEnum } from '../Components/MultiSelectEnum';
 import style from './SettingsForm.css';
 import { baseCSS } from '../baseCSS';
+import { numberValue, percentValue } from './inputValue';
 
 @customElement('axonometric-settings-form')
 export class AxonometricSettingsForm extends BaseElement {
@@ -120,16 +121,16 @@ export class AxonometricSettingsForm extends BaseElement {
             axonometricConeStyle: this.inputs.coneStyle.value,
             axonometricConeWidth: this.inputs.coneWidth.valueAsNumber,
             axonometricConeStartPoints: this.inputs.coneStartPoints.value,
-            axonometricConeOverlapThreshold: parseInt(this.inputs.coneOverlapThreshold.value, 10) / 100,
-            axonometricConeSizeSnapping: parseFloat(this.inputs.coneSizeSnapping.value),
+            axonometricConeOverlapThreshold: percentValue(this.inputs.coneOverlapThreshold, roomMetadata.defaultValues.axonometricConeOverlapThreshold),
+            axonometricConeSizeSnapping: numberValue(this.inputs.coneSizeSnapping, roomMetadata.defaultValues.axonometricConeSizeSnapping),
             axonometricConeDirection: this.inputs.coneDirection.value,
             axonometricCircleStyle: this.inputs.circleStyle.value,
             axonometricCircleStartPoints: this.inputs.circleStartPoints.value,
-            axonometricCircleSizeSnapping: parseFloat(this.inputs.circleSizeSnapping.value),
+            axonometricCircleSizeSnapping: numberValue(this.inputs.circleSizeSnapping, roomMetadata.defaultValues.axonometricCircleSizeSnapping),
             axonometricCubeStyle: this.inputs.cubeStyle.value,
             axonometricCubeStartPoints: this.inputs.cubeStartPoints.value,
-            axonometricCubeOverlapThreshold: parseInt(this.inputs.cubeOverlapThreshold.value, 10) / 100,
-            axonometricCubeSizeSnapping: parseFloat(this.inputs.cubeSizeSnapping.value),
+            axonometricCubeOverlapThreshold: percentValue(this.inputs.cubeOverlapThreshold, roomMetadata.defaultValues.axonometricCubeOverlapThreshold),
+            axonometricCubeSizeSnapping: numberValue(this.inputs.cubeSizeSnapping, roomMetadata.defaultValues.axonometricCubeSizeSnapping),
             axonometricCubeDirection: this.inputs.cubeDirection.value,
         });
 

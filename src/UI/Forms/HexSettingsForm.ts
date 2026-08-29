@@ -6,6 +6,7 @@ import { HexConeStyle, roomMetadata, StartPoint } from '../../Metadata/room';
 import { MultiSelectEnum } from '../Components/MultiSelectEnum';
 import style from './SettingsForm.css';
 import { baseCSS } from '../baseCSS';
+import { numberValue, percentValue } from './inputValue';
 
 @customElement('hex-settings-form')
 export class HexSettingsForm extends BaseElement {
@@ -90,15 +91,15 @@ export class HexSettingsForm extends BaseElement {
         // Save the data
         roomMetadata.set({
             hexConeStyle: this.inputs.coneStyle.value,
-            hexConeWidth: this.inputs.coneWidth.valueAsNumber,
+            hexConeWidth: numberValue(this.inputs.coneWidth, roomMetadata.defaultValues.hexConeWidth),
             hexConeStartPoints: this.inputs.coneStartPoints.value,
-            hexConeOverlapThreshold: parseInt(this.inputs.coneOverlapThreshold.value, 10) / 100,
-            hexConeSizeSnapping: parseFloat(this.inputs.coneSizeSnapping.value),
+            hexConeOverlapThreshold: percentValue(this.inputs.coneOverlapThreshold, roomMetadata.defaultValues.hexConeOverlapThreshold),
+            hexConeSizeSnapping: numberValue(this.inputs.coneSizeSnapping, roomMetadata.defaultValues.hexConeSizeSnapping),
             hexCircleStartPoints: this.inputs.circleStartPoints.value,
-            hexCircleSizeSnapping: parseFloat(this.inputs.circleSizeSnapping.value),
+            hexCircleSizeSnapping: numberValue(this.inputs.circleSizeSnapping, roomMetadata.defaultValues.hexCircleSizeSnapping),
             hexCubeStartPoints: this.inputs.cubeStartPoints.value,
-            hexCubeOverlapThreshold: parseInt(this.inputs.cubeOverlapThreshold.value, 10) / 100,
-            hexCubeSizeSnapping: parseFloat(this.inputs.cubeSizeSnapping.value),
+            hexCubeOverlapThreshold: percentValue(this.inputs.cubeOverlapThreshold, roomMetadata.defaultValues.hexCubeOverlapThreshold),
+            hexCubeSizeSnapping: numberValue(this.inputs.cubeSizeSnapping, roomMetadata.defaultValues.hexCubeSizeSnapping),
         });
 
         this.showOrHideFields();
