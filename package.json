@@ -7,6 +7,7 @@
     "lint:ci": "biome ci --error-on-warnings .",
     "format": "biome format --write .",
     "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --import ./src/testSetup.ts --test \"src/**/*.test.ts\"",
     "postinstall": "simple-git-hooks"
   },
   "engines": {
@@ -17,7 +18,7 @@
   "license": "GPL-3.0-or-later",
   "description": "",
   "simple-git-hooks": {
-    "pre-commit": "npm run lint && npm run typecheck"
+    "pre-commit": "npm run lint && npm run typecheck && npm run test"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.10",
@@ -30,6 +31,7 @@
     "postcss-nesting": "^14.0.1",
     "simple-git-hooks": "^2.13.1",
     "ts-loader": "^9.5.1",
+    "tsx": "^4.23.12",
     "typescript": "^5.6.2",
     "webpack": "^5.91.0",
     "webpack-cli": "^7.2.2",

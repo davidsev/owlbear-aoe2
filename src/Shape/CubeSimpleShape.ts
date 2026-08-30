@@ -16,10 +16,19 @@ export class CubeSimpleShape extends BaseShape {
         return Math.round(dist / this.grid.dpi) * this.grid.dpi;
     }
 
+    // getDiagonalDirection4 returns a 0 component for a perfectly horizontal/vertical drag, which
+    // would collapse the square into a duplicated line of cells below. Default that axis to
+    // positive so the cube always extends as a full square.
+    @cached()
+    private get direction(): Point | null {
+        const raw = getDiagonalDirection4(this.end.sub(this.start));
+        if (!raw) return null;
+        return new Point(raw.x || 1, raw.y || 1);
+    }
+
     @cached()
     private get roundedEnd(): Point {
-        const vector = this.end.sub(this.start);
-        const direction = getDiagonalDirection4(vector);
+        const direction = this.direction;
         if (!direction) return this.roundedStart;
         const move = new Point(this.roundedDistance * direction.x, this.roundedDistance * direction.y);
         return this.roundedStart.add(move);
@@ -36,7 +45,7 @@ export class CubeSimpleShape extends BaseShape {
 
     @cached()
     public get cells(): Cell[] {
-        const direction = getDiagonalDirection4(this.end.sub(this.start));
+        const direction = this.direction;
         if (!direction) return [];
 
         const squares = Math.round(this.roundedDistance / this.grid.dpi);
