@@ -33,24 +33,50 @@ export class CellOutliner {
 
         if (!externalLines.length) throw new Error('No external lines found.  Should never happen?');
 
+        // Index the remaining lines by endpoint, so finding "the line touching this point" is O(1)
+        // instead of a linear scan over all remaining lines.
+        const pointIndex = new Map<string, LineSegment[]>();
+        const indexLine = (line: LineSegment) => {
+            for (const point of [line.p1, line.p2]) {
+                const key = point.toString();
+                const lines = pointIndex.get(key);
+                if (lines) lines.push(line);
+                else pointIndex.set(key, [line]);
+            }
+        };
+        const unindexLine = (line: LineSegment) => {
+            for (const point of [line.p1, line.p2]) {
+                const lines = pointIndex.get(point.toString());
+                if (!lines) continue;
+                const index = lines.indexOf(line);
+                if (index !== -1) lines.splice(index, 1);
+            }
+        };
+        const remainingLines = new Set(externalLines);
+        for (const line of externalLines) indexLine(line);
+
         // Sort the lines into order.  Pick a starting point and then find the next line that has that
         // point etc, until we're back where we started - that's one loop.  Cells can form several
         // disconnected islands, so keep going until every external line has been used up in some loop.
-        while (externalLines.length) {
-            const firstLine = externalLines.shift() as LineSegment; // externalLines.length was just checked, so this can't be undefined.
+        while (remainingLines.size) {
+            const firstLine = remainingLines.values().next().value as LineSegment;
+            remainingLines.delete(firstLine);
+            unindexLine(firstLine);
+
             const startPoint = firstLine.p1;
             const points: Point[] = [firstLine.p1, firstLine.p2];
             let currentPoint = firstLine.p2;
 
             while (!currentPoint.equals(startPoint)) {
                 // Find a line with our current point
-                const nextLineIndex = externalLines.findIndex(line => line.p1.equals(currentPoint) || line.p2.equals(currentPoint));
-                if (nextLineIndex === -1) {
+                const nextLine = pointIndex.get(currentPoint.toString())?.[0];
+                if (!nextLine) {
                     throw new Error('Could not find next line.  Should never happen?');
                 }
 
-                // Remove the line from the list
-                const [nextLine] = externalLines.splice(nextLineIndex, 1) as [LineSegment];
+                // Remove the line from the remaining set/index
+                remainingLines.delete(nextLine);
+                unindexLine(nextLine);
 
                 // Add the new point to the list and make it the current point
                 const nextPoint = nextLine.p1.equals(currentPoint) ? nextLine.p2 : nextLine.p1;
