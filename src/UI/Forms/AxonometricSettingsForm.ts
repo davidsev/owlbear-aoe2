@@ -1,11 +1,12 @@
 import { customElement, query } from 'lit/decorators.js';
 import { html, type PropertyValueMap } from 'lit';
-import { BaseElement, baseCSS } from '@davidsev/owlbear-ui';
+import { BaseElement, baseCSS, type ObUITabBar } from '@davidsev/owlbear-ui';
 import { roomMetadata, SquareCircleStyle, SquareConeStyle, SquareCubeStyle, SquareDirection, StartPoint } from '../../Metadata/room';
 import { MAX_CONE_WIDTH_DEGREES, MIN_CONE_WIDTH_DEGREES } from '../../Tool/ConeTool';
 import { enumMultiSelect, enumSelect, numberInput } from '../Components/controls';
 import style from './SettingsForm.css';
 import { inputsAreValid, nullableNumberValue, numberValue, percentString, percentValue } from './inputValue';
+import { selectTabForActiveTool } from './selectTabForActiveTool';
 
 @customElement('axonometric-settings-form')
 export class AxonometricSettingsForm extends BaseElement {
@@ -59,6 +60,8 @@ export class AxonometricSettingsForm extends BaseElement {
         }),
     };
 
+    @query('obui-tab-bar', true)
+    private accessor tabBar!: ObUITabBar;
     @query('div#templateConeFields', true)
     private accessor templateConeFields!: HTMLDivElement;
     @query('div#coneWidthField', true)
@@ -136,6 +139,7 @@ export class AxonometricSettingsForm extends BaseElement {
     protected firstUpdated(_changedProperties: PropertyValueMap<unknown> | Map<PropertyKey, unknown>) {
         super.firstUpdated(_changedProperties);
         this.showOrHideFields();
+        void selectTabForActiveTool(this.tabBar);
     }
 
     private setConeDefaults() {
@@ -168,9 +172,9 @@ export class AxonometricSettingsForm extends BaseElement {
     render() {
         return html`
             <obui-tab-bar>
-                <obui-tab-button active target="#coneForm">Cone</obui-tab-button>
-                <obui-tab-button target="#circleForm">Circle</obui-tab-button>
-                <obui-tab-button target="#cubeForm">Cube</obui-tab-button>
+                <obui-tab-button id="coneTab" active target="#coneForm">Cone</obui-tab-button>
+                <obui-tab-button id="circleTab" target="#circleForm">Circle</obui-tab-button>
+                <obui-tab-button id="cubeTab" target="#cubeForm">Cube</obui-tab-button>
             </obui-tab-bar>
             <form>
                 <div id="coneForm">
