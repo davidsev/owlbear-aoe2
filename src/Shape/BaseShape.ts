@@ -6,7 +6,7 @@ import type { DrawableShape } from './DrawableShape';
 export abstract class BaseShape<G extends Grid = Grid> implements DrawableShape {
     private _start: Point;
     private _end: Point;
-    public readonly _cache: Map<string | symbol, unknown> = new Map();
+    public readonly _cache: Map<unknown, unknown> = new Map();
 
     constructor(public readonly grid: G) {
         this._start = new Point(0, 0);
@@ -77,11 +77,11 @@ export abstract class BaseShape<G extends Grid = Grid> implements DrawableShape 
 export function cached<T>() {
     return (func: () => T) =>
         function (this: BaseShape): T {
-            if (this._cache.has(func.name)) {
-                return this._cache.get(func.name) as T;
+            if (this._cache.has(func)) {
+                return this._cache.get(func) as T;
             }
             const result = func.apply(this);
-            this._cache.set(func.name, result);
+            this._cache.set(func, result);
             return result;
         };
 }
