@@ -18,8 +18,15 @@ interface ConeSettings {
     direction: SquareDirection;
 }
 
-function coneWidthRads(degrees: number): number {
-    return ((degrees % 180) * Math.PI) / 180;
+// A cone's apex angle must stay strictly between 0 and 180 degrees - outside that range
+// Math.tan(widthRads / 2) degenerates to 0 or blows up to infinity, so clamp rather than
+// wrap (wrapping via `% 180` turns exactly 180/360 into a silent 0-radian, invisible cone).
+export const MIN_CONE_WIDTH_DEGREES = 1;
+export const MAX_CONE_WIDTH_DEGREES = 120;
+
+export function coneWidthRads(degrees: number): number {
+    const clamped = Math.min(Math.max(degrees, MIN_CONE_WIDTH_DEGREES), MAX_CONE_WIDTH_DEGREES);
+    return (clamped * Math.PI) / 180;
 }
 
 export class ConeTool extends BaseTool {

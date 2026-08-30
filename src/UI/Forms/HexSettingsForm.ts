@@ -2,6 +2,7 @@ import { customElement, query } from 'lit/decorators.js';
 import { html, type PropertyValueMap } from 'lit';
 import { BaseElement, baseCSS } from '@davidsev/owlbear-ui';
 import { HexConeStyle, roomMetadata, StartPoint } from '../../Metadata/room';
+import { MAX_CONE_WIDTH_DEGREES, MIN_CONE_WIDTH_DEGREES } from '../../Tool/ConeTool';
 import { enumMultiSelect, enumSelect, numberInput } from '../Components/controls';
 import style from './SettingsForm.css';
 import { inputsAreValid, numberValue, percentString, percentValue } from './inputValue';
@@ -15,7 +16,7 @@ export class HexSettingsForm extends BaseElement {
             [HexConeStyle.TEMPLATE]: 'D&D 5e (Template Method)',
             [HexConeStyle.EQUILATERAL]: 'Equilateral Triangle',
         }),
-        coneWidth: numberInput(),
+        coneWidth: numberInput({ min: MIN_CONE_WIDTH_DEGREES.toString(), max: MAX_CONE_WIDTH_DEGREES.toString() }),
         coneStartPoints: enumMultiSelect({
             [StartPoint.CORNER]: 'Corners',
             [StartPoint.CENTER]: 'Center',

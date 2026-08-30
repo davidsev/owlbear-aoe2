@@ -2,6 +2,7 @@ import { customElement, query } from 'lit/decorators.js';
 import { html, type PropertyValueMap } from 'lit';
 import { BaseElement, baseCSS } from '@davidsev/owlbear-ui';
 import { roomMetadata, SquareCircleStyle, SquareConeStyle, SquareCubeStyle, SquareDirection, StartPoint } from '../../Metadata/room';
+import { MAX_CONE_WIDTH_DEGREES, MIN_CONE_WIDTH_DEGREES } from '../../Tool/ConeTool';
 import { enumMultiSelect, enumSelect, numberInput } from '../Components/controls';
 import style from './SettingsForm.css';
 import { inputsAreValid, nullableNumberValue, numberValue, percentString, percentValue } from './inputValue';
@@ -17,7 +18,7 @@ export class SquareSettingsForm extends BaseElement {
             [SquareConeStyle.TOKEN]: 'D&D 5e (Token Method)',
             [SquareConeStyle.HYBRID]: 'D&D 5e (Hybrid Method)',
         }),
-        coneWidth: numberInput({ placeholder: 'Width = Height' }),
+        coneWidth: numberInput({ placeholder: 'Width = Height', min: MIN_CONE_WIDTH_DEGREES.toString(), max: MAX_CONE_WIDTH_DEGREES.toString() }),
         coneStartPoints: enumMultiSelect({
             [StartPoint.CORNER]: 'Corners',
             [StartPoint.CENTER]: 'Center',
